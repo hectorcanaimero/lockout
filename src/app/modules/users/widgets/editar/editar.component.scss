@@ -1,0 +1,15 @@
+.container {
+  background: #fff;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  ion-item {
+    --background: #fff;
+    ion-label {
+      --color: rgb(63, 63, 63);
+    }
+    ion-input {
+      --color: rgb(63, 63, 63);
+    }
+  }
+}

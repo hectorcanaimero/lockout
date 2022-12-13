@@ -1,0 +1,36 @@
+ion-toolbar {
+  --background: var(--ion-meka-primary);
+  ion-title {
+    color: #fff;
+  }
+  ion-icon {
+    color: #fff;
+  }
+  .empty {
+    color: #fff;
+   }
+  .full { color: rgb(218, 194, 14); }
+}
+
+
+ion-button {
+  position: relative;
+	ion-badge {
+    width: 20px;
+		position: absolute;
+		top: 0px;
+		right: -5px;
+		opacity: 1;
+    font-size: 10px;
+    line-height: 1;
+    --padding-top: 5px;
+    --padding-bottom: 5px;
+    --padding-start: 5px;
+    --padding-end: 5px;
+    color: #fff;
+    // color: var(--ion-color-danger);
+	}
+  ion-icon {
+    margin-right: .25rem;
+  }
+}

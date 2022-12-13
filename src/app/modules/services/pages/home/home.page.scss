@@ -1,0 +1,13 @@
+ion-content {
+  --background: var(--ion-meka-primary);
+  ion-segment {
+    margin-top: .5rem;
+    --background: var(--ion-meka-primary);
+    ion-segment-button {
+      --color-checked: var(--ion-meka-primary);
+      --indicator-color: rgb(255, 196, 0);
+      --color: rgb(255, 196, 0);
+      --background: rgba(0,0,0, .3);
+    }
+  }
+}

@@ -1,0 +1,13 @@
+<app-header title="{{ 'TABS.SERVICES' | translate }}"></app-header>
+<ion-content>
+  <app-on-off-widget></app-on-off-widget>
+  <ion-segment [value]="toogle" (ionChange)="segmentChanged($event)" mode="ios">
+    <ion-segment-button value="in_process">
+      <ion-label>{{ 'SEGMENT.IN_PROCESS' | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="accepted">
+      <ion-label>{{ 'SEGMENT.ACCEPTED' | translate }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <app-services-list [type]="toogle"></app-services-list>
+</ion-content>

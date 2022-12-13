@@ -1,0 +1,28 @@
+ion-content {
+  --background: #fafafa;
+}
+
+ion-header {
+  ion-toolbar {
+    --background: var(--ion-color-warning-shade);
+    ion-buttons {
+      ion-button {
+        ion-icon {
+          color: rgba(45, 45, 45, 0.933);
+        }
+      }
+    }
+  }
+}
+
+ion-content {
+  #profile {
+    ion-accordion-group {
+      ion-accordion {
+        background: none;
+        ion-item {
+        }
+      }
+    }
+  }
+}

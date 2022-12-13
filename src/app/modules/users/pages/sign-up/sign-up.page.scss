@@ -1,0 +1,105 @@
+ion-content {
+  .head {
+    ion-label {
+      --color: #fff;
+      h1 {
+        color: #fff;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 1.1rem;
+      }
+      p {
+        color: #fafafa;
+        text-align: center;
+        margin-bottom: 1.1rem;
+      }
+    }
+  }
+  ion-item {
+    margin-bottom: 1rem;
+    --background: none;
+    --border-width: 0px;
+    --border-style: none;
+    ion-item .phone {
+      --min-height: 30px;
+    }
+    ion-label {
+      --color: #fff;
+      margin-bottom: .7rem !important;
+    }
+    ion-input, ion-datetime, ion-select {
+      border-radius: 20px;
+      background: #fff;
+      --background: #fff;
+      --padding-start: 15px !important;
+      --padding-end: 15px !important;
+      --placeholder: #4f4f4f;
+      color: #4f4f4f;
+      border: 1px solid #d8d8d8;
+    }
+  }
+  ion-input, ion-datetime, ion-select {
+    border-radius: 15px;
+    background: #fff;
+    --background: #fff;
+    --padding-start: 15px !important;
+    --padding-end: 15px !important;
+    --placeholder: #4f4f4f;
+    color: #4f4f4f;
+    border: 1px solid #d8d8d8;
+  }
+  ion-item.phone {
+    --padding-start: 0px !important;
+  }
+  ion-item.phone-label {
+    --min-height: 20px !important;
+  }
+  ion-item.country {
+    --padding-end: 0px !important;
+  }
+  ion-select {
+    width: 100% !important;
+  }
+
+  .avatar {
+    margin: 0 auto;
+    ion-avatar {
+      margin: 0 auto;
+      width: 100px;
+      height: 100px;
+      border: 1.5px solid #fafafa;
+      background: #fafafa;
+    }
+  }
+}
+ion-content, ion-footer, ion-header, ion-toolbar {
+  --background: var(--ion-meka-primary);
+  background: var(--ion-meka-primary);
+}
+
+
+@media(max-width: 767px) {
+  .pagr-id-10263 #main-header {
+    display: none !important;
+  }
+}
+
+ion-buttons {
+  ion-button {
+    --color: #fafafa;
+    ion-icon {
+      color: #fafafa;
+    }
+  }
+}
+
+
+ion-button {
+  --color: #fafafa;
+  ion-icon {
+    color: #fafafa;
+  }
+}
+ion-title{
+  --color: #fafafa;
+}

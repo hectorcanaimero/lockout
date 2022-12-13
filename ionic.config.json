@@ -1,0 +1,7 @@
+{
+  "name": "meka-empresa",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

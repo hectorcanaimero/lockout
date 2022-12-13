@@ -1,0 +1,24 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios">
+    <ion-title>Registra tu Dirección</ion-title>
+  </ion-toolbar>
+  <ion-item>
+    <ion-icon slot="start" color="primary" name="location"></ion-icon>
+    <ion-label>
+      <h4 class="ion-text-wrap">{{ address }}</h4>
+      <p> [{{ lat | number }}, {{ lng | number }}]</p>
+    </ion-label>
+  </ion-item>
+</ion-header>
+<ion-content>
+  <agm-map
+  [latitude]="lat" [longitude]="lng" [zoom]="16" [disableDefaultUI]="true" [zoomControl]="false">
+    <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true" (dragEnd)="setOnAddress($event)"></agm-marker>
+  </agm-map>
+</ion-content>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button color="primary" (click)="onClose()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

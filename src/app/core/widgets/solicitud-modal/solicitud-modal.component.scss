@@ -1,0 +1,29 @@
+ion-toolbar {
+  --background: #fff;
+  ion-title {
+    --color: var(--ion-meka-primary)
+  }
+  ion-icon {
+    color: var(--ion-meka-primary)
+  }
+}
+ion-content {
+  --background: #fff;
+  ion-list {
+    margin-top: 1rem;
+    background: none;
+    ion-item {
+      --background: none;
+      ion-label {
+        --color: var(--ion-meka-primary);
+        h2, p, h1 {
+          color: var(--ion-meka-primary);
+        }
+      }
+      .expert {
+        // filter: invert(100%) sepia(0%) saturate(7499%) hue-rotate(287deg) brightness(104%) contrast(101%);
+      }
+    }
+  }
+
+}

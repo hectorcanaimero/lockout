@@ -1,0 +1,12 @@
+ion-menu {
+  --background: #fafafa;
+  .meka-back {
+    background: var(--ion-meka-primary);
+    ion-item {
+      --background: none;
+      ion-label {
+        --color: #fff;
+      }
+    }
+  }
+}

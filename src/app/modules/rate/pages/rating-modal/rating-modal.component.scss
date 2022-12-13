@@ -1,0 +1,24 @@
+ion-content, ion-list, ion-toolbar {
+  background: var(--ion-meka-principal);
+  --background: var(--ion-meka-principal);
+  ion-list {
+    ion-item {
+      --background: none;
+      --padding-start: 10px;
+      --padding-inner-end: 10px;
+      ion-label {
+        --color: #393939;
+        h2 {
+          color: #393939;
+        }
+      }
+    }
+  }
+}
+
+ion-textarea {
+  --border-radius: 5px;
+  --padding-start: 10px;
+  --padding-bottom: 45px;
+  --background: rgba(0,0,0,.15);;
+}

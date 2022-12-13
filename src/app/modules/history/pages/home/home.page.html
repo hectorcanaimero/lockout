@@ -1,0 +1,27 @@
+<app-header [title]="'TABS.HISTORY' | translate"></app-header>
+<ion-content>
+  <ng-container *ngIf="(items$ | async) as items; else notFound">
+    <ion-list lines="none">
+      <ion-item-sliding *ngFor="let item of items">
+        <ion-item button (click)="openService(item)" [detail]="false">
+          <ion-label>
+            <p>{{ item.status | translate }}</p>
+            <h2>{{ item._id }}</h2>
+            <p>
+              {{ item.brand.name }} {{ item.model.name }}
+            </p>
+            <p>{{ item.distance | unitConverted  }}</p>
+            <h4>{{ item.category.name | translate }}</h4>
+          </ion-label>
+          <ion-avatar slot="end" class="expert">
+            <img [src]="item.category.picture" [alt]="item.category.name" />
+          </ion-avatar>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+  </ng-container>
+  <ng-template #notFound>
+    <app-widget-skeleton *ngFor="let item of [0, 1, 2]"></app-widget-skeleton>
+  </ng-template>
+
+</ion-content>

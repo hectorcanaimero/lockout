@@ -1,0 +1,52 @@
+
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios">
+    <ion-title mode="ios">
+      {{ 'CHAT.NAME' | translate }}: {{ name }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content #content [scrollEvents]="true">
+  <ion-grid>
+    <ion-row *ngFor="let item of items$ | async" [ngClass]="item.type === 'USER' ? '' : 'ion-justify-content-end'">
+      <ion-col size="7">
+        <div [ngClass]="item.type === 'USER' ? 'from-them' : 'from-me'">
+          <div class="item">
+            <span *ngIf="item.input ==='TEXT'">{{ item.message }}</span>
+            <img *ngIf="item.input ==='IMG'" [src]="item.message" class="img" (click)="openPop(item.message)" alt="Image">
+            <span style="font-size: 10px;">
+              {{item.createdAt.toMillis() | amTimeAgo }}
+              <ion-icon *ngIf="item.type === 'LT' || item.type ==='USER'"
+                name="checkmark-done" [color]="item.status === 'READ' ? 'success' : 'medium'">
+              </ion-icon>
+            </span>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-item lines="none">
+      <ion-input *ngIf="!recording" type="text" [placeholder]=" 'CHAT.PLACEHOLDER' | translate" [(ngModel)]="message"
+      (ionChange)="txtMessage($event)" mode="ios" (keypress)="sendMessageKeypress($event.keyCode)"></ion-input>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="cameraGet()"  *ngIf="!toogleMessage; else send">
+          <ion-icon slot="icon-only" name="camera"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>
+<ng-template #send>
+  <ion-button fill="clear" (click)="sendMessage()">
+    <ion-icon slot="icon-only" name="send" color="primary"></ion-icon>
+  </ion-button>
+</ng-template>

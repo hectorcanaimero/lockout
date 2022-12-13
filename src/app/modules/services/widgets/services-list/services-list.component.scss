@@ -1,0 +1,28 @@
+ion-list {
+  margin-top: 1rem;
+  background: none;
+  ion-item {
+    --background: none;
+    ion-label {
+      --color: #fff;
+      h2, p, h1 {
+        color: #fff;
+      }
+    }
+    .expert {
+      filter: invert(100%) sepia(0%) saturate(7499%) hue-rotate(287deg) brightness(104%) contrast(101%);
+    }
+  }
+}
+
+.loading {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  ion-spinner {
+    --color: #fafafa;
+  }
+}

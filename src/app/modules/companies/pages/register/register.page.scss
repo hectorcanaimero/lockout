@@ -1,0 +1,22 @@
+ion-content, ion-footer, ion-toolbar {
+  --background: var(--ion-meka-primary);
+  --color: #fff;
+}
+
+ion-content {
+  form {
+    width: 100%;
+    .avatar {
+      margin-top: 20px;
+      ion-avatar {
+        margin: auto;
+        margin-top: 0px;
+        width: 120px;
+        height: 120px;
+        img {
+          width: 100% !important;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+<ion-menu side="start" menuId="first" contentId="main">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Start Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list class="meka-back" lines="none">
+      <ion-item>
+        <ion-label>{{ status ? 'On-line':'Off-line' }}</ion-label>
+        <ion-toggle mode="ios" color="warning" slot="end" [(ngModel)]="status"></ion-toggle>
+      </ion-item>
+      <ion-item button *ngFor="let item of link">
+        <ion-label>{{ item.name }}</ion-label>
+      </ion-item>
+    </ion-list>
+    <ion-list>
+      <ion-item button *ngFor="let item of subLink">
+        <ion-label>{{ item.name }}</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>

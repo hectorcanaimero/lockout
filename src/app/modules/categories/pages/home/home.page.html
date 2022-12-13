@@ -1,0 +1,26 @@
+<app-header></app-header>
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list lines="none">
+    <ion-item button *ngFor="let item of items$ | async" (click)="onModal(item)">
+      <ion-label>
+        <p>{{ item.date_reg | date: 'short' }}</p>
+        <h1>{{ item.code }}</h1>
+        <h2> {{ item.type_expert }} </h2>
+        <h3>
+          {{ item.vehicle_model.brand }}
+          {{ item.vehicle_model.model }}
+        </h3>
+      </ion-label>
+      <ion-badge slot="end" [color]="item.status === 'OPEN' ? 'secondary' : 'tertiary'" mode="ios">
+        {{ item.status === 'OPEN' ? 'Open' : 'In Proccess' }}</ion-badge>
+    </ion-item>
+  </ion-list>
+</ion-content>

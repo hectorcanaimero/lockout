@@ -1,0 +1,26 @@
+ion-content {
+  --background: #ececec;
+  // --background: var(--ion-meka-primary);
+  .box {
+    padding: 1rem;
+    // background: #fafafa;
+    border-radius: 15px;
+    .form-control {
+      // background-color: rgb(234, 234, 234);
+    }
+  }
+  ion-list {
+    background: none;
+    --background: none;
+    ion-item {
+      --background: none;
+      // --color: #fff;
+      fa-icon {
+        // color: #fff;
+      }
+      ion-label {
+        // --color: #fff;
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        <ion-icon slot="icon-only" name="close" class="empty"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Notifications</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card *ngFor="let item of [1,2,3,4]; let i = index;">
+    <ion-card-content>
+      <div class="row">
+        <div class="col-3 align-self-center">
+          <ion-avatar>
+            <img src="./assets/images/logo.png" class="img-fluid" alt="">
+          </ion-avatar>
+        </div>
+        <div class="col-9">
+          <p class="mb-0">
+            Keep close to Nature's heart... and break clear away, once in awhile,
+            and climb a mountain or spend a week in the woods. Wash your spirit clean.
+          </p>
+        </div>
+        <div class="col-12 mt-2" *ngIf="i === 2">
+          <img class="img-fluid border" src="https://www.razaoautomovel.com/wp-content/uploads/2017/09/mec%C3%A2nico-repara%C3%A7%C3%A3o-1_925x520_acf_cropped.jpg" alt="">
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

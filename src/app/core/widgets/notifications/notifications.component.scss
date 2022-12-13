@@ -1,0 +1,34 @@
+ion-toolbar {
+  --background: #fff;
+  ion-title {
+    --color: var(--ion-meka-primary)
+  }
+  ion-icon {
+    color: var(--ion-meka-primary)
+  }
+}
+ion-content {
+  ion-card {
+    ion-avatar {
+      background: var(--ion-meka-primary);
+    }
+    .border {
+      border-radius: 10px;
+    }
+  }
+  --background: #fff;
+  ion-list {
+    margin-top: 1rem;
+    background: none;
+    ion-item {
+      --background: none;
+      ion-label {
+        --color: var(--ion-meka-primary);
+        h2, p, h1 {
+          color: var(--ion-meka-primary);
+        }
+      }
+    }
+  }
+
+}

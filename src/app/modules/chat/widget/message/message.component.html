@@ -1,0 +1,13 @@
+<div class="imessage">
+  <p [ngClass]="item.type_user === 1 ? 'from-me' : 'from-them'">
+    <span *ngIf="item.type_message ==='MSG'">{{ item.message }}</span>
+    <span *ngIf="item.type_message ==='IMG'">
+      <img [src]="item.message" class="img" alt="Image">
+    </span>
+    <span style="font-size: 10px; color: #6C6C6C">
+      {{ item.createdAt.seconds * 1000 | amLocale: 'es' | amTimeAgo }}
+      <ion-icon name="checkmark-done" [color]="item.view_message ? 'success' : 'medium'">
+      </ion-icon>
+    </span>
+  </p>
+</div>

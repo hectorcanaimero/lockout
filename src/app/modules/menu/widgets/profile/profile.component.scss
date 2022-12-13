@@ -1,0 +1,43 @@
+.profile {
+  margin-top: 1.5rem;
+  .avatar {
+
+  }
+  .getDatos {
+    --color: #fff;
+    .name {
+      color: #fafafa;
+      font-weight: 600;
+    }
+    .jobs {
+      color: #fff;;
+    }
+    .rating {
+      color: rgb(203, 159, 48);
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+  }
+}
+
+
+ion-avatar {
+  background: #fafafa;
+  padding: 5px;
+  width:  90px;
+  height: 90px;
+  .meka {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    p {
+      letter-spacing: -3px;
+      font-size: 1.7rem;
+      color: #cb9f30;
+      font-weight: 700;
+      margin-bottom: 0;
+      text-transform: uppercase;
+    }
+  }
+}

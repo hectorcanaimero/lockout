@@ -1,0 +1,27 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        <ion-icon slot="icon-only" color="medium" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="px-2">
+    <div class="px-4 mb-3">
+      <ion-label> <h2>Rate your service?</h2> </ion-label>
+    </div>
+    <app-stars-widget [type]="false" [num]="4" (value)="getStar($event)"></app-stars-widget>
+  </div>
+  <div class="px-3 my-3">
+    <ion-textarea placeholder="write to comments..." [rows]="5" [(ngModel)]="comment"></ion-textarea>
+  </div>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-button (click)="onSubmit()" expand="block" color="danger" mode="ios">
+        {{ 'BUTTON.SEND' | translate }}
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

@@ -1,0 +1,23 @@
+<div id="banner">
+  <ion-slides mode="ios" [options]="options">
+    <ng-container *ngFor="let item of banners$ | async">
+      <ion-slide>
+        <ng-container *ngIf="item.display; else entry" >
+          <img
+            class="img-fluid border-radius"
+            [src]="item.picture"
+            [alt]="item.name"
+            (click)="openProfile(item.url)"
+          >        </ng-container>
+        <ng-template #entry>
+          <img
+            class="img-fluid border-radius"
+            [src]="item.picture"
+            [alt]="item.name"
+            (click)="openUrl(item.url)"
+          >
+        </ng-template>
+      </ion-slide>
+    </ng-container>
+  </ion-slides>
+</div>

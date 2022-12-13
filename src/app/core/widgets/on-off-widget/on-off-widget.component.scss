@@ -1,0 +1,14 @@
+.offline {
+  ion-card {
+    --background: var(--ion-color-danger);
+    ion-item {
+      --background: var(--ion-color-danger);
+      ion-label {
+        --color: #fff;
+        h1, h2, h3, p {
+          color: #fff;
+        }
+      }
+    }
+  }
+}

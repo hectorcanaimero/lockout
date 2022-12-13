@@ -1,0 +1,40 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ 'SERVICES' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list lines="none">
+    <ion-item button *ngFor="let item of opened$ | async" (click)="openService(item)" [detail]="false">
+      <ion-label>
+        <p style="font-size: .8rem">{{ item.date_reg | amTimeAgo }}</p>
+        <h2>{{ item.code }}</h2>
+        <h4 style="font-weight: 600;">{{ item.status | translate }}</h4>
+        <p>{{ item.type_expert | translate }}</p>
+        <p> {{ item.vehicle_model?.brand }} {{ item.vehicle_model?.model }} </p>
+        <p>{{ item.maps.distance?.replace(',', '')?.replace('.', ',')  }}</p>
+      </ion-label>
+      <ion-avatar slot="end" class="expert">
+        <img [src]="item.icon_expert" [alt]="item.icon_expert" />
+      </ion-avatar>
+    </ion-item>
+    <ion-item button *ngFor="let item of accepted$ | async" (click)="openService(item)" [detail]="false">
+      <ion-label>
+        <p style="font-size: .8rem">{{ item.date_reg | amTimeAgo }}</p>
+        <h2>{{ item.code }}</h2>
+        <h4 style="font-weight: 600;">{{ item.status | translate }}</h4>
+        <p>{{ item.type_expert | translate }}</p>
+        <p> {{ item.vehicle_model?.brand }} {{ item.vehicle_model?.model }} </p>
+        <p>{{ item.maps.distance?.replace(',', '')?.replace('.', ',')  }}</p>
+      </ion-label>
+      <ion-avatar slot="end" class="expert">
+        <img [src]="item.icon_expert" [alt]="item.icon_expert" />
+      </ion-avatar>
+    </ion-item>
+  </ion-list>
+</ion-content>

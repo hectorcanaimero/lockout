@@ -1,0 +1,104 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="primary">{{ 'SERVICE' | translate | uppercase }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <app-on-off-widget></app-on-off-widget>
+  <div id="dados" class="container">
+    <ion-list lines="none">
+      <ion-item>
+        <ion-label>
+          <p>{{ res.status | translate | uppercase }}</p>
+          <h3 class="code"> {{ res._id.slice(0, 15) }}... </h3>
+          <p>Distance: {{ res.distance | unitConverted }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-label>{{ res.createdAt | date: 'short'}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="car-outline"></ion-icon>
+        <ion-label>
+          {{ res.brand.name }} {{ res.model.name }}
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="reader-outline"></ion-icon>
+        <ion-label>
+          <p class="categoria"> {{ res.category.name | translate }}</p>
+          <p class="description ion-text-wrap"> {{ res.description }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+        <ion-label>
+          <p>{{ res.user.first_name }} {{ res.user.last_name }}</p>
+          <p> 4.3 <ion-icon name="star"></ion-icon> </p>
+        </ion-label>
+      </ion-item>
+      <ion-item *ngIf="res.status === 'accepted'"
+      class="chat" color="warning" button
+        details (click)="goToChat(res._id)">
+        <ion-icon slot="start" name="chatbubbles-outline"></ion-icon>
+        <ion-label>
+          {{ 'BUTTON.CHAT' | translate }}
+        </ion-label>
+      </ion-item>
+      <div class="pt-3">
+        <agm-map
+        [zoom]="15"
+        [latitude]="res.latitude"
+        [disableDefaultUI]="true"
+        [longitude]="res.longitude"
+        [disableDoubleClickZoom]="true">
+        <agm-marker [latitude]="res.latitude" [longitude]="res.longitude"></agm-marker>
+      </agm-map>
+      </div>
+    </ion-list>
+  </div>
+  <div class="pictures" *ngIf="res.pictures?.length > 0">
+    <ion-item lines="none" (click)="toogle()">
+      <ion-label>Fotos</ion-label>
+      <ion-icon slot="end" [name]="openImage ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+    </ion-item>
+    <ion-slides class="my-3" mode="ios" scrollbar="ios" [options]="slideOpts" [ngStyle]="{width: openImage ? '100px' : '0px'}">
+      <ion-slide *ngFor="let item of res.pictures">
+        <img [src]="item.picture" class="img-fluid" alt="Images">
+      </ion-slide>
+    </ion-slides>
+  </div>
+</ion-content>
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <div class="row g-1">
+      <div class="col-6">
+        <ion-button
+          expand="block" mode="ios" color="danger" fill="outline"
+          *ngIf="res.status === 'accepted' || res.status === 'in_process'"
+          (click)="onCancelService(res)" [disabled]="offline">
+          {{ 'BUTTON.CANCELLED' | translate }}
+        </ion-button>
+      </div>
+      <div class="col-6">
+        <ion-button expand="block" mode="ios" color="primary"
+          *ngIf="res.status === 'in_process'"
+          (click)="onAceptService(res)" [disabled]="offline">
+          {{ 'BUTTON.ACCEPTED' | translate }}
+        </ion-button>
+        <ion-button
+          mode="ios" expand="block" color="success"
+          *ngIf="res.status === 'accepted'"
+          (click)="onFinishedService(res)" [disabled]="offline">
+          {{ 'BUTTON.CLOSED' | translate }}
+        </ion-button>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-footer>

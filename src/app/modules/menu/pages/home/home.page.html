@@ -1,0 +1,36 @@
+<app-header [title]="'TABS.MENU' | translate"></app-header>
+<ion-content>
+  <div id="menu">
+    <app-profile></app-profile>
+    <ion-list class="link">
+      <ion-item>
+        <ion-label>
+          <h1 class="mb-0">{{ active ? 'On-line' : 'Off-line' }}</h1>
+        </ion-label>
+        <ng-container *ngIf="(company$ | async) as company">
+          <ion-toggle mode="ios" color="success" [(ngModel)]="active"
+            (ngModelChange)="onOffLine(company._id)"></ion-toggle>
+        </ng-container>
+      </ion-item>
+      <ion-item button *ngFor="let item of content" (click)="goToPage(item.url)" routerLinkActive="router-link-active" >
+        <ion-label>{{ item.name }}</ion-label>
+      </ion-item>
+      <ion-item button (click)="goToMembresia()">
+        <ion-label>Membresias</ion-label>
+      </ion-item>
+      <ion-item button (click)="logout()">
+        <ion-label>Salir Sistema</ion-label>
+      </ion-item>
+    </ion-list>
+    <ion-list class="sublink">
+      <ion-item button *ngFor="let item of subContent" (click)="item.modal ? onPost(item.name): ''">
+        <ion-label>{{ item.name }}</ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label class="ion-text-right mb-3">
+          <h3 class="text-right mb-0">{{ appInfo?.name || 'Meka LT' }} v{{ appInfo?.version || '1.0.0'}}</h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

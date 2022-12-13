@@ -1,0 +1,30 @@
+<ion-list lines="none" class="mb-5">
+  <ion-list-header>
+    <ion-label>
+      <h2>{{ 'WIDGETS.ACCEPTED' | translate }}</h2>
+    </ion-label>
+  </ion-list-header>
+  <ng-container *ngIf="(items$ | async ) as items">
+    <ng-container *ngIf="items.length > 0; else notFound">
+      <ion-item detail="false" button *ngFor="let item of items">
+        <ion-label (click)="openServiceModal(item)">
+          <p class="date">{{ item.createdAt | amLocale:'es' | amTimeAgo  }}</p>
+          <p>{{ item.category.name | translate }}</p>
+          <h2>{{item._id.slice(0, 10)}}...</h2>
+          <p>{{ item.brand .name}} {{ item.model.name }}</p>
+          <h4>{{ item.description.slice(0, 50) }}...</h4>
+        </ion-label>
+        <ion-label class="ion-text-right" color="warning">{{ item.unread > 0 ? item.unread : '' }}</ion-label>
+        <ion-button slot="end" (click)="openChat(item._id)" fill="clear" [disabled]="offline">
+          <ion-icon slot="icon-only" name="chatbubbles" color="warning"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ng-container>
+    <ng-template #notFound>
+      <ion-item lines="none" class="not-found" detail="false">
+        <ion-icon slot="start" name="sad-outline"></ion-icon>
+        <ion-label>{{ 'WIDGETS.NOT_FOUND' | translate }}</ion-label>
+      </ion-item>
+    </ng-template>
+  </ng-container>
+</ion-list>

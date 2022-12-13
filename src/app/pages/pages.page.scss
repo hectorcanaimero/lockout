@@ -1,0 +1,12 @@
+ion-tabs {
+  ion-tab-bar{
+    --background: var(--ion-meka-primary);
+    ion-tab-button {
+      --color: #fff;
+      --color-focused: #c8a80c;
+      --color-selected: #c8a80c;
+    }
+  }
+}
+
+

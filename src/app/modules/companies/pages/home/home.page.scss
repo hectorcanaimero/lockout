@@ -1,0 +1,18 @@
+ion-content {
+  --background: var(--ion-meka-primary);
+  ion-list {
+    background: none;
+    ion-item {
+      --background: none;
+      ion-icon {
+        color: #fafafa;
+      }
+      ion-label {
+        --color: #fafafa;
+        h2, p {
+          color: #fafafa;
+        }
+      }
+    }
+  }
+}
