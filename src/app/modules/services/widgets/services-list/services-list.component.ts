@@ -17,7 +17,7 @@ import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.comp
 
 export class ServicesListComponent implements AfterViewInit, OnChanges {
 
-  @Input() type = 'accepted';r
+  @Input() type = 'accepted';
   offline: boolean;
   items$: Observable<any[]>;
 
@@ -37,11 +37,19 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
   }
 
   getServices = (type: any) => {
-    if (type === 'in_process') {
-      this.items$ = this.ms.getMaster(`services/status/in_process`);
-    } else {
-      this.items$ = this.ms.getMaster(`services/status/accepted`);
-    }
+    this.store.select('company')
+    .pipe(
+      filter(row => !row.loading),
+      map((res: any) => res.company)
+    )
+    .subscribe((res: any) => {
+      if (type === 'in_process') {
+        this.items$ = this.ms.getMaster(`services/${res._id}/status/in_process`);
+      } else {
+        this.items$ = this.ms.getMaster(`services/${res._id}/status/accepted`);
+      }
+    })
+    this.items$.subscribe(res => console.log(res));
   }
 
   async openService (res: any): Promise<void> {

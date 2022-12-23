@@ -1,9 +1,22 @@
 {
+  "MECHANICAL WORKSHOP": "Mechanical Workshop",
+  "MECHANICAL": "Mechanical",
+  "AUTO PARTS SHOP": "AUTO PARTS SHOP",
+  "YOU_ARE_OFFLINE": "You're offline.",
+  "OFFLINE_MESSAGE": "You will not be able to accept any service",
+  "RATE_THE_SERVICE": "Rate your service?",
+  "WRITE_TO_COMMENTS": "Write to comments...",
   "GLOBAL": {
     "APP_NAME": "Meka",
     "ACCEPT": "Accept",
     "CANCEL": "Cancel",
     "EXPLORE_THE_BEST_PLACES_OF_THE_WORLD_MOST_VIBRANT_CITIES": "Explore the best places of the world's most vibrant cities!"
+  },
+  "WIDGETS": {
+    "IN_PROCESS": "services to accept",
+    "ACCEPTED": "Accepted Services",
+    "CLOSED": "Finished",
+    "NOT_FOUND": "No Services"
   },
   "TABS": {
     "HOME": "Home",

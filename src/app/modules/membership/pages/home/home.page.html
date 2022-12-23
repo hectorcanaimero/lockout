@@ -5,27 +5,39 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Membresia</ion-title>
+    <ion-title>Cuenta</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content *ngIf="(entry$ | async) as item">
   <div class="container">
-    <ion-list class="mt-4" lines="none">
-      <ion-item>
-        <fa-icon icon="money-bill-wave" slot="start"></fa-icon>
-        <ion-label>Valor mensual: {{ item?.plan?.amount / 100 || 0 | currency }}</ion-label>
-      </ion-item>
-      <ion-item>
-        <fa-icon icon="calendar-check" slot="start"></fa-icon>
-        <ion-label>
-          Subscripción: {{ item.current_period_start | amFromUnix | amDateFormat: 'DD-MM-YY' }}
-        </ion-label>
-      </ion-item>
-      <ion-item>
-        <fa-icon icon="calendar-check" slot="start"></fa-icon>
-        <ion-label>Periodo Prueba: {{ item.trial_end | amFromUnix | amDateFormat: 'DD-MM-YY' }}</ion-label>
-      </ion-item>
-    </ion-list>
+    <ion-item class="not-back" lines="none">
+      <ion-label class="ion-text-wrap">
+        <h2 class="ion-text-wrap">
+          Miembro desde
+          {{ item.created | amFromUnix | amDateFormat: 'MMMM YYYY' }}
+        </h2>
+      </ion-label>
+    </ion-item>
+    <ion-card>      
+      <ion-list class="py-3">
+        <ion-item>
+          <fa-icon icon="money-bill-wave" slot="start"></fa-icon>
+          <ion-label>Valor mensual: {{ item?.plan?.amount / 100 || 0 | currency }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <fa-icon icon="calendar-check" slot="start"></fa-icon>
+          <ion-label>
+            Subscripción: {{ item.current_period_start | amFromUnix | amDateFormat: 'DD-MM-YY' }}
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label class="ion-text-wrap">
+            Tu próxima fecha de facturación es el Periodo 
+            {{ item.trial_end | amFromUnix | amDateFormat: 'DDDD MMMM YYYY' }}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card>
     <div class="box mt-3" [ngClass]="item.default_payment_method !== null || invisible? 'invisible': ''">
       <ngx-stripe-card-group [elementsOptions]="elementsOptions">
         <div class="row justify-content-center">

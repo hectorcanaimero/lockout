@@ -46,6 +46,7 @@ export class AppComponent implements OnInit {
       this.integrated.initState();
       this.socketService.getConnection();
       this.socketService.setJoinRoom();
+      await this.mobileService.getPush();
       await this.mobileService.getGlobalization();
       setTimeout(()=>{ SplashScreen.hide({ fadeOutDuration: 1000 }); }, 2000)
     });

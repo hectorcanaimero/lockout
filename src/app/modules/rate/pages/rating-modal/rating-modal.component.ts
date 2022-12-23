@@ -48,14 +48,15 @@ export class RatingModalComponent {
       company: this.item.company._id,
       score_customer: this.score ? this.score : 4,
     };
-    this.ms.postMaster('comments', data).subscribe((res) => {
-      this.changeStatusService();
+    this.ms.postMaster('comments', data).subscribe((res: any) => {
+      this.changeStatusService(res._id);
       this.uService.modalDimiss();
     });
   }
 
-  changeStatusService() {
+  changeStatusService(commentId: string) {
     this.item.status = 'finished';
+    this.item.comment = commentId;
     this.socketService.changeStatus(this.item);
     this.store.dispatch(actions.historyInit({ id: this.item.company._id }));
     this.store.dispatch(actions.acceptedInit({ id: this.item.company._id }));

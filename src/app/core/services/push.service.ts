@@ -1,10 +1,9 @@
 import { StorageService } from './storage.service';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { ActionPerformed, PushNotificationSchema, PushNotifications, Token } from '@capacitor/push-notifications';
-import { Platform } from '@ionic/angular';
+import { PushNotificationSchema, PushNotifications, Token } from '@capacitor/push-notifications';
 import { LocalNotifications, ScheduleOptions } from '@capacitor/local-notifications';
 import { MasterService } from '@core/services/master.service';
+import { AnyFn } from '@ngrx/store/src/selector';
 
 
 @Injectable({
@@ -12,9 +11,7 @@ import { MasterService } from '@core/services/master.service';
 })
 export class PushService {
   constructor(
-    private router: Router,
     private ms: MasterService,
-    private platform: Platform,
     private storage: StorageService
     ) { }
 
@@ -48,16 +45,10 @@ export class PushService {
     PushNotifications.addListener('pushNotificationReceived',
     async (notification: PushNotificationSchema): Promise<void> => {
       console.log('Push notification received: ', notification);
-      let not: ScheduleOptions = {
-        notifications: [{
-          id: Date.now(),
-          body: notification.body,
-          title: notification.title,
-          ongoing: false,
-        }]
-      };
-      const result = await LocalNotifications.schedule(not)
-      console.log(result)
+      await this.setLocalNotification(notification);
+      if (!notification.data.type) {
+        await this.savePushStorage(notification);
+      }
     });
     PushNotifications.addListener('pushNotificationActionPerformed', notification => {
       console.log('Push notification action performed', notification.actionId, notification.inputValue);
@@ -74,5 +65,22 @@ export class PushService {
     if(push !== token) {
       this.ms.changeToken(token.value).subscribe((res) => {});
     }
+  }
+  private async savePushStorage(item) {
+    const data: string[] = await this.storage.getStorage('pushs');
+    data.push(...item);
+    const setData = await this.storage.setStorage('pushs', data);
+  }
+
+  private async setLocalNotification(item: any) {
+    let payload: ScheduleOptions = {
+      notifications: [{
+        id: Date.now(),
+        body: item.body,
+        title: item.title,
+        ongoing: false,
+      }]
+    };
+    await LocalNotifications.schedule(payload)
   }
 }

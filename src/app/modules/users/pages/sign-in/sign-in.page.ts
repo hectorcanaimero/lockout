@@ -92,6 +92,7 @@ export class SignInPage implements OnInit, AfterViewInit {
     }))
     .subscribe(async (res: any) => {
       this.uService.loadDimiss();
+      await this.storage.setStorage('oSubs', res.stripe);
       await this.storage.setStorage('oAccess', res.access);
       await this.storage.setStorage('oUser', res.user);
       this.store.dispatch(actions.loadUser({ user: res.user }));

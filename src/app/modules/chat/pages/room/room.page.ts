@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { IonContent } from '@ionic/angular';
@@ -8,6 +8,8 @@ import { UtilsService } from '@core/services/utils.service';
 import { StorageService } from '@core/services/storage.service';
 import { ChatFireService } from '@core/services/chat-fire.service';
 import { FireStorageService } from '@modules/chat/services/fire-storage.service';
+import { SocketService } from '@core/services/socket.service';
+import { MasterService } from '@core/services/master.service';
 
 @Component({
   selector: 'app-room-hat',
@@ -22,10 +24,13 @@ export class RoomChatPage implements OnInit {
   public message = '';
   public messages: string[] = [];
   public messages$: Observable<any[]>;
+  service: any;
 
   constructor(
     private uService: UtilsService,
     private storage: StorageService,
+    private msService: MasterService,
+    private socketService: SocketService,
     private activatedRoute: ActivatedRoute,
     private chatFireService: ChatFireService,
     private storageService: FireStorageService,
@@ -39,6 +44,7 @@ export class RoomChatPage implements OnInit {
   async onSubmit(): Promise<void> {
     if(this.message) {
       await this.sendMessage('MSG', this.message);
+      this.sendPush();
       this.message = '';
     }
   }
@@ -79,6 +85,16 @@ export class RoomChatPage implements OnInit {
     }
   }
 
+  sendPush() {
+    const data = {
+      token: this.service.user.push,
+      title: `Tienes un mensaje de ${this.service.user.name}`,
+      body: `${this.message.slice(0, 50)}...`
+    }
+    this.msService.postMaster('services/push/chat', data)
+      .subscribe((res) => console.log(res));
+  }
+
   private async sendMessage(type_message: string, message: string) {
     const { _id }: any = await this.storage.getStorage('oUser');
     const payload: Payload = {
@@ -93,6 +109,8 @@ export class RoomChatPage implements OnInit {
     this.getMessage(uid);
     this.chatFireService.readMessages(uid)
       .subscribe(() => null);
+    this.msService.getMaster(`services/${uid}`)
+      .subscribe((res: any) => this.service = res);
   }
 
 }

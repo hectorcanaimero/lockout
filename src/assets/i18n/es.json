@@ -1,4 +1,11 @@
 {
+  "WRITE_TO_COMMENTS": "Escribe tu commentario...",
+  "RATE_THE_SERVICE": "Califica tu servicio?",
+  "MECHANICAL WORKSHOP": "Taller Mecanico",
+  "MECHANICAL": "Mecanico",
+  "AUTO PARTS SHOP": "Venta de Respuestos",
+  "YOU_ARE_OFFLINE": "Fuera de linea.",
+  "OFFLINE_MESSAGE": "No podrá aceptar ningún servicio",
   "SERVICES": "Servicios",
   "SERVICE": "Servicio",
   "PROCCESSING": "'Procesando...'",
@@ -60,10 +67,10 @@
     "CLOSED": "Finalizados"
   },
   "WIDGETS": {
-    "IN_PROCESS": "Servicios por aceptar",
+    "IN_PROCESS": "Servicios por solicitudes",
     "ACCEPTED": "Servicios Aceptados",
     "CLOSED": "Finalizados",
-    "NOT_FOUND": "Sin Ofertas de Trabajo"
+    "NOT_FOUND": "Sin Servicios"
   },
   "TABS": {
     "HOME": "Home",

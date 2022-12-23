@@ -6,7 +6,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { LoadingController, NavController } from '@ionic/angular';
 import { AuthService } from '@modules/users/services/auth.service';
 import { Store } from '@ngrx/store';
-import { catchError, Observable } from 'rxjs';
+import { catchError, Observable, subscribeOn, timer } from 'rxjs';
 import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
 @Component({
@@ -19,13 +19,10 @@ export class EditarComponent implements OnInit {
   registerForm: FormGroup;
   countries$: Observable<any[]>;
   idioma = [
-    { name: 'Ingles (USA)', iso: 'en' },
-    { name: 'Portugues (Brasil)', iso: 'po' },
-    { name: 'Español (Latinoamerica)', iso: 'es' },
+    { id: 1, name: 'Español (Latinoamerica)', iso: 'es' },
   ];
 
   constructor(
-    private db: AuthService,
     private fb: FormBuilder,
     private ms: MasterService,
     private store: Store<AppState>,
@@ -35,8 +32,12 @@ export class EditarComponent implements OnInit {
 
   ngOnInit() {
     this.getData();
+    timer(500).subscribe(() => {
+      console.log(this.user);
+      this.loadData();
+    });
   }
-
+  
   getData() {
     this.loadForm();
     this.countries$ = this.ms.getMaster('tables/countries');

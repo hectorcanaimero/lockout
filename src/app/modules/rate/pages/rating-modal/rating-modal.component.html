@@ -10,12 +10,12 @@
 <ion-content>
   <div class="px-2">
     <div class="px-4 mb-3">
-      <ion-label> <h2>Rate your service?</h2> </ion-label>
+      <ion-label> <h2>{{ 'RATE_THE_SERVICE' | translate }}</h2> </ion-label>
     </div>
     <app-stars-widget [type]="false" [num]="4" (value)="getStar($event)"></app-stars-widget>
   </div>
   <div class="px-3 my-3">
-    <ion-textarea placeholder="write to comments..." [rows]="5" [(ngModel)]="comment"></ion-textarea>
+    <ion-textarea [placeholder]="'WRITE_TO_COMMENTS' | translate" [rows]="5" [(ngModel)]="comment"></ion-textarea>
   </div>
   <ion-footer class="ion-no-border">
     <ion-toolbar>

@@ -20,7 +20,7 @@ import { AppState } from '@store/app.state';
 import { StorageService } from '@core/services/storage.service';
 import { MemberService } from '../../services/membership.service';
 import { DatePipe } from '@angular/common';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { ConnectService } from '@modules/chat/services/connect.service';
 import { Router } from '@angular/router';
 
@@ -61,11 +61,19 @@ export class HomePage implements OnInit {
     private alertCtrl: AlertController,
     private stripeService: StripeService,
     private loadingCtrl: LoadingController,
+    private storageService: StorageService,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.getData();
     this.stripeService.elements(this.elementsOptions).subscribe(elements => this.elements = elements);
-    this.loadData();
+    // this.loadData();
+  }
+
+  getData(): void {
+    const promise: any = this.storageService.getStorage('oSubs');
+    this.entry$ = from(promise);
+    this.entry$.subscribe(res => console.log(res));
   }
 
   loadData = () => {

@@ -21,6 +21,8 @@ export class MobileService{
     const info: DeviceInfo = await Device.getInfo();
     if (info.platform !== 'web') {
       this.pushService.initPush();
+    } else {
+      console.log('Aqui es web');
     }
   }
 

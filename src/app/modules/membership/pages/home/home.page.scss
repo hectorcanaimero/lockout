@@ -1,6 +1,19 @@
-ion-content {
+ion-toolbar, ion-content {
   --background: #ececec;
-  // --background: var(--ion-meka-primary);
+}
+
+ion-content {
+  ion-card {
+    ion-list {
+      ion-item {
+        --padding-start: 0px;
+        --inner-padding-start: 10px;      
+      }
+    }
+  }
+  ion-item {
+    --background: none;
+  }
   .box {
     padding: 1rem;
     // background: #fafafa;

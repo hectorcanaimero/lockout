@@ -7,6 +7,7 @@ import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
 import { ConnectService } from '@modules/chat/services/connect.service';
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
+import { SocketService } from '@core/services/socket.service';
 
 @Component({
   selector: 'app-services-in-proccess-widget',
@@ -25,6 +26,7 @@ export class ServicesInProccessWidgetComponent implements AfterViewInit {
     private store: Store<AppState>,
     private uService: UtilsService,
     private chatService: ConnectService,
+    private socketService: SocketService,
   ) { }
 
   ngAfterViewInit(): void {
@@ -32,10 +34,21 @@ export class ServicesInProccessWidgetComponent implements AfterViewInit {
   }
 
   getData(): void {
-    this.items$ = this.store.select('serviceAccepted').pipe(
-      filter((row) => !row.loading),
-      map(({ items }) => items)
+    this.items$ = this.socketService.onFetchService()
+    .pipe(
+      map((res: any) => {
+        if (res && res.length) {
+          return res.filter((row: any) => row.status === 'accepted');
+        } else if (res.status === 'accepted') {
+          return res;
+        }
+      })
     );
+    this.items$.subscribe(res => console.log(res));
+    // this.items$ = this.store.select('serviceAccepted').pipe(
+    //   filter((row) => !row.loading),
+    //   map(({ items }) => items)
+    // );
   }
   // getServiceAcceptedWithChat = () => {
   //   this.items$ = this.store.select('accepted')
