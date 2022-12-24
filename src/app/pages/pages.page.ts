@@ -40,6 +40,7 @@ export class PagesPage implements AfterViewInit {
     await this.getLoadAppMobile();
     this.iService.getCompany();
     await this.iService.setTokenPushOnUser();
+    await this.iService.paymentCheck();
   }
 
   ngAfterViewInit() {

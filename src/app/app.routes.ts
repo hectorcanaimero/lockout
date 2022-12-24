@@ -9,6 +9,12 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'member',
+    // canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('@modules/membership/membership.module').then( m => m.MembershipModule)
+  },
+  {
     path: 'pages',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/pages.module').then( m => m.PagesPageModule)
@@ -32,13 +38,13 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('@modules/companies/widgets/maps/maps.module').then( m => m.MapsUserWidgetModule)
   },
-  {
-    path: 'membership',
-    canActivate: [AuthGuard],
-    loadChildren: () => import('@modules/membership/membership.module').then( m => m.MembershipModule)
-  },
-
+  // {
+  //   path: 'membership',
+  //   canActivate: [AuthGuard],
+  //   loadChildren: () => import('@modules/membership/membership.module').then( m => m.MembershipModule)
+  // },
 ];
 
 
-export const appRoute = RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules });
+export const appRoute =
+  RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules });

@@ -9,7 +9,7 @@ import { StorageService } from '@core/services/storage.service';
 import { Router } from '@angular/router';
 import { MasterService } from '@core/services/master.service';
 import { UtilsService } from '@core/services/utils.service';
-
+import { Browser } from '@capacitor/browser';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +26,22 @@ export class IntegratedService {
   initState = () => {
     this.getUser();
   };
+
+  paymentCheck(): void {
+    const session$ = this.store.select('user')
+    .pipe(
+      filter((row: any) => !row.loading),
+      map(({user}: any) => user),
+      switchMap((res: any) =>
+        this.ms.getMaster(`stripe/checkout/session/${res.subscriptionID}`))
+    );
+    session$.subscribe(async res => {
+      console.log(res)
+      if (res.payment_status === 'unpaid') {
+        await Browser.open({ url: res.url });
+      }
+    });
+  }
 
   pageState() {
 

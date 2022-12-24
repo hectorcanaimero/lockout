@@ -53,6 +53,8 @@ export class HomePage implements OnInit {
   }
   elementsOptions: StripeElementsOptions = { locale: 'es' };
 
+  paidState = true;
+
   constructor(
     private db: MemberService,
     private store: Store<AppState>,
@@ -66,8 +68,7 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
     this.getData();
-    this.stripeService.elements(this.elementsOptions).subscribe(elements => this.elements = elements);
-    // this.loadData();
+    this.loadStripe();
   }
 
   getData(): void {
@@ -76,10 +77,16 @@ export class HomePage implements OnInit {
     this.entry$.subscribe(res => console.log(res));
   }
 
-  loadData = () => {
-    this.entry$ = this.store.select('stripe')
-    .pipe(filter(row => !row.loading), map((res: any) => res.item))
-    // entry$.subscribe(res => this.item = res);
+  onCancelSubscription() {
+    console.log('on Cancel Subscription');
+  }
+
+  onPaid(sessionId: string) {
+    // this.paidState = !this.paidState;
+    this.stripeService.redirectToCheckout({ sessionId })
+      .subscribe((result: any) => {
+        console.log(result);
+      })
   }
 
   onPay = async () => {
@@ -124,6 +131,10 @@ export class HomePage implements OnInit {
     );
   }
 
+  loadStripe() {
+    this.stripeService.elements(this.elementsOptions)
+      .subscribe(elements => this.elements = elements);
+  }
   private alertMessage = async (header: string, message: string) => {
     const alert = await this.alertCtrl.create({header, message, mode:'ios', buttons: ['OK']});
     alert.present();

@@ -9,18 +9,18 @@
   </ion-toolbar>
 </ion-header>
 <ion-content *ngIf="(entry$ | async) as item">
-  <div class="container">
-    <ion-item class="not-back" lines="none">
-      <ion-label class="ion-text-wrap">
-        <h2 class="ion-text-wrap">
-          Miembro desde
-          {{ item.created | amFromUnix | amDateFormat: 'MMMM YYYY' }}
-        </h2>
-      </ion-label>
-    </ion-item>
-    <ion-card>      
-      <ion-list class="py-3">
-        <ion-item>
+  <div class="container pt-4">
+    <ion-card>
+      <ion-list class="pt-2 pb-3">
+        <ion-item class="not-back" lines="none">
+          <ion-label class="ion-text-wrap">
+            <h2 class="ion-text-wrap">
+              Miembro desde
+              {{ item?.created | amFromUnix | amDateFormat: 'MMMM YYYY' }}
+            </h2>
+          </ion-label>
+        </ion-item>
+        <!-- <ion-item>
           <fa-icon icon="money-bill-wave" slot="start"></fa-icon>
           <ion-label>Valor mensual: {{ item?.plan?.amount / 100 || 0 | currency }}</ion-label>
         </ion-item>
@@ -29,41 +29,65 @@
           <ion-label>
             Subscripción: {{ item.current_period_start | amFromUnix | amDateFormat: 'DD-MM-YY' }}
           </ion-label>
+        </ion-item> -->
+        <ion-item lines="none">
+          <div class="value shadow-drop-center">
+            <div class="usd">
+              <h2>{{ item.currency }}</h2>
+            </div>
+            <div class="price">
+              <h2>{{ item?.plan?.amount / 100 || 0  }}</h2>
+            </div>
+            <div class="valor">
+              <p>Pago Mensual</p>
+            </div>
+            <!-- <ion-label>
+              Valor mensual: {{ item?.plan?.amount / 100 || 0 | currency }}
+            </ion-label> -->
+          </div>
         </ion-item>
         <ion-item>
           <ion-label class="ion-text-wrap">
-            Tu próxima fecha de facturación es el Periodo 
-            {{ item.trial_end | amFromUnix | amDateFormat: 'DDDD MMMM YYYY' }}
+            Tu próxima fecha de facturación es el Periodo
+            {{ item?.trial_end | amFromUnix | amDateFormat: 'DD MMMM YYYY' }}
           </ion-label>
         </ion-item>
       </ion-list>
+      <ion-button (click)="onPaid('seti_1MIHoqBciJuLJJgxQWZbShve_secret_N2MXFCwRXoP5KB7nZ4hJ4AH7TRJ8ktg')" expand="block" mode="ios" fill="clear">
+        Pagar subscripción
+      </ion-button>
     </ion-card>
-    <div class="box mt-3" [ngClass]="item.default_payment_method !== null || invisible? 'invisible': ''">
-      <ngx-stripe-card-group [elementsOptions]="elementsOptions">
-        <div class="row justify-content-center">
-          <div class="col-12 mb-3">
-            <div class="form-control">
-              <ngx-stripe-card-number [options]="cardOptions"></ngx-stripe-card-number>
+    <ng-container *ngIf="paidState">
+      <div class="box mt-3" [ngClass]="item.default_payment_method !== null || invisible? 'invisible': ''">
+        <ngx-stripe-card-group [elementsOptions]="elementsOptions">
+          <div class="row justify-content-center">
+            <div class="col-12 mb-3">
+              <div class="form-control">
+                <ngx-stripe-card-number [options]="cardOptions"></ngx-stripe-card-number>
+              </div>
+            </div>
+            <div class="col-7">
+              <div class="form-control">
+                <ngx-stripe-card-expiry [options]="cardOptions"></ngx-stripe-card-expiry>
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="form-control">
+                <ngx-stripe-card-cvc [options]="cardOptions"></ngx-stripe-card-cvc>
+              </div>
             </div>
           </div>
-          <div class="col-7">
-            <div class="form-control">
-              <ngx-stripe-card-expiry [options]="cardOptions"></ngx-stripe-card-expiry>
-            </div>
-          </div>
-          <div class="col-5">
-            <div class="form-control">
-              <ngx-stripe-card-cvc [options]="cardOptions"></ngx-stripe-card-cvc>
-            </div>
-          </div>
+        </ngx-stripe-card-group>
+        <div class="text-center py-3">
+          <ion-button expand="block" color="primary" (click)="onPay()">
+            Pagar
+          </ion-button>
         </div>
-      </ngx-stripe-card-group>
-      <div class="text-center py-3">
-        <ion-button expand="block" color="primary" (click)="onPay()">
-          Pagar
-        </ion-button>
       </div>
-    </div>
+    </ng-container>
+    <ion-button (click)="onCancelSubscription()" expand="block" color="danger">
+      Cancelar la subscripción
+    </ion-button>
   </div>
 </ion-content>
 <ng-template #notFound>
