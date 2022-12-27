@@ -12,7 +12,7 @@
             <form [formGroup]="loginForm">
               <ion-item>
                 <ion-label position="stacked">{{ "SIGN.EMAIL" | translate }} <ion-text color="danger">*</ion-text></ion-label>
-                <ion-input required type="email" formControlName="username" placeholder=""></ion-input>
+                <ion-input required type="email" formControlName="username" placeholder="Correo Electrónico"></ion-input>
               </ion-item>
               <!-- <ion-item *ngIf="loginForm.get('email').invalid && loginForm.get('email').touched">
                 <ion-text color="danger" class="form-error">
@@ -21,7 +21,7 @@
               </ion-item> -->
               <ion-item>
                 <ion-label position="stacked">{{ "SIGN.PASSWORD" | translate }} <ion-text color="danger">*</ion-text></ion-label>
-                <ion-input required type="password" formControlName="password" (keyup.enter)="onSubmit()" placeholder="123456"></ion-input>
+                <ion-input required type="password" formControlName="password" (keyup.enter)="onSubmit()" placeholder="Contraseña"></ion-input>
               </ion-item>
               <!-- <ion-item *ngIf="loginForm.get('password').invalid && loginForm.get('password').touched">
                 <ion-text color="danger" class="form-error">
@@ -53,7 +53,7 @@
             <form [formGroup]="forgotPasswordForm">
               <ion-item>
                 <ion-label position="stacked">{{ "SIGN.EMAIL" | translate }} <ion-text color="danger">*</ion-text></ion-label>
-                <ion-input required type="email" formControlName="username"></ion-input>
+                <ion-input required type="email" formControlName="username"  placeholder="Correo Electrónico"></ion-input>
               </ion-item>
               <!-- <ion-item *ngIf="forgotPasswordForm.get('email').invalid && loginForm.get('email').touched">
                 <ion-text color="danger" class="form-error">
@@ -77,8 +77,8 @@
 </ion-content>
 <ion-footer class="ion-no-border">
   <ion-toolbar>
-    <ion-button (click)="onRegister()" expand="block" fill="clear" shape="round" mode="ios" class="unlink">
-      <span style="font-size: .85rem">{{ "SIGN.YOU_DONT_HAVE_AN_ACCOUNT" | translate}}</span>
+    <ion-button (click)="onRegister()" expand="block" fill="clear" shape="round" mode="ios" class="unlink" id="register">
+      <span style="font-size: .85rem" [innerHtml]="'SIGN.YOU_DONT_HAVE_AN_ACCOUNT' | translate"></span>
     </ion-button>
   </ion-toolbar>
 </ion-footer>

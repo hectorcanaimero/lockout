@@ -5,11 +5,13 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "start": "ionic serve --external --port 8102",
+    "start": "ionic serve --external --port 8103",
     "build": "ionic build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "sync": "npx cap sync android",
+    "sync:open": "npx cap sync android && npx cap open android",
     "res": "cordova-res ios && cordova-res android && node scripts/resources.js",
     "res:md": "cordova-res android && node scripts/resources.js",
     "res:ios": "cordova-res ios && node scripts/resources.js"

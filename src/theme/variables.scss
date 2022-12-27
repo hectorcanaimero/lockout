@@ -311,4 +311,11 @@
   .item-skeleton {
     --background: none;
   }
+  #register {
+    .register {
+      display: block;
+      color: var(--ion-color-warning-shade) !important;
+      font-weight: 600;
+    }
+  }
 }

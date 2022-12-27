@@ -21,24 +21,31 @@ export class IntegratedService {
     private uService: UtilsService,
     private store: Store<AppState>,
     private storage: StorageService,
-  ) { }
-
-  initState = () => {
-    this.getUser();
+  ) {
+  }
+  
+  initState(): void {
+    this.getUser();    
   };
+
+
 
   paymentCheck(): void {
     const session$ = this.store.select('user')
     .pipe(
       filter((row: any) => !row.loading),
       map(({user}: any) => user),
-      switchMap((res: any) =>
-        this.ms.getMaster(`stripe/checkout/session/${res.subscriptionID}`))
-    );
-    session$.subscribe(async res => {
-      console.log(res)
-      if (res.payment_status === 'unpaid') {
-        await Browser.open({ url: res.url });
+      switchMap((res: any) => {
+        console.log(res);
+        return this.ms.postMaster(`stripe`, res);
+      }));
+    session$.subscribe(async ({ type, data }: any) => {
+      console.log(data);
+      if (type === 1 && data.payment_status === 'unpaid') {
+        // await Browser.open({ url: data.url });
+      } 
+      if (type === 2){
+        // await Browser.open({ url: data.url });
       }
     });
   }

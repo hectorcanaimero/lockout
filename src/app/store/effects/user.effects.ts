@@ -11,7 +11,7 @@ export class UserEffects {
   seervice$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.loadUser),
-      map((user: any) => actions.loadedUser({ user })),
+      map((user: any) => actions.loadedUser(user)),
       catchError(() => EMPTY)
     )
   );

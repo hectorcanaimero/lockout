@@ -28,7 +28,7 @@
         <ion-label class="ion-text-wrap">
           <h2 class="mb-3">Categorias</h2>
           <ion-badge color="primary" mode="ios" *ngFor="let category of company.categories" class="mx-1">
-            {{ category.name }}
+            {{ category.name | translate }}
           </ion-badge>
         </ion-label>
       </ion-item>
@@ -36,7 +36,7 @@
         <ion-icon slot="start" name="card-outline"></ion-icon>
         <ion-label class="ion-text-wrap">
           <h2 class="mb-2">Método de Pagos</h2>
-          <span *ngFor="let paid of company.payment">{{ paid }}, </span>
+          <span *ngFor="let paid of company.payment">{{ paid | translate }}, </span>
         </ion-label>
       </ion-item>
     </ion-list>

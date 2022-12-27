@@ -142,7 +142,7 @@ export class RegisterPage implements OnInit, AfterViewInit {
         this.store.dispatch(actions.loadCompany({ user: item.user }));
         this.uService.loadDimiss();
         await this.uService.alert({
-          header: 'Info', message: 'Company Created!',
+          header: 'Info', message: 'Compañia creada con éxito!',
           mode: 'ios', buttons: ['OK']
         });
         this.uService.navigate('/pages/home');

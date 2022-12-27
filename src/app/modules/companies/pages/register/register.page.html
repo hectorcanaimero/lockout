@@ -33,9 +33,9 @@
                 </ion-select>
               </ion-item>
               <ion-item>
-                <ion-label mode="ios"position="floating">Formas Pago <ion-text color="danger">*</ion-text></ion-label>
+                <ion-label mode="ios"position="floating">{{ 'PAYMENT' | translate }}<ion-text color="danger">*</ion-text></ion-label>
                 <ion-select placeholder="Seleccione..." interface="action-sheet" formControlName="payment" multiple="true">
-                  <ion-select-option *ngFor="let item of payment" [value]="item">{{ item }}</ion-select-option>
+                  <ion-select-option *ngFor="let item of payment" [value]="item">{{ item | translate }}</ion-select-option>
                 </ion-select>
               </ion-item>
               <ng-container>
@@ -58,7 +58,7 @@
               <div class="my-4">
                 <ion-button expand="block" (click)="onSubmit()" color="warning" [disabled]="factoryForm.invalid">
                   <ion-icon slot="start" name="checkmark-circle"></ion-icon>
-                  Salvar Compañia
+                  {{ 'COMPANY.CREATE' | translate }}
                 </ion-button>
               </div>
             </form>

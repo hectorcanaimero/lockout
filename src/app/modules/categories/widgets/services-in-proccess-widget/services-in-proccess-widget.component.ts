@@ -73,6 +73,7 @@ export class ServicesInProccessWidgetComponent implements AfterViewInit {
   };
 
   openChat(code: any): void {
-    this.uService.navigate(`/chat/room/${code}`);
+    console.log(code);
+    this.uService.navigate(`/chat/service/${code}`);
   };
 }

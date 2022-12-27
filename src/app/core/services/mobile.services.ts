@@ -5,6 +5,8 @@ import { Device, DeviceInfo } from '@capacitor/device';
 import { PushService } from '@core/services/push.service';
 import { Globalization } from '@ionic-native/globalization/ngx';
 import { TraslationService } from '@core/language/traslation.service';
+import { Browser } from '@capacitor/browser';
+import { PluginListenerHandle } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root'

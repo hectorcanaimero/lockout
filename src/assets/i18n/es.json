@@ -1,4 +1,13 @@
 {
+  "Cash": "Dinero",
+  "Credit Card": "Tarjeta Crédito",
+  "Transfer Bank": "Transferencia Bancaria",
+  "Crypto": "Criptomoneda",
+  "Paypal": "Paypal",
+  "PROVIDER_INFO": "Información proveedor",
+  "PAYMENT": "Métodos de Pago",
+  "NEW": "Nuevo",
+  "USED": "Usado",
   "WRITE_TO_COMMENTS": "Escribe tu commentario...",
   "RATE_THE_SERVICE": "Califica tu servicio?",
   "MECHANICAL WORKSHOP": "Taller Mecanico",
@@ -62,7 +71,7 @@
     "SELECT": "Seleccione..."
   },
   "SEGMENT": {
-    "IN_PROCESS": "Por Aceptar",
+    "IN_PROCESS": "Solicitudes",
     "ACCEPTED": "Aceptados",
     "CLOSED": "Finalizados"
   },
@@ -84,6 +93,9 @@
     "NAME": "CHAT",
     "PLACEHOLDER": "Escribe tu mensaje..."
   },
+  "COMPANY": {
+    "CREATE": "Crear Compañia"
+  },
   "SIGN": {
     "NEW_PWD": "Nueva clave",
     "REPEAT_PWD": "Repetir clave",
@@ -94,14 +106,15 @@
     "PHONE": "Télefono",
     "LOGIN": "Login",
     "SIGNUP": "Registrarse",
-    "ACCESS": "Acceder",
+    "ACCESS": "Entrar",
     "SEND": "enviar",
+    "CREATE": "Crear cuenta",
     "RECOVER_PASSWORD": "Recuperar clave",
     "COUNTRY": "País",
     "LANGUAGE": "Idioma",
-    "FORGET_YOUR_PASSWORD": "Olvidastes la clave",
+    "FORGET_YOUR_PASSWORD": "¿Has olvidado tu contraseña?",
     "BACK_TO_LOGIN": "Regresar al Login",
-    "YOU_DONT_HAVE_AN_ACCOUNT": "No tienens una cuenta?. Registrate",
+    "YOU_DONT_HAVE_AN_ACCOUNT": "¿No tienes una cuenta aún? <span class='register'>Registrate aquí</span>",
     "SIGNUP_INFO": "Por favor escribe la información abajo",
     "SIGNUP_TITLE": "Registrate",
     "ERROR": {

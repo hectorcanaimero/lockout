@@ -49,7 +49,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
     if(this.registerForm.invalid) { return; }
     const data = this.registerForm.value;
     await this.getDataForm(data);
-    await this.uService.load({ message: 'Loading...' });
+    await this.uService.load({ message: 'Procesando...' });
     this.auth.signUp(this.registerForm.value)
     .pipe(
       catchError(async (error) => {
@@ -76,12 +76,12 @@ export class SignUpPage implements OnInit, AfterViewInit {
       picture: [''],
       type_user: [1],
       language: ['', Validators.required],
-      password: ['admin', Validators.required],
-      phone: ['41998819501', Validators.required],
+      password: ['', Validators.required],
+      phone: ['', Validators.required],
       country: ['', Validators.required],
-      last_name: ['Velasques', [Validators.required, Validators.minLength(4)]],
-      first_name: ['Alejandro', [Validators.required, Validators.minLength(4)]],
-      email: ['aplicativo@condor.com.br', [Validators.required, Validators.email]],
+      last_name: ['', [Validators.required, Validators.minLength(4)]],
+      first_name: ['', [Validators.required, Validators.minLength(4)]],
+      email: ['', [Validators.required, Validators.email]],
     });
   };
 
@@ -112,7 +112,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
 
   private setToast = async (): Promise<void> => {
     await this.uService.toast({
-      message: 'Account created, now access with your login and password',
+      message: 'Cuenta creada, ahora accede con tu usuario y contraseña',
       position: 'top', duration: 1000
     });
     this.uService.navigate('/user/signIn');
