@@ -1,20 +1,20 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
 import * as actions from '@store/actions';
 import { UtilsService } from '@core/services/utils.service';
 import { MasterService } from '@core/services/master.service';
 import { SocketService } from '@core/services/socket.service';
+import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-rating-modal',
   templateUrl: './rating-modal.component.html',
   styleUrls: ['./rating-modal.component.scss'],
 })
-export class RatingModalComponent {
+export class RatingModalComponent implements OnInit {
 
   @Input() item: any;
-  @Input() company: any;
   num: number;
   data: any = [];
   score: number;
@@ -26,6 +26,7 @@ export class RatingModalComponent {
     private uService: UtilsService,
     private socketService: SocketService,
   ) { }
+  ngOnInit(): void { }
 
   getStar (ev: number): void {
     this.score = ev;
@@ -46,7 +47,8 @@ export class RatingModalComponent {
     const data = {
       service: this.item._id,
       comment_customer: this.comment,
-      company: this.company,
+      company: this.item.company.user._id,
+      user: this.item.user._id,
       score_customer: this.score ? this.score : 1,
     };
     this.ms.postMaster('comments', data).subscribe((res: any) => {
@@ -60,9 +62,9 @@ export class RatingModalComponent {
     this.item.status = 'finished';
     this.item.comment = commentId;
     this.socketService.changeStatus(this.item);
-    this.store.dispatch(actions.historyInit({ id: this.company }));
-    this.store.dispatch(actions.acceptedInit({ id: this.company }));
-    this.store.dispatch(actions.inProcessInit({ id: this.company }));
+    this.store.dispatch(actions.historyInit({ id: this.item._id }));
+    this.store.dispatch(actions.acceptedInit({ id: this.item._id }));
+    this.store.dispatch(actions.inProcessInit({ id: this.item._id }));
   }
 
   onClose = (): Promise<boolean> => this.uService.modalDimiss();

@@ -21,7 +21,6 @@ export class WaitingComponent implements OnInit {
 
   @Input() res: any;
   @Input() company: number;
-  companyId: string;
   room$: Observable<any>;
   offline: boolean;
   openImage = false;
@@ -40,7 +39,6 @@ export class WaitingComponent implements OnInit {
     private chatFireService: ChatFireService,
     ) { }
   ngOnInit(): void {
-    this.getCompanyId();
   }
 
   async onCancel(): Promise<void> {
@@ -59,8 +57,8 @@ export class WaitingComponent implements OnInit {
     await this.uService.load({ duration: 750, message: 'Proccesing...', });
     await this.chatFireService.createRoom(item);
     this.socketService.changeStatus(item);
-    this.store.dispatch(actions.inProcessInit({ id: this.companyId }));
-    this.store.dispatch(actions.acceptedInit({ id: this.companyId }));
+    this.store.dispatch(actions.inProcessInit({ id: item._id }));
+    this.store.dispatch(actions.acceptedInit({ id: item._id }));
     this.uService.modalDimiss();
     this.uService.navigate('/pages/home');
   };
@@ -75,8 +73,8 @@ export class WaitingComponent implements OnInit {
           text: 'OK', handler: async() => {
             await this.uService.load({ message: 'Processing...', duration: 750, });
             this.socketService.changeStatus(item);
-            this.store.dispatch(actions.inProcessInit({ id: this.companyId }));
-            this.store.dispatch(actions.acceptedInit({ id: this.companyId }));
+            this.store.dispatch(actions.inProcessInit({ id: item._id }));
+            this.store.dispatch(actions.acceptedInit({ id: item._id }));
           }
         }
       ],
@@ -101,7 +99,7 @@ export class WaitingComponent implements OnInit {
                 mode: 'ios',
                 initialBreakpoint: .85,
                 breakpoints: [0, .85,1],
-                componentProps: { item, company: this.companyId },
+                componentProps: { item },
                 component: RatingModalComponent,
               });
             });
@@ -124,17 +122,5 @@ export class WaitingComponent implements OnInit {
   goToChat(id: string) {
     this.uService.modalDimiss();
     this.uService.navigate(`/chat/service/${id}`)
-  }
-
-  private getCompanyId() {
-    this.store.select('company')
-    .pipe(
-      filter(row => !row.loading),
-      map((res: any) => res.company)
-    )
-    .subscribe(res => {
-      this.companyId = res._id;
-      console.log(this.companyId);
-    })
   }
 }
