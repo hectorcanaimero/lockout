@@ -1,6 +1,7 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
+import { Component, Input, AfterViewInit, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, timer } from 'rxjs';
+import { filter, map, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
 import * as actions from '@store/actions';
@@ -16,10 +17,11 @@ import { SocketService } from '@core/services/socket.service';
   templateUrl: './waiting.component.html',
   styleUrls: ['./waiting.component.scss'],
 })
-export class WaitingComponent {
+export class WaitingComponent implements OnInit {
 
   @Input() res: any;
   @Input() company: number;
+  companyId: string;
   room$: Observable<any>;
   offline: boolean;
   openImage = false;
@@ -37,6 +39,9 @@ export class WaitingComponent {
     private socketService: SocketService,
     private chatFireService: ChatFireService,
     ) { }
+  ngOnInit(): void {
+    this.getCompanyId();
+  }
 
   async onCancel(): Promise<void> {
     await this.uService.alert({
@@ -54,8 +59,8 @@ export class WaitingComponent {
     await this.uService.load({ duration: 750, message: 'Proccesing...', });
     await this.chatFireService.createRoom(item);
     this.socketService.changeStatus(item);
-    this.store.dispatch(actions.inProcessInit({ id: item.company._id }));
-    this.store.dispatch(actions.acceptedInit({ id: item.company._id }));
+    this.store.dispatch(actions.inProcessInit({ id: this.companyId }));
+    this.store.dispatch(actions.acceptedInit({ id: this.companyId }));
     this.uService.modalDimiss();
     this.uService.navigate('/pages/home');
   };
@@ -70,8 +75,8 @@ export class WaitingComponent {
           text: 'OK', handler: async() => {
             await this.uService.load({ message: 'Processing...', duration: 750, });
             this.socketService.changeStatus(item);
-            this.store.dispatch(actions.inProcessInit({ id: item.company._id }));
-            this.store.dispatch(actions.acceptedInit({ id: item.company._id }));
+            this.store.dispatch(actions.inProcessInit({ id: this.companyId }));
+            this.store.dispatch(actions.acceptedInit({ id: this.companyId }));
           }
         }
       ],
@@ -81,6 +86,7 @@ export class WaitingComponent {
   };
 
   async onFinishedService (item: any): Promise<void>{
+    console.log(item);
     await this.uService.alert({
       header: 'Info',
       message: this.translate.instant('MESSAGES.CLOSED_SERVICE'),
@@ -95,7 +101,7 @@ export class WaitingComponent {
                 mode: 'ios',
                 initialBreakpoint: .85,
                 breakpoints: [0, .85,1],
-                componentProps: { item },
+                componentProps: { item, company: this.companyId },
                 component: RatingModalComponent,
               });
             });
@@ -118,5 +124,17 @@ export class WaitingComponent {
   goToChat(id: string) {
     this.uService.modalDimiss();
     this.uService.navigate(`/chat/service/${id}`)
+  }
+
+  private getCompanyId() {
+    this.store.select('company')
+    .pipe(
+      filter(row => !row.loading),
+      map((res: any) => res.company)
+    )
+    .subscribe(res => {
+      this.companyId = res._id;
+      console.log(this.companyId);
+    })
   }
 }

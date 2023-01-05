@@ -14,6 +14,7 @@ import { SocketService } from '@core/services/socket.service';
 export class RatingModalComponent {
 
   @Input() item: any;
+  @Input() company: any;
   num: number;
   data: any = [];
   score: number;
@@ -45,10 +46,11 @@ export class RatingModalComponent {
     const data = {
       service: this.item._id,
       comment_customer: this.comment,
-      company: this.item.company._id,
-      score_customer: this.score ? this.score : 4,
+      company: this.company,
+      score_customer: this.score ? this.score : 1,
     };
     this.ms.postMaster('comments', data).subscribe((res: any) => {
+      console.log(res);
       this.changeStatusService(res._id);
       this.uService.modalDimiss();
     });
@@ -58,9 +60,9 @@ export class RatingModalComponent {
     this.item.status = 'finished';
     this.item.comment = commentId;
     this.socketService.changeStatus(this.item);
-    this.store.dispatch(actions.historyInit({ id: this.item.company._id }));
-    this.store.dispatch(actions.acceptedInit({ id: this.item.company._id }));
-    this.store.dispatch(actions.inProcessInit({ id: this.item.company._id }));
+    this.store.dispatch(actions.historyInit({ id: this.company }));
+    this.store.dispatch(actions.acceptedInit({ id: this.company }));
+    this.store.dispatch(actions.inProcessInit({ id: this.company }));
   }
 
   onClose = (): Promise<boolean> => this.uService.modalDimiss();

@@ -33,6 +33,7 @@ export class ServicesOpenWidgetComponent implements AfterViewInit {
   getFetchService() {
     return this.socketService.onFetchService().pipe(
       map((res: any) => {
+        console.log(res);
         if (res && res.length) {
           return res.filter((row: any) => row.status === 'in_process');
         } else if (res.status === 'in_process') {

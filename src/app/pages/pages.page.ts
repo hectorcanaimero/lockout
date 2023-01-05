@@ -12,8 +12,8 @@ import { ValidationTokenService } from '@core/services/validation-token.service'
 import { RegisterPage } from '@modules/companies/pages/register/register.page';
 import { Observable } from 'rxjs';
 import { IntegratedService } from '@core/services/integrated.service';
-import { PushService } from '@core/services/push.service';
-import { SocketService } from '@core/services/socket.service';
+import { StripeService } from '@core/services/stripe.service';
+
 
 @Component({
   selector: 'app-pages',
@@ -31,7 +31,6 @@ export class PagesPage implements AfterViewInit {
     private modalCtrl: ModalController,
     private iService: IntegratedService,
     private memberService: MemberService,
-    private socketService: SocketService,
     private validateService: ValidationTokenService,
   ) { }
 
@@ -40,7 +39,7 @@ export class PagesPage implements AfterViewInit {
     await this.getLoadAppMobile();
     this.iService.getCompany();
     await this.iService.setTokenPushOnUser();
-    await this.iService.paymentCheck();
+    //await this.iService.paymentCheck();
   }
 
   ngAfterViewInit() {

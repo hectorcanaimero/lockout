@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 import { MasterService } from '@core/services/master.service';
 import { UtilsService } from '@core/services/utils.service';
 import { Browser } from '@capacitor/browser';
+import { StripeService } from './stripe.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -21,34 +23,13 @@ export class IntegratedService {
     private uService: UtilsService,
     private store: Store<AppState>,
     private storage: StorageService,
+    private stripe: StripeService,
   ) {
   }
   
   initState(): void {
     this.getUser();    
   };
-
-
-
-  paymentCheck(): void {
-    const session$ = this.store.select('user')
-    .pipe(
-      filter((row: any) => !row.loading),
-      map(({user}: any) => user),
-      switchMap((res: any) => {
-        console.log(res);
-        return this.ms.postMaster(`stripe`, res);
-      }));
-    session$.subscribe(async ({ type, data }: any) => {
-      console.log(data);
-      if (type === 1 && data.payment_status === 'unpaid') {
-        // await Browser.open({ url: data.url });
-      } 
-      if (type === 2){
-        // await Browser.open({ url: data.url });
-      }
-    });
-  }
 
   pageState() {
 
@@ -115,6 +96,7 @@ export class IntegratedService {
     if (user) {
       this.store.dispatch(actions.loadedUser({ user }));
       this.getExistCompany(user._id);
+      this.stripe.checkRecord(user);
     }
   }
 }
