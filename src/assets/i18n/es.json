@@ -97,10 +97,10 @@
     "CREATE": "Crear Compañia"
   },
   "SIGN": {
-    "NEW_PWD": "Nueva clave",
-    "REPEAT_PWD": "Repetir clave",
-    "EMAIL": "Email",
-    "PASSWORD": "Clave",
+    "NEW_PWD": "Nueva contraseña",
+    "REPEAT_PWD": "Repetir contraseña",
+    "EMAIL": "Correo electrónico",
+    "PASSWORD": "Contraseña",
     "FIRSTNAME": "Nombres",
     "LASTNAME": "Apellidos",
     "PHONE": "Télefono",
