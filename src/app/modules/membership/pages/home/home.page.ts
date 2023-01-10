@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { LoadingController, AlertController, ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { filter, map, take, tap } from 'rxjs/operators';
-import { StripeCardNumberComponent, StripeService } from "ngx-stripe";
+import { filter, map, take, tap, switchMap } from 'rxjs/operators';
+import { StripeCardComponent, StripeCardNumberComponent, StripeService } from "ngx-stripe";
 import {
   StripeElements,
   StripeElementsOptions,
@@ -23,6 +23,7 @@ import { DatePipe } from '@angular/common';
 import { from, Observable } from 'rxjs';
 import { ConnectService } from '@modules/chat/services/connect.service';
 import { Router } from '@angular/router';
+import { MasterService } from '@core/services/master.service';
 
 
   @Component({
@@ -33,7 +34,8 @@ import { Router } from '@angular/router';
 })
 export class HomePage implements OnInit {
 
-  @ViewChild(StripeCardNumberComponent) card: StripeCardNumberComponent;
+  // @ViewChild(StripeCardNumberComponent) card: StripeCardNumberComponent;
+  @ViewChild(StripeCardComponent) card: StripeCardComponent;
   entry$: Observable<any>;
   item: any = [];
   invisible = false;
@@ -42,23 +44,43 @@ export class HomePage implements OnInit {
   numberCard: StripeCardNumberElement;
   expiryCard: StripeCardExpiryElement;
 
+  // cardOptions: StripeCardElementOptions = {
+  //   iconStyle: 'solid',
+  //   style: {
+  //     base: {
+  //       color: '#303030', fontWeight: '400', fontFamily: 'Roboto, sans-serif',
+  //       fontSize: '18px', '::placeholder': { color: '#303030' },
+  //     }
+  //   }
+  // }
+  // elementsOptions: StripeElementsOptions = { locale: 'es' };
+
   cardOptions: StripeCardElementOptions = {
-    iconStyle: 'solid',
     style: {
       base: {
-        color: '#303030', fontWeight: '400', fontFamily: 'Roboto, sans-serif',
-        fontSize: '18px', '::placeholder': { color: '#303030' },
-      }
-    }
-  }
-  elementsOptions: StripeElementsOptions = { locale: 'es' };
+        iconColor: '#666EE8',
+        color: '#31325F',
+        fontWeight: '300',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSize: '18px',
+        '::placeholder': {
+          color: '#CFD7E0',
+        },
+      },
+    },
+  };
+
+  elementsOptions: StripeElementsOptions = {
+    locale: 'es',
+  };
 
   paidState = true;
 
   constructor(
     private db: MemberService,
-    private store: Store<AppState>,
     private router: Router,
+    private ms: MasterService,
+    private store: Store<AppState>,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private stripeService: StripeService,
@@ -72,8 +94,13 @@ export class HomePage implements OnInit {
   }
 
   getData(): void {
-    const promise: any = this.storageService.getStorage('oSubs');
-    this.entry$ = from(promise);
+    const promise: any = this.storageService.getStorage('oPayment');
+    this.entry$ = from(promise).pipe(
+      switchMap((res: any) => {
+        console.log(res);
+        return this.ms.getMaster(`payments/subscription/${res.subscription}`)
+      })
+    );
     this.entry$.subscribe(res => console.log(res));
   }
 
@@ -89,19 +116,31 @@ export class HomePage implements OnInit {
       })
   }
 
-  onPay = async () => {
-    const load = await this.loadingCtrl.create({ message: 'Procesando...' });
-    await load.present();
-    this.store.select('customer')
-    .pipe(
-      filter(row => !row.loading),
-      map((res: any) => res.item.item),
-    )
-    .subscribe((res: any) =>{
-      console.log(res);
-      this.send(res);
-    });
-
+  async onPay () {
+    const payment: any = await this.storageService.getStorage('oPayment');
+    if (payment) {
+      console.log(payment.client_secret);
+      this.stripeService.confirmCardPayment(
+        payment.client_secret, 
+        {
+          payment_method: {
+            card: this.card.element,
+            billing_details: { name: 'Plan' },
+          },
+        }
+        ).subscribe((result) => {
+        console.log(result);
+        if (result.error) {
+          // Show error to your customer (e.g., insufficient funds)
+          console.log(result.error.message);
+        } else {
+          // The payment has been processed!
+          if (result.paymentIntent.status === 'succeeded') {
+            // Show a success message to your customer
+          }
+        }
+      });
+    }
   }
 
   onClose = () => this.modalCtrl.dismiss();

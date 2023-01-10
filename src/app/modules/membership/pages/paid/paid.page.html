@@ -1,7 +1,52 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="ios">
     <ion-title>Header</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <div class="container">
+    <ion-card>
+      <div class="row">
+        <div class="col-6">
+          <ion-label class="ion-text-center">
+            <p>Plano</p>
+            <h2>Junior</h2>
+            <h1>{{ 10 | currency }}</h1>
+          </ion-label>
+        </div>
+        <div class="col-6">
+          <ion-label class="plan ion-text-center">
+            <p>Plano</p>
+            <h2>Junior</h2>
+            <h1>{{ 10 | currency }}</h1>
+          </ion-label>
+        </div>
+      </div>
+    </ion-card>
+    <!-- <div class="row">
+      <div class="col-6">
+        <ion-card class="free">
+          <ion-label class="ion-text-center">
+            <p>Plano</p>
+            <h2>Junior</h2>
+            <h1>{{ 10 | currency }}</h1>
+          </ion-label>
+        </ion-card>
+      </div>
+      <div class="col-6">
+        <ion-card class="plan">
+          <ion-label class="ion-text-center">
+            <p>Plano</p>
+            <h2>Junior</h2>
+            <h1>{{ 10 | currency }}</h1>
+          </ion-label>
+        </ion-card>
+      </div>
+    </div> -->
+  </div>
 </ion-content>

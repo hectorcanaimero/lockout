@@ -9,7 +9,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { MobileService } from '@core/services/mobile.services';
 import { StorageService } from '@core/services/storage.service';
 import { AuthService } from '@modules/users/services/auth.service';
-import * as MemberPage from '@modules/membership/pages/home/home.page';
+import * as MemberPage from '@modules/membership/pages/paid/paid.page';
 import { PostContentsWidgetComponent } from '@modules/contents/widget/post/post.component';
 
 
@@ -82,7 +82,7 @@ export class HomePage implements OnInit, AfterViewInit {
       mode: 'ios',
       initialBreakpoint: 1,
       breakpoints: [0, .5, .85, 1],
-      component: MemberPage.HomePage,
+      component: MemberPage.PaidPage,
     });
   };
 
