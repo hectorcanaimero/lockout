@@ -26,6 +26,7 @@ export class PagesPage implements AfterViewInit {
   company: number;
   user: any;
   constructor(
+    private stripeService: StripeService,
     private store: Store<AppState>,
     private storage: StorageService,
     private modalCtrl: ModalController,
@@ -48,6 +49,7 @@ export class PagesPage implements AfterViewInit {
     this.stripeCustomer();
     this.getConfigStripe();
     this.validateService.validateMember();
+    this.stripeService.validatePeriodtest();
     // this.loadServices();
   }
 

@@ -4,7 +4,7 @@ const config: CapacitorConfig = {
   appId: 'com.mekadevelopments.lt',
   appName: 'Meka LT',
   webDir: 'www',
-  bundledWebRuntime: false,
+  bundledWebRuntime: true,
   plugins: {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
@@ -28,10 +28,10 @@ const config: CapacitorConfig = {
   android: {
     allowMixedContent: true
   },
-  // server: {
-  //   cleartext: true,
-  //   url: 'http://192.168.0.227:8103',
-  // },
+  server: {
+    cleartext: true,
+    url: 'http://192.168.0.227:8104',
+  },
 };
 
 export default config;

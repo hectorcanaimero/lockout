@@ -17,7 +17,7 @@ export default class ApiInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('MEKA LT ', request.url);
+    console.log('LT', request.url);
     return next.handle(request);
     // this.getNetwork(request, next);
     // const promise = this.storage.getStorage('tokenCompany');

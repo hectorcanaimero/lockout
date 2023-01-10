@@ -11,6 +11,8 @@ import { UtilsService } from '@core/services/utils.service';
 })
 export class PaidPage implements OnInit {
   user: any;
+  payment: any;
+  today = new Date();
   constructor(
     private uService: UtilsService,
     private storage: StorageService
@@ -20,6 +22,10 @@ export class PaidPage implements OnInit {
     await this.getData();
   }
 
+  onPay() {
+    console.log('object');
+  }
+
   onClose(): void {
     this.uService.modalDimiss();
   }
@@ -27,5 +33,7 @@ export class PaidPage implements OnInit {
   private async getData() {
     this.user = await this.storage.getStorage('oUser');
     console.log(this.user);
+    this.payment = await this.storage.getStorage('oPayment');
+    console.log(this.payment);
   }
 }

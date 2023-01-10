@@ -1,6 +1,6 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
-    <ion-title>Header</ion-title>
+    <ion-title></ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="onClose()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -9,44 +9,43 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div class="container">
-    <ion-card>
-      <div class="row">
-        <div class="col-6">
-          <ion-label class="ion-text-center">
-            <p>Plano</p>
-            <h2>Junior</h2>
-            <h1>{{ 10 | currency }}</h1>
-          </ion-label>
-        </div>
+  <ion-card class="my-5">
+    <ion-card-content>
+      <div class="row g-1 ">
         <div class="col-6">
           <ion-label class="plan ion-text-center">
+            <h2>Plan Junior</h2>
             <p>Plano</p>
-            <h2>Junior</h2>
+          </ion-label>
+        </div>
+        <div class="col-6 align-self-center">
+          <ion-label class="plan ion-text-center">
             <h1>{{ 10 | currency }}</h1>
           </ion-label>
         </div>
       </div>
-    </ion-card>
-    <!-- <div class="row">
-      <div class="col-6">
-        <ion-card class="free">
-          <ion-label class="ion-text-center">
-            <p>Plano</p>
-            <h2>Junior</h2>
-            <h1>{{ 10 | currency }}</h1>
-          </ion-label>
-        </ion-card>
-      </div>
-      <div class="col-6">
-        <ion-card class="plan">
-          <ion-label class="ion-text-center">
-            <p>Plano</p>
-            <h2>Junior</h2>
-            <h1>{{ 10 | currency }}</h1>
-          </ion-label>
-        </ion-card>
-      </div>
-    </div> -->
+    </ion-card-content>
+  </ion-card>
+  <ion-list>
+    <ion-item>
+      <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
+      <ion-label>
+        <p>Tu cuenta fue creada</p>
+        <h2>{{ user.createdAt | amLocale:'es'| amDateFormat: 'DD MMMM YYYY' }}</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="key-outline"></ion-icon>
+      <ion-label>
+        <h1 class="dia_prueba ion-text-wrap">
+          {{ payment.config[0].free - (today | amLocale:'es' | amDifference: user.createdAt : 'days') }} En periodo de prueba
+        </h1>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <div class="container mt-4">
+    <ion-button (click)="onPay()" expand="block" color="primary" shape="round">
+      Pagar
+    </ion-button>
   </div>
 </ion-content>

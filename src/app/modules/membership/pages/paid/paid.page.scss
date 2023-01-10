@@ -3,28 +3,53 @@ ion-toolbar, ion-content {
 }
 
 ion-content {
+  ion-list {
+    background: none;
+    ion-item {
+      --padding-start: 15px;
+      --padding-end: 15px;
+      --background: none;
+      ion-icon {
+        color: rgba(58, 58, 58, 0.933);
+      }
+      ion-label {
+        --color: rgba(58, 58, 58, 0.933);
+        p, h1, h2, h3 {
+          color: rgba(58, 58, 58, 0.933);
+        }
+        h2 {
+          font-size: 20px;
+          font-weight: 500;
+        }
+        .dia_prueba {
+          font-size: 20px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
   ion-card  {
-    min-height: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    .plan {
-      p {
-        font-size: 18px;
-      }
-      h2 {
-        border-radius: 5px;
-        padding: 4px 0;
-        font-weight: 600;
-        letter-spacing: 1px;
-        background: rgb(239, 218, 115);
-      }
-      h1 {
-        margin: 5px 0;
-        font-size: 32px;
-        font-weight: 600;
+    --background: #fafafa;
+    ion-card-content {
+      .plan {
+        p {
+          color: rgba(58, 58, 58, 0.933);
+          font-size: 14px;
+        }
+        h2 {
+          border-radius: 5px;
+          padding: 4px 0;
+          font-weight: 600;
+          letter-spacing: 1px;
+          color: rgba(58, 58, 58, 0.933);
+          background: rgb(239, 218, 115);
+        }
+        h1 {
+          margin: 5px 0;
+          font-size: 36px;
+          font-weight: 600;
+          color: rgba(58, 58, 58, 0.933);
+        }
       }
     }
   }

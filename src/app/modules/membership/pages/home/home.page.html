@@ -47,13 +47,14 @@
           </div>
         </ion-item>
         <ion-item>
+          <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
           <ion-label class="ion-text-wrap">
             Tu próxima fecha de facturación es el Periodo
             {{ item?.trial_end | amFromUnix | amDateFormat: 'DD MMMM YYYY' }}
           </ion-label>
         </ion-item>
       </ion-list>
-      <ion-button (click)="onPaid('seti_1MIHoqBciJuLJJgxQWZbShve_secret_N2MXFCwRXoP5KB7nZ4hJ4AH7TRJ8ktg')" expand="block" mode="ios" fill="clear">
+      <ion-button (click)="onPaid('seti_1MIHoqBciJuLJJgxQWZbShve_secret_N2MXFCwRXoP5KB7nZ4hJ4AH7TRJ8ktg')" expand="block" mode="ios" fill="clear" class="mt-4">
         Pagar subscripción
       </ion-button>
     </ion-card>
