@@ -10,7 +10,7 @@ import { StorageService } from '@core/services/storage.service';
 import { MemberService } from '@modules/membership/services/membership.service';
 import { ValidationTokenService } from '@core/services/validation-token.service';
 import { RegisterPage } from '@modules/companies/pages/register/register.page';
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { IntegratedService } from '@core/services/integrated.service';
 import { StripeService } from '@core/services/stripe.service';
 
@@ -40,7 +40,6 @@ export class PagesPage implements AfterViewInit {
     await this.getLoadAppMobile();
     this.iService.getCompany();
     await this.iService.setTokenPushOnUser();
-    //await this.iService.paymentCheck();
   }
 
   ngAfterViewInit() {
@@ -49,7 +48,9 @@ export class PagesPage implements AfterViewInit {
     this.stripeCustomer();
     this.getConfigStripe();
     this.validateService.validateMember();
-    this.stripeService.validatePeriodtest();
+    timer(10*1000).subscribe(() => {
+      this.stripeService.validatePeriodtest();
+    })
     // this.loadServices();
   }
 

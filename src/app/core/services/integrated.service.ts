@@ -1,17 +1,16 @@
-import { AlertController, NavController } from '@ionic/angular';
-import { filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
 import { StorageService } from '@core/services/storage.service';
-import { Router } from '@angular/router';
 import { MasterService } from '@core/services/master.service';
 import { UtilsService } from '@core/services/utils.service';
 import { Browser } from '@capacitor/browser';
+import { Geolocation } from '@capacitor/geolocation';
 import { StripeService } from './stripe.service';
-import { Observable } from 'rxjs';
+import { interval } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -77,14 +76,38 @@ export class IntegratedService {
     const user = await this.storage.getStorage('oUser');
     if (user) {
       this.getExistCompany(user._id);
+      if (user.status) {
+        this.updateLocation();
+      }
     }
   };
+
+  updateLocation() {
+    const company$ = this.store.select('company')
+    .pipe(filter(row => !row.loading), map((res: any)=> res.company));
+    company$.subscribe((res: any) => {
+      if (res.typeCompany.type === 1) {
+        this.setLocation(res._id);
+      }
+    })
+  }
 
   async setTokenPushOnUser() {
     const oUser = await this.storage.getStorage('oUser');
     const oPush = await this.storage.getStorage('oPush');
     if (oPush) this.ms.patchMaster(`users/${oUser._id}`, { push: oPush })
       .subscribe(() => null);
+  }
+
+  private setLocation(id: string) {
+    interval(15*1000)
+    .subscribe(async () => {
+      const { coords } = await Geolocation.getCurrentPosition();
+      this.ms.patchMaster(`companies/${id}`, {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      }).subscribe(res => res);
+    });
   }
 
   private getExistCompany(user: any) {

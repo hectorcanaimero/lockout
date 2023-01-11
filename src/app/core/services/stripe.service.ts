@@ -1,3 +1,4 @@
+import { PaidPage } from './../../modules/membership/pages/paid/paid.page';
 import { MasterService } from './master.service';
 import { Injectable } from "@angular/core";
 import { UtilsService } from './utils.service';
@@ -20,13 +21,14 @@ export class StripeService {
     private uService: UtilsService,
     private store: Store<AppState>,
     private storageService: StorageService,
-  ) {}
-
+  ) { }
   async validatePeriodtest() {
     const { createdAt } = await this.storageService.getStorage('oUser');
     const payment = await this.storageService.getStorage('oPayment');
     const conf: any = payment.config[0];
     const diff = this.diffData(createdAt);
+    console.log(diff, conf.free);
+    console.log('DIFF', diff > conf.free);
     if (diff >= conf.free) {
       this.checkoutSession(payment);
     }
@@ -44,7 +46,12 @@ export class StripeService {
     const data = { customer: payment.customer, price: payment.config[0].price };
     this.ms.postMaster('payments/create-checkout-session', data)
     .subscribe(async (res: any) => {
-      await Browser.open({ url: res.url });
+      this.uService.modal({
+        mode: 'ios',
+        component: PaidPage,
+        componentProps: { res, close: false  }
+      })
+      // await Browser.open({ url: res.url });
     });
     this.setPaymentStorage(payment.user._id);
   }
@@ -52,8 +59,13 @@ export class StripeService {
   getPaymentSession(payment: any): void {
     this.ms.getMaster('payments/checkout-session/' + payment.session)
     .subscribe(async (res: any) => {
+      console.log(res);
       if (res.payment_status === 'unpaid') {
-        await Browser.open({ url: res.url });
+        this.uService.modal({
+          mode: 'ios',
+          component: PaidPage,
+          componentProps: { res, close: false }
+        })
       }
     });
   }
@@ -116,6 +128,7 @@ export class StripeService {
       Browser.open({ url: res.url });
     });
   }
+
 
   private parseData(data: any) {
     return {

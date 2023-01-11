@@ -1,11 +1,13 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
     <ion-title></ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="onClose()">
-        <ion-icon slot="icon-only" name="close"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ng-container *ngIf="close">
+      <ion-buttons slot="end">
+        <ion-button (click)="onClose()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ng-container>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -31,21 +33,33 @@
       <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
       <ion-label>
         <p>Tu cuenta fue creada</p>
-        <h2>{{ user.createdAt | amLocale:'es'| amDateFormat: 'DD MMMM YYYY' }}</h2>
+        <h2>{{ user?.createdAt | amLocale:'es'| amDateFormat: 'DD MMMM YYYY' }}</h2>
       </ion-label>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="key-outline"></ion-icon>
       <ion-label>
         <h1 class="dia_prueba ion-text-wrap">
-          {{ payment.config[0].free - (today | amLocale:'es' | amDifference: user.createdAt : 'days') }} En periodo de prueba
+          <ng-container *ngIf="total <= 0; else validate">
+            Se acabo tu periodo de prueba
+          </ng-container>
+          <ng-template #validate>
+            {{ total }} dias en periodo de prueba
+          </ng-template>
         </h1>
       </ion-label>
     </ion-item>
   </ion-list>
   <div class="container mt-4">
-    <ion-button (click)="onPay()" expand="block" color="primary" shape="round">
-      Pagar
-    </ion-button>
+    <ng-container *ngIf="res && res.payment_status === 'unpaid'">
+      <ion-button (click)="onPay(res.url)" expand="block" color="primary">
+        Pagar
+      </ion-button>
+    </ng-container>
+    <ng-container *ngIf="url">
+      <ion-button (click)="onPay(url)" expand="block" color="success">
+        Ver Factura
+      </ion-button>
+    </ng-container>
   </div>
 </ion-content>

@@ -1,39 +1,62 @@
-import { Component, OnInit } from '@angular/core';
+import { subscribeOn, timer } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
+import { Browser } from '@capacitor/browser';
 import { StorageService } from '@core/services/storage.service';
 import { UtilsService } from '@core/services/utils.service';
+import { MasterService } from '@core/services/master.service';
 
-  @Component({
+@Component({
   selector: 'app-paid',
   templateUrl: 'paid.page.html',
   styleUrls: ['paid.page.scss'],
   providers: [DatePipe]
 })
 export class PaidPage implements OnInit {
+  @Input() res: any;
+  @Input() close = true;
   user: any;
   payment: any;
-  today = new Date();
+  url: string;
+  total = 0;
   constructor(
+    private ms: MasterService,
     private uService: UtilsService,
-    private storage: StorageService
+    private storage: StorageService,
   ){}
 
   async ngOnInit(): Promise<void> {
     await this.getData();
+    timer(500).subscribe(() => console.log(this.res));
   }
 
-  onPay() {
-    console.log('object');
+  async onPay(url) {
+    await Browser.open({ url });
+    Browser.addListener('browserFinished', () => {
+      this.uService.modalDimiss();
+    });
   }
 
   onClose(): void {
     this.uService.modalDimiss();
   }
 
+  diffData(createdAt: any) {
+    const a = moment(createdAt).format();
+    return moment().diff(a, 'days');
+  }
+
   private async getData() {
     this.user = await this.storage.getStorage('oUser');
-    console.log(this.user);
     this.payment = await this.storage.getStorage('oPayment');
+    const diff = this.diffData(this.user.createdAt);
+    this.total = this.payment.config[0].free - diff;
     console.log(this.payment);
+    this.ms.postMaster('payments/billing-portal', { user: this.payment.user._id })
+    .subscribe((res: any) => {
+      console.log(res);
+      this.url = res.url;
+    });
   }
 }
