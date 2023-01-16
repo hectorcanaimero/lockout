@@ -87,8 +87,8 @@ export class PagesPage implements AfterViewInit {
     .subscribe(
       (res: any) => {
         if (res.item.message || res.error) {
-          this.memberService.createCustomer(data)
-            .subscribe((res: any) => this.store.dispatch(actions.customerLoad({ email: data.email})));
+          // this.memberService.createCustomer(data)
+            // .subscribe((res: any) => this.store.dispatch(actions.customerLoad({ email: data.email})));
         }
       }
     )

@@ -100,13 +100,15 @@ export class IntegratedService {
   }
 
   private setLocation(id: string) {
-    interval(15*1000)
+    interval(30*1000)
     .subscribe(async () => {
       const { coords } = await Geolocation.getCurrentPosition();
-      this.ms.patchMaster(`companies/${id}`, {
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      }).subscribe(res => res);
+      if (coords) {
+        this.ms.patchMaster(`companies/${id}`, {
+          latitude: +coords.latitude,
+          longitude: +coords.longitude,
+        }).subscribe(res => res);
+      }
     });
   }
 

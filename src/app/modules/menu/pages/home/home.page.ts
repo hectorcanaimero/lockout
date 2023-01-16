@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -29,9 +30,9 @@ export class HomePage implements OnInit, AfterViewInit {
     { name: 'Mensajes', url: '/chat/soporte' }
   ];
   subContent = [
-    { name: 'Privacy Policy', modal: true },
-    { name: 'Term of Use', modal: true },
-    { name: 'About Meka', modal: true }
+    { name: 'Política de privacidad', modal: true },
+    { name: 'Términos de uso', modal: true },
+    { name: 'Acerca de Meka', modal: true }
   ];
   user$: Observable<any>;
   count$: Observable<number>;
@@ -47,6 +48,7 @@ export class HomePage implements OnInit, AfterViewInit {
     private store: Store<AppState>,
     private uService: UtilsService,
     private mService: MobileService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -111,8 +113,8 @@ export class HomePage implements OnInit, AfterViewInit {
 
   async logout(): Promise<void> {
     await this.uService.load({
-      message: 'Delete User info...',
-      duration: 2500
+      message: this.translate.instant('PROCCESSING'),
+      duration: 1000
     });
     await this.auth.signOut();
   }

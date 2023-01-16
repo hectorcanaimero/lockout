@@ -21,9 +21,9 @@
               </ion-item>
               <ion-item>
                 <ion-label mode="ios"position="floating">Tipo Compañia <ion-text color="danger">*</ion-text></ion-label>
-                <ion-select formControlName="typeCompany" placeholder="Seleccione..." interface="action-sheet">
+                <ion-select formControlName="typeCompany" placeholder="Seleccione..." interface="action-sheet" (ionChange)="onTypeCompany($event)">
                   <ion-select-option *ngFor="let item of types$ | async"
-                    [value]="item._id">{{ item.name | translate | titlecase }}</ion-select-option>
+                    [value]="item">{{ item.name | translate | titlecase }}</ion-select-option>
                 </ion-select>
               </ion-item>
               <ion-item>
@@ -38,7 +38,7 @@
                   <ion-select-option *ngFor="let item of payment" [value]="item">{{ item | translate }}</ion-select-option>
                 </ion-select>
               </ion-item>
-              <ng-container>
+              <ng-container *ngIf="typeCompany !== 1">
                 <br />
                 <ion-button (click)="goToMap()" expand="block" color="warning">
                   <ion-icon slot="start" name="location"></ion-icon>

@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/app.state';
-import { filter, map } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-on-off-widget',
@@ -10,21 +10,20 @@ import { filter, map } from 'rxjs';
 })
 export class OnOffWidgetComponent implements AfterViewInit {
 
-  offline = true;
+  online = false;
+  onLine$!: Observable<boolean>;
+
 
   constructor(
     private store: Store<AppState>,
   ) { }
 
   ngAfterViewInit(): void {
-    this.store.select('company')
+    this.onLine$ = this.store.select('company')
     .pipe(
       filter(row => !row.loading),
-      map((res: any) => res.company)
-    )
-    .subscribe((res: any) => {
-      this.offline = res.status;
-    })
+      map((res: any) => res.company.status)
+    );
   }
 
 }

@@ -16,7 +16,7 @@ export class MemberService {
     private storageService: StorageService,
   ) { }
 
-  createCustomer = (data: any) => this.http.post(`${url}/customer`, data);
+  // createCustomer = (data: any) => this.http.post(`${url}/customer`, data);
   getCustomerByEmail = (email: string) => this.http.post(`${url}/customer/email`, { email });
   getConfig = () => this.http.get(`${url}/orders/config`);
 

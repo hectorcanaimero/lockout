@@ -65,8 +65,8 @@ export class SignInPage implements OnInit, AfterViewInit {
 
   loadForm = () => {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(4)]],
+      username: ['aplicativo@condor.com.br', [Validators.required, Validators.email]],
+      password: ['admin', [Validators.required, Validators.minLength(4)]],
     });
     this.forgotPasswordForm = this.fb.group({
       username: ['', [Validators.required, Validators.email]],
@@ -92,9 +92,11 @@ export class SignInPage implements OnInit, AfterViewInit {
     }))
     .subscribe(async (res: any) => {
       this.uService.loadDimiss();
+      console.log(res.user._id);
       await this.storage.setStorage('oUser', res.user);
       await this.storage.setStorage('oAccess', res.access);
       this.store.dispatch(actions.loadUser({ user: res.user }));
+      this.store.dispatch(actions.loadCompany({ user: res.user._id }));
       this.uService.navigate('/pages/home');
     });
   }

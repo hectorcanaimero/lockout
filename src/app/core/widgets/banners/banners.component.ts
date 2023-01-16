@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Geolocation, Position } from '@capacitor/geolocation';
 import { Browser } from '@capacitor/browser';
@@ -12,7 +12,7 @@ import { ProfileComponent } from './profile/profile.component';
   templateUrl: './banners.component.html',
   styleUrls: ['./banners.component.scss'],
 })
-export class BannersWidgetComponent implements OnInit {
+export class BannersWidgetComponent implements AfterViewInit {
 
   options = {
     speed: 600,
@@ -27,7 +27,7 @@ export class BannersWidgetComponent implements OnInit {
     private uService: UtilsService,
   ) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.getData();
   }
 

@@ -27,19 +27,12 @@ export class StripeService {
     const payment = await this.storageService.getStorage('oPayment');
     const conf: any = payment.config[0];
     const diff = this.diffData(createdAt);
-    console.log(diff, conf.free);
-    console.log('DIFF', diff > conf.free);
-    if (diff >= conf.free) {
-      this.checkoutSession(payment);
-    }
+    if (diff >= conf.free) this.checkoutSession(payment);
   }
 
   async checkoutSession(payment: any) {
-    if(!payment.session) {
-      this.setPaymentSession(payment);
-    } else {
-      this.getPaymentSession(payment);
-    }
+    if(!payment.session) this.setPaymentSession(payment);
+    else this.getPaymentSession(payment);
   }
 
   setPaymentSession(payment: any): void {
@@ -52,7 +45,7 @@ export class StripeService {
         componentProps: { res, close: false  }
       })
       // await Browser.open({ url: res.url });
-    });
+    }); 
     this.setPaymentStorage(payment.user._id);
   }
 

@@ -5,7 +5,7 @@ import { SolicitudModalComponent } from '@core/widgets/solicitud-modal/solicitud
 import { Observable } from 'rxjs';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -33,12 +33,16 @@ export class HeaderComponent implements AfterViewInit {
   }
 
   getData = (): void => {
-    const openedCount$ =  this.store.select('solicitud').pipe(
-      filter(row => !row.loading ), map((res: any) => res.total) );
-    const acceptedCount$ =  this.store.select('accepted').pipe(
-      filter(row => !row.loading ), map((res: any) => res.total) );
-    openedCount$.subscribe(res => this.count = res);
-    acceptedCount$.subscribe(res => this.count += res);
+    const openedCount$ =  this.store.select('serviceInProcess').pipe(
+      filter(row => !row.loading ), map(({ items }: any) => items) );
+    const acceptedCount$ =  this.store.select('serviceAccepted').pipe(
+      filter(row => !row.loading ), map(({ items }: any) => items) );
+    openedCount$.subscribe(res => this.count = res ? res.length : 0);
+    acceptedCount$.subscribe(res => {
+      const a = res ? res.length : 0;
+      this.count = this.count + a;
+    });
+    console.log('COUNT ', this.count);
   };
 
 

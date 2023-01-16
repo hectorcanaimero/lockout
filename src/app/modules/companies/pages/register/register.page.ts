@@ -30,7 +30,7 @@ export class RegisterPage implements OnInit, AfterViewInit {
   countries: any = [];
   yenny: any;
   payment = ['Cash', 'Credit Card', 'Transfer Bank', 'Crypto', 'Paypal'];
-
+  typeCompany: number;
 
   address: any;
   factoryForm: FormGroup;
@@ -128,6 +128,10 @@ export class RegisterPage implements OnInit, AfterViewInit {
       const active = res.filter((row: any) => row._id === value)[0];
       this.isMechanics = this.activeAddress(active.name);
     })
+  }
+
+  onTypeCompany(ev: any) {
+    this.typeCompany = ev.detail.value.type;
   }
 
   private activeAddress(name: string) {
