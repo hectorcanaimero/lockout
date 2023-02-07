@@ -1,36 +1,25 @@
 <div class="container widget-slides">
   <ion-label>
-    <h2 class="mb-3">{{'WIDGETS.IN_PROCESS' | translate }}</h2>
+    <h2 class="mb-3 white-text">{{'WIDGETS.IN_PROCESS' | translate }}</h2>
   </ion-label>
   <ng-container *ngIf="(service$ | async) as service; else notFound">
-    <ion-slides mode="ios" [options]="options">
-      <ng-container *ngIf="service.length > 0; else single">
-        <ion-slide *ngFor="let item of service" (click)="openModal(item, company)">
-          <div class="service">
-            <ion-label>
-              <p class="date">{{ item.createdAt | amLocale:'es' | amTimeAgo  }}</p>
-              <p>{{ item.category.name | translate }}</p>
-              <h2>{{item._id.slice(0,10)}}...</h2>
-              <p>{{ item.brand.name}} {{ item.model.name }}</p>
-              <h4>Distancia: {{ item.distance | unitConverted }}</h4>
-            </ion-label>
-          </div>
-        </ion-slide>
-      </ng-container>
-      <ng-template #single>
-        <ion-slide (click)="openModal(service, company)">
-          <div class="service">
-            <ion-label>
-              <p class="date">{{ service.createdAt | amLocale:'es' | amTimeAgo  }}</p>
-              <p>{{ service.category.name | translate }}</p>
-              <h2>{{service._id.slice(0,10)}}...</h2>
-              <p>{{ service.brand.name}} {{ service.model.name }}</p>
-              <h4>Distancia: {{ service.distance | unitConverted }}</h4>
-            </ion-label>
-          </div>
-        </ion-slide>
-      </ng-template>
-    </ion-slides>
+    <ng-container *ngIf="service.length > 0; else notFound">
+      <ion-slides mode="ios" [options]="options">
+        <ng-container *ngFor="let item of service">
+          <ion-slide (click)="openModal(item, company)">
+            <div class="service">
+              <ion-label>
+                <p class="date">{{ item.createdAt | amLocale:'es' | amTimeAgo  }}</p>
+                <p>{{ item.category.name | translate }}</p>
+                <h2>{{item._id | slice:0:7 }}...</h2>
+                <p>{{ item.brand.name}} {{ item.model.name }}</p>
+                <h4>Distancia: {{ item.distance | unitConverted }}</h4>
+              </ion-label>
+            </div>
+          </ion-slide>
+        </ng-container>
+      </ion-slides>
+    </ng-container>
   </ng-container>
   <ng-template #notFound>
     <ion-slides mode="ios" [options]="options">

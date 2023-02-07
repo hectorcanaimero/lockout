@@ -1,63 +1,30 @@
 
-ion-header, ion-footer {
-  ion-toolbar {
-    --background: #F0F3F8;
-  }
-}
-ion-content {
+ion-toolbar, ion-content {
   --background: #F0F3F8;
-  #dados {
-    ion-list {
-      --background: none;
-      background: none;
-      ion-item {
-        --background: none;
-        --color: var(--ion-meka-primary);
-        ion-label {
-          --color: var(--ion-meka-primary);
-          p, h2, h3 { color: var(--ion-meka-primary); }
-          p { font-size: 1rem; }
-          .code {
-            font-size: 1.3rem;
-            font-weight: 300;
+}
+
+ion-content {
+  ion-accordion-group {
+    ion-accordion {
+      .header {
+        --background: #fafafa !important;
+      }
+      ion-list {
+        background: #fafafa;
+        ion-item {
+          --background: #fafafa !important;
+          ion-label, ion-icon, p, h3, h2 {
+            --color: #1e1e1e;
+            color: #1e1e1e;
+            p {
+              font-size: 1rem;
+            }
+            h3 {
+              font-size: 1.1rem;
+            }
           }
         }
       }
-    }
-  }
-  .pictures {
-    ion-item {
-      --background: none;
-      ion-label, ion-icon {
-        --color: var(--ion-meka-primary);
-        color: var(--ion-meka-primary);
-        p, h2, h3 { color: var(--ion-meka-primary); }
-      }
-    }
-  }
-  ion-slides {
-    ion-slide {
-      img {
-        border-radius: 10px;
-      }
-    }
-  }
-  .map-wrapper {
-    position: relative;
-    margin: 1rem 0;
-    #map {
-      width: 100%;
-      height: 250px;
-    }
-    #map_center {
-      position: absolute;
-      z-index: 99;
-      height: 40px;
-      width: 40px;
-      top: 50%;
-      left: 50%;
-      margin-left: -21px;
-      margin-top: -41px;
     }
   }
 }
@@ -73,4 +40,12 @@ agm-map {
 
 .chat {
   --border-radius: 20px;
+}
+
+ion-slides {
+  ion-slide {
+    img {
+      border-radius: 10px;
+    }
+  }
 }

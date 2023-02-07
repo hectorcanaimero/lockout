@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as fs from '@angular/fire/firestore';
-import { Firestore } from '@angular/fire/firestore';
-import { map, Observable, switchMap } from 'rxjs';
+import { Firestore, getCountFromServer } from '@angular/fire/firestore';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -31,14 +31,25 @@ export class ChatFireService {
     return fs.collectionData(query, { idField: 'id' }) as Observable<any[]>;
   }
 
-  unReadMessages(type_user: number, service: string) {
+  unReadMessages(type_user: number, service: string): Observable<number> {
     const query = fs.query(
       fs.collection(this.fireStore, `services/${service}/chat`),
       fs.where('view_message', '==', false),
       fs.where('type_user', '==', type_user)
     );
-    const data$ = fs.collectionData(query, { idField: 'id' }) as Observable<any[]>;
-    return data$.pipe(map((res: any) => res.length));
+    const data$ = fs.collectionData(query) as Observable<any[]>;
+    return data$.pipe(
+      map((res: any) => res ? res.length : 0)
+    );
+  }
+  async unReadMessages2(type_user: number, service: string): Promise<number> {
+    const query = fs.query(
+      fs.collection(this.fireStore, `services/${service}/chat`),
+      fs.where('view_message', '==', false),
+      fs.where('type_user', '==', type_user)
+    );
+    const count = await getCountFromServer(query);
+    return count.data().count > 0 ? count.data().count : null;
   }
 
   readMessages(service: string) {

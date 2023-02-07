@@ -1,7 +1,9 @@
+import { TranslateService } from '@ngx-translate/core';
 import { Component, Input, OnInit } from "@angular/core";
-import { MasterService } from "@core/services/master.service";
-import { UtilsService } from "@core/services/utils.service";
 import { Observable } from "rxjs";
+
+import { UtilsService } from "@core/services/utils.service";
+import { MasterService } from '@core/services/master.service';
 
 @Component({
   selector: 'app-banner-profile',
@@ -10,23 +12,18 @@ import { Observable } from "rxjs";
 })
 export class ProfileComponent implements OnInit {
   @Input() uid: string;
-  company$!: Observable<any>;
-
+  provider$!: Observable<any>;
   constructor(
-    private ms: MasterService,
+    private ms:MasterService,
     private uService: UtilsService,
-  ) {}
+    private translateService: TranslateService,
+  ) { }
 
-  ngOnInit(): void {
-    this.getData();
+  ngOnInit() {
+    this.provider$ = this.ms.getMaster(`companies/${this.uid}`);
   }
 
-  getData() {
-    this.company$ = this.ms.getMaster(`companies/${this.uid}`);
-    this.company$.subscribe(res => console.log(res));
-  }
-
-  onClose() {
+  onClose (): void {
     this.uService.modalDimiss();
   }
 }

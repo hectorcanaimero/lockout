@@ -52,6 +52,7 @@ export class IntegratedService {
     .pipe(
       filter(row => !row.loading),
       switchMap(({ company }: any) => {
+        this.store.dispatch(actions.load({ company: company._id }));
         this.store.dispatch(actions.initScore({ user: company._id }));
         return this.ms.getMaster(`services/company/active/${company._id}`).pipe(take(1));
       }

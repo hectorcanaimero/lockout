@@ -1,39 +1,83 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
-    <ion-buttons slot="end">
-      <ion-button (click)="onClose()">
-        <ion-icon slot="icon-only" name="close"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-title>{{ 'PROVIDER_INFO' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div id="profile" class="py-4">
-    <ion-accordion-group>
-      <ion-accordion value="first">
-        <ion-item slot="header">
-          <ion-label>First Accordion</ion-label>
+  <ng-container *ngIf="(provider$ | async) as provider">    
+    <ion-accordion-group value="detail" mode="ios">
+      <ion-accordion value="detail">
+        <ion-item class="title" slot="header">
+          <ion-icon slot="start" name="list"></ion-icon>
+          <ion-label><strong>{{ 'INFORMATION' | translate | titlecase }}</strong></ion-label>
         </ion-item>
-        <div class="ion-padding" slot="content">
-          First Content
-        </div>
+        <ion-list lines="none" slot="content">
+          <ion-item>
+            <ion-icon slot="start" name="calendar-outline"></ion-icon>
+            <ion-label>{{ provider.name }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="build-outline"></ion-icon>
+            <ion-label>{{ provider.typeCompany.name | translate |titlecase }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="call-outline"></ion-icon>
+            <ion-label>{{ provider.user.phone }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="mail-outline"></ion-icon>
+            <ion-label>{{ provider.user.email }}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="provider.typeCompany.type !== 1">
+            <ion-icon slot="start" name="business-outline"></ion-icon>
+            <ion-label class="ion-text-wrap">{{ provider.address }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="star" color="warning"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              <strong>{{ provider.user.score }} - {{ provider.user.nivel | uppercase }}</strong>
+            </ion-label>
+          </ion-item>
+        </ion-list>
       </ion-accordion>
-      <ion-accordion value="second">
-        <ion-item slot="header">
-          <ion-label>Second Accordion</ion-label>
+      <ion-accordion value="payment">
+        <ion-item class="title" slot="header">
+          <ion-icon slot="start" name="list"></ion-icon>
+          <ion-label><strong>{{ 'PAYMENT' | translate | titlecase }}</strong></ion-label>
         </ion-item>
-        <div class="ion-padding" slot="content">
-          Second Content
-        </div>
+        <ion-list lines="none" slot="content">
+          <ion-item>
+            <ion-label class="ion-text-wrap">
+              <ion-badge color="primary" *ngFor="let code of provider.payment" class="mx-1">
+                {{ code | translate }}
+              </ion-badge>
+            </ion-label>
+          </ion-item>
+        </ion-list>
       </ion-accordion>
-      <ion-accordion value="third">
-        <ion-item slot="header">
-          <ion-label>Third Accordion</ion-label>
+      <ion-accordion value="services">
+        <ion-item class="title" slot="header">
+          <ion-icon slot="start" name="list"></ion-icon>
+          <ion-label><strong>{{ 'SERVICES' | translate | titlecase }}</strong></ion-label>
         </ion-item>
-        <div class="ion-padding" slot="content">
-          Third Content
-        </div>
+        <ion-list lines="none" slot="content">
+          <ion-item>
+            <ion-label  class="ion-text-wrap">
+              <ion-badge *ngFor="let code of provider.categories" class="mx-1">
+                {{ code.name | translate }}
+              </ion-badge>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>
+      <ion-accordion value="comments">
+        <ion-item class="title" slot="header">
+          <ion-icon slot="start" name="chatbubble-outline"></ion-icon>
+          <ion-label><strong>{{ 'COMMENTS' | translate | titlecase }}</strong></ion-label>
+        </ion-item>
       </ion-accordion>
     </ion-accordion-group>
-  </div>
+  </ng-container>
 </ion-content>
+
+

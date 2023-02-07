@@ -5,36 +5,34 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ 'SERVICES' | translate }}</ion-title>
+    <ion-title></ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <ion-list lines="none">
-    <ion-item button *ngFor="let item of opened$ | async" (click)="openService(item)" [detail]="false">
-      <ion-label>
-        <p style="font-size: .8rem">{{ item.date_reg | amTimeAgo }}</p>
-        <h2>{{ item.code }}</h2>
-        <h4 style="font-weight: 600;">{{ item.status | translate }}</h4>
-        <p>{{ item.type_expert | translate }}</p>
-        <p> {{ item.vehicle_model?.brand }} {{ item.vehicle_model?.model }} </p>
-        <p>{{ item.maps.distance?.replace(',', '')?.replace('.', ',')  }}</p>
-      </ion-label>
-      <ion-avatar slot="end" class="expert">
-        <img [src]="item.icon_expert" [alt]="item.icon_expert" />
-      </ion-avatar>
-    </ion-item>
-    <ion-item button *ngFor="let item of accepted$ | async" (click)="openService(item)" [detail]="false">
-      <ion-label>
-        <p style="font-size: .8rem">{{ item.date_reg | amTimeAgo }}</p>
-        <h2>{{ item.code }}</h2>
-        <h4 style="font-weight: 600;">{{ item.status | translate }}</h4>
-        <p>{{ item.type_expert | translate }}</p>
-        <p> {{ item.vehicle_model?.brand }} {{ item.vehicle_model?.model }} </p>
-        <p>{{ item.maps.distance?.replace(',', '')?.replace('.', ',')  }}</p>
-      </ion-label>
-      <ion-avatar slot="end" class="expert">
-        <img [src]="item.icon_expert" [alt]="item.icon_expert" />
-      </ion-avatar>
-    </ion-item>
+    <ng-container *ngIf="(services$ | async) as items; else notFound">
+      <ng-container *ngFor="let item of items; trackBy:identify">
+        <ion-item button (click)="openService(item)" [detail]="false" 
+          [color]="item.status === 'accepted' ? '' : 'medium'">
+          <ion-label>
+            <p style="font-size: .7rem;">{{ item.createdAt | date: 'dd MMM, HH:mm' }}</p>
+            <h2 style="font-weight: 600;">{{ item.status | translate }}</h2>
+            <h2>{{ item._id | slice:0:7 }}...</h2>
+            <p>
+              {{ item.brand.name }} {{ item.model.name }}
+            </p>
+            <p>{{ item.distance | unitConverted  }}</p>
+            <h4></h4>
+          </ion-label>
+          <ion-avatar slot="end" class="expert">
+            <img [src]="item.category.picture" [alt]="item.category.name" />
+          </ion-avatar>
+        </ion-item>
+      </ng-container>
+    </ng-container>
+    <ng-template #notFound>
+      <app-widget-skeleton *ngFor="let item of [0, 1, 2, 3, 4]"></app-widget-skeleton>
+    </ng-template>
   </ion-list>
+  
 </ion-content>

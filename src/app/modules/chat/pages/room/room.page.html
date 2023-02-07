@@ -37,10 +37,10 @@
     </ion-input>
     <ion-buttons slot="primary">
       <ion-button  fill="clear" (click)="setCamera()" *ngIf="!activeMessage">
-        <ion-icon name="camera" color="info"></ion-icon>
+        <ion-icon name="camera" color="primary"></ion-icon>
       </ion-button>
       <ion-button (click)="onSubmit()" slot="end" class="send-chat-button" *ngIf="activeMessage">
-        <ion-icon slot="icon-only" name="send"></ion-icon>
+        <ion-icon slot="icon-only" name="send" color="primary"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

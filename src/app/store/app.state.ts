@@ -12,10 +12,10 @@ export interface AppState {
   stripe: reducers.StripeState;
   company: reducers.CompanyState;
   history: reducers.HistoryState;
-  accepted: reducers.AcceptedState;
   customer: reducers.CustomerState;
   position: reducers.PositionState;
   solicitud: reducers.SolicitudState;
+  serviceActive: reducers.ServiceActiveState;
   serviceAccepted: reducers.ServiceAcceptedState;
   serviceFinished: reducers.ServiceFinishedState;
   serviceInProcess: reducers.ServiceInProcessState;
@@ -30,10 +30,10 @@ export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
   stripe: reducers.stripeReducer,
   company: reducers.companyReducer,
   history: reducers.historyReducer,
-  accepted: reducers.acceptedReducer,
   customer: reducers.customerReducer,
   position: reducers.positionReducer,
   solicitud: reducers.solicitudReducer,
+  serviceActive: reducers.serviceActiveReduce,
   serviceAccepted: reducers.serviceAcceptedReducer,
   serviceFinished: reducers.serviceFinishedReducer,
   serviceInProcess: reducers.serviceInProcessReducer,

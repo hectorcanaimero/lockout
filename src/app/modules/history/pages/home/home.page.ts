@@ -43,6 +43,8 @@ export class HomePage implements OnInit {
       mode: 'ios',
       componentProps: { res },
       component: WaitingComponent,
+      initialBreakpoint: 1,
+      breakpoints: [0, .65, 1],
     });
   };
 }

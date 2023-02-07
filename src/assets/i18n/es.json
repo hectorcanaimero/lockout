@@ -9,7 +9,7 @@
   "NEW": "Nuevo",
   "USED": "Usado",
   "WRITE_TO_COMMENTS": "Escribe tu commentario...",
-  "RATE_THE_SERVICE": "Califica tu servicio?",
+  "RATE_THE_SERVICE": "Califica el servicio:",
   "MECHANICAL WORKSHOP": "Taller Mecanico",
   "MECHANICAL": "Mecanico",
   "AUTO PARTS SHOP": "Venta de Respuestos",
@@ -24,6 +24,7 @@
   "accepted": "Servicio en ejecución",
   "cancelled": "Cancelado",
   "closed": "Finalizado",
+  "finished": "Finalizado",
   "Air Conditioning": "Aire Acondicionado",
   "Brakes": "Frenos",
   "Oil Change": "Cambio de Aceite",
@@ -76,10 +77,11 @@
     "CLOSED": "Finalizados"
   },
   "WIDGETS": {
-    "IN_PROCESS": "Servicios por solicitudes",
+    "IN_PROCESS": "Solicitud de Servicio",
     "ACCEPTED": "Servicios Aceptados",
     "CLOSED": "Finalizados",
-    "NOT_FOUND": "Sin Servicios"
+    "NOT_FOUND": "Sin Solicitudes",
+    "NOT_FOUND_ACCEPTED": "Sin Servicios"
   },
   "TABS": {
     "HOME": "Home",

@@ -10,10 +10,12 @@ export class UnitConvertedPipe implements PipeTransform {
     let calculate: number;
     calculate = kilometer / km;
     if (calculate >= 1) {
-      return `${calculate} km.`
+      return `${calculate.toFixed(2)} km.`
     }
     calculate = calculate * km;
-    return `${calculate} mts.`;
+    return `${calculate.toFixed(2)} mts.`;
   }
 
 }
+
+

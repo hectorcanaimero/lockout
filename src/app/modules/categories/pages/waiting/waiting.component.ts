@@ -22,6 +22,7 @@ export class WaitingComponent implements OnInit {
   @Input() res: any;
   @Input() company: number;
   room$: Observable<any>;
+  total$: Observable<number>;
   offline: boolean;
   openImage = false;
   slideOpts = {
@@ -39,7 +40,13 @@ export class WaitingComponent implements OnInit {
     private chatFireService: ChatFireService,
     ) { }
   ngOnInit(): void {
+    // timer(500).subscribe(() => this.unreadMessage(this.res._id));
   }
+
+  unreadMessage(service: string) {
+    this.total$ = this.chatFireService.unReadMessages(0, service);
+  }
+
 
   async onCancel(): Promise<void> {
     await this.uService.alert({
@@ -57,14 +64,14 @@ export class WaitingComponent implements OnInit {
     await this.uService.load({ duration: 750, message: 'Proccesing...', });
     await this.chatFireService.createRoom(item);
     this.socketService.changeStatus(item);
-    this.store.dispatch(actions.inProcessInit({ id: item._id }));
-    this.store.dispatch(actions.acceptedInit({ id: item._id }));
+    this.loadServiceInStore(item.company._id);
     this.uService.modalDimiss();
     this.uService.navigate('/pages/home');
   };
 
   async onCancelService (item: any): Promise<void>{
-    item.status = 'cancelled';
+    item.status = 'open';
+    delete item.company;
     await this.uService.alert({
       header: 'Info', message: this.translate.instant('MESSAGES.CANCEL_SERVICE'),
       buttons: [
@@ -73,8 +80,7 @@ export class WaitingComponent implements OnInit {
           text: 'OK', handler: async() => {
             await this.uService.load({ message: 'Processing...', duration: 750, });
             this.socketService.changeStatus(item);
-            this.store.dispatch(actions.inProcessInit({ id: item._id }));
-            this.store.dispatch(actions.acceptedInit({ id: item._id }));
+            this.loadServiceInStore(item.company._id);
           }
         }
       ],
@@ -122,5 +128,14 @@ export class WaitingComponent implements OnInit {
   goToChat(id: string) {
     this.uService.modalDimiss();
     this.uService.navigate(`/chat/service/${id}`)
+  }
+
+  private loadServiceInStore(id: string) {
+    timer(300).subscribe(() => {
+      console.log(id);
+      this.store.dispatch(actions.inProcessInit({ id }));
+      this.store.dispatch(actions.acceptedInit({ id }));
+      this.store.dispatch(actions.load({ company: id }));
+    });
   }
 }

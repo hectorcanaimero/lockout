@@ -1,13 +1,13 @@
-import { Component, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
 import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
-import { ConnectService } from '@modules/chat/services/connect.service';
-import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 import { SocketService } from '@core/services/socket.service';
+import { ChatFireService } from '@core/services/chat-fire.service';
+import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 
 @Component({
   selector: 'app-services-in-proccess-widget',
@@ -15,22 +15,38 @@ import { SocketService } from '@core/services/socket.service';
   styleUrls: ['./services-in-proccess-widget.component.scss'],
 })
 
-export class ServicesInProccessWidgetComponent implements AfterViewInit {
+export class ServicesInProccessWidgetComponent implements OnInit, AfterViewInit {
   unread: any;
   company: string;
   offline: boolean;
   companyId = 0;
   items$: Observable<[] | any>;
+  services$: Observable<any>;
+  total$: Observable<number>;
+  ids: any = [];
+
 
   constructor(
     private store: Store<AppState>,
     private uService: UtilsService,
-    private chatService: ConnectService,
+    private chatFire: ChatFireService,
     private socketService: SocketService,
   ) { }
 
+  ngOnInit(): void {
+    this.getServices();
+  }
+
   ngAfterViewInit(): void {
     this.getData();
+  }
+
+  getServices() {
+    this.services$ = this.store.select('serviceAccepted')
+    .pipe(
+      filter(row => !row.loading), 
+      map((res: any) => res.items)
+    )
   }
 
   getData(): void {
@@ -44,28 +60,12 @@ export class ServicesInProccessWidgetComponent implements AfterViewInit {
         }
       })
     );
-    this.items$.subscribe(res => console.log(res));
-    // this.items$ = this.store.select('serviceAccepted').pipe(
-    //   filter((row) => !row.loading),
-    //   map(({ items }) => items)
-    // );
   }
-  // getServiceAcceptedWithChat = () => {
-  //   this.items$ = this.store.select('accepted')
-  //   .pipe(
-  //     filter(row => !row.loading),
-  //     map((res: any) => res.accepted),
-  //     map((res: any) => {
-  //       const data = this.chatService.unReadMessageServiceChat(this.code, res).slice(0,3);
-  //       return data;
-  //     })
-  //   );
-  // }
 
   async openServiceModal(res: any): Promise<void> {
     await this.uService.modal({
       mode: 'ios',
-      breakpoints: [0, 1],
+      breakpoints: [0, .65, 1],
       initialBreakpoint: 1,
       component: WaitingComponent,
       componentProps: { res }
@@ -73,7 +73,6 @@ export class ServicesInProccessWidgetComponent implements AfterViewInit {
   };
 
   openChat(code: any): void {
-    console.log(code);
     this.uService.navigate(`/chat/service/${code}`);
   };
 }

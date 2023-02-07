@@ -1,10 +1,12 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 import { SocketService } from '@core/services/socket.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-services-open-widget',
@@ -15,25 +17,26 @@ import { SocketService } from '@core/services/socket.service';
 export class ServicesOpenWidgetComponent implements AfterViewInit {
 
   service$: Observable<any>;
-  options = { freeMode: true, spaceBetween: 10, slidesPerView: 2.1,  };
+  options = { freeMode: true, spaceBetween: 10, slidesPerView: 1.9,  };
   items$: Observable<any>;
   loading = true;
   company: number;
 
   constructor(
-    private modalCtrl: ModalController,
+    private store: Store<AppState>,
+    private uService: UtilsService,
     private socketService: SocketService,
     ) { }
 
-    ngAfterViewInit(): void {
-    this.service$ = this.getFetchService();
-    this.service$.subscribe(res => console.log(res));
+  ngAfterViewInit(): void {
+    this.getServices();
+    this.getFetchService();
   }
 
   getFetchService() {
     return this.socketService.onFetchService().pipe(
       map((res: any) => {
-        console.log(res);
+        console.log('SOCKET', res);
         if (res && res.length) {
           return res.filter((row: any) => row.status === 'in_process');
         } else if (res.status === 'in_process') {
@@ -43,14 +46,20 @@ export class ServicesOpenWidgetComponent implements AfterViewInit {
     );
   }
 
-  openModal = async (res: any, company: number) => {
-    const modal = await this.modalCtrl.create({
+  getServices() {
+    this.service$ = this.store.select('serviceInProcess').pipe(
+      filter(row => !row.loading),
+      map((res: any) => res.items)
+    );
+  }
+
+  async openModal (res: any, company: number): Promise<void> {
+    await this.uService.modal({
+      mode: 'ios',
+      breakpoints: [0, .65, 1],
+      initialBreakpoint: 1,
       component: WaitingComponent,
       componentProps: { res, company },
-      mode: 'ios',
-      initialBreakpoint: 1,
-      breakpoints: [0, 1]
     });
-    await modal.present();
   };
 }

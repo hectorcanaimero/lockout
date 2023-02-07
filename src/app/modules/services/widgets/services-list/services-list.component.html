@@ -1,39 +1,44 @@
 <ion-list lines="none">
   <ng-container *ngIf="(items$ | async) as items; else notFound">
-    <ion-item-sliding *ngFor="let item of items; trackBy:identify">
-      <ion-item button (click)="openService(item)" [detail]="false">
-        <ion-label>
-          <p style="font-size: .7rem;">{{ item.createdAt | date: 'dd MMM, HH:mm' }}</p>
-          <h2>{{ item._id.slice(0, 10) }}...</h2>
-          <p>
-            {{ item.brand.name }} {{ item.model.name }}
-          </p>
-          <p>{{ item.distance | unitConverted  }}</p>
-          <h4></h4>
-        </ion-label>
-        <ion-avatar slot="end" class="expert">
-          <img [src]="item.category.picture" [alt]="item.category.name" />
-        </ion-avatar>
-      </ion-item>
-      <ion-item-options side="start" *ngIf="offline">
-        <ion-item-option *ngIf="type !== 'in_process'" (click)="finishService(item)" color="success">
-          <ion-icon slot="icon-only" name="checkmark-circle-outline"></ion-icon>
-        </ion-item-option>
-        <ion-item-option *ngIf="type === 'in_process'" (click)="acceptedService(item)" color="success">
-          <ion-icon slot="icon-only" name="send-outline"></ion-icon>
-        </ion-item-option>
-        <ion-item-option color="danger" (click)="cancelService(item)">
-          <ion-icon slot="icon-only" name="trash"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-      <ion-item-options side="end" *ngIf="offline">
-        <ion-item-option *ngIf="type === 'accepted'" (click)="chat(item._id)" color="tertiary">
-          <ion-icon slot="icon-only" name="chatbubbles"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+    <ng-container *ngIf="items.length > 0; else notShow">
+      <ion-item-sliding *ngFor="let item of items; trackBy:identify">
+        <ion-item button (click)="openService(item)" [detail]="false">
+          <ion-label>
+            <p style="font-size: .7rem;">{{ item.createdAt | date: 'dd MMM, HH:mm' }}</p>
+            <h2>{{ item._id.slice(0, 10) }}...</h2>
+            <p>
+              {{ item.brand.name }} {{ item.model.name }}
+            </p>
+            <p>{{ item.distance | unitConverted  }}</p>
+            <h4></h4>
+          </ion-label>
+          <ion-avatar slot="end" class="expert">
+            <img [src]="item.category.picture" [alt]="item.category.name" />
+          </ion-avatar>
+        </ion-item>
+        <ion-item-options side="start" *ngIf="offline">
+          <ion-item-option *ngIf="type !== 'in_process'" (click)="finishService(item)" color="success">
+            <ion-icon slot="icon-only" name="bookmark-outline"></ion-icon>
+          </ion-item-option>
+          <ion-item-option *ngIf="type === 'in_process'" (click)="acceptedService(item)" color="success">
+            <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
+          </ion-item-option>
+          <ion-item-option color="danger" (click)="cancelService(item)">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+        <ion-item-options side="end" *ngIf="offline">
+          <ion-item-option *ngIf="type === 'accepted'" (click)="chat(item._id)" color="tertiary">
+            <ion-icon slot="icon-only" name="chatbubbles"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ng-container>
   </ng-container>
   <ng-template #notFound>
     <app-widget-skeleton *ngFor="let item of [0, 1, 2, 3, 4]"></app-widget-skeleton>
+  </ng-template>
+  <ng-template #notShow>
+    <ng-lottie [options]="options" (animationCreated)="animationCreated($event)"></ng-lottie>
   </ng-template>
 </ion-list>

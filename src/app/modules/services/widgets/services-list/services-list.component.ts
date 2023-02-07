@@ -8,6 +8,8 @@ import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
 import { MasterService } from '@core/services/master.service';
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
+import { AnimationItem } from 'lottie-web';
+import { AnimationOptions } from 'ngx-lottie';
 
 @Component({
   selector: 'app-services-list',
@@ -20,6 +22,10 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
   @Input() type = 'accepted';
   offline: boolean;
   items$: Observable<any[]>;
+
+  options: AnimationOptions = {
+    path: './assets/lotties/not-found.json',
+  };
 
   constructor(
     private ms: MasterService,
@@ -36,6 +42,9 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
     this.getServices(changes.type.currentValue);
   }
 
+  animationCreated(animationItem: AnimationItem): void {
+    console.log(animationItem);
+  }
   getServices = (type: any) => {
     this.store.select('company')
     .pipe(
@@ -113,7 +122,7 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
   };
 
   chat(item: any) {
-    this.uService.navigate(`/chat/room/${item}`);
+    this.uService.navigate(`/chat/service/${item}`);
   }
 
   identify(index: number, item: any) {

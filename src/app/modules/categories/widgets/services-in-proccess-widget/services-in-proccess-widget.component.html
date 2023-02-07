@@ -1,45 +1,33 @@
 <ion-list lines="none" class="mb-5">
-  <ion-list-header>
+  <ion-list-header class="mb-2">
     <ion-label>
       <h2>{{ 'WIDGETS.ACCEPTED' | translate }}</h2>
     </ion-label>
   </ion-list-header>
-  <ng-container *ngIf="(items$ | async ) as items; else notFound">
-    <ng-container *ngIf="items.length > 0; else single">
+  <ng-container *ngIf="(services$ | async ) as items; else notFound">
+    <ng-container *ngIf="items.length > 0; else notFound">
       <ion-item detail="false" button *ngFor="let item of items">
         <ion-label (click)="openServiceModal(item)">
           <p class="date">{{ item.createdAt | amLocale:'es' | amTimeAgo  }}</p>
+          <h3>{{item._id | slice:0:7 }}...</h3>
           <p>{{ item.category.name | translate }}</p>
-          <h2>{{item._id.slice(0, 10)}}...</h2>
           <p>{{ item.brand .name}} {{ item.model.name }}</p>
-          <h4>{{ item.description.slice(0, 50) }}...</h4>
         </ion-label>
-        <ion-label class="ion-text-right" color="warning">{{ item.unread > 0 ? item.unread : '' }}</ion-label>
-        <ion-button slot="end" (click)="openChat(item._id)" fill="clear" [disabled]="offline">
-          <ion-icon slot="icon-only" name="chatbubbles" color="warning"></ion-icon>
-        </ion-button>
+        <div class="bubble" slot="end">
+          <ion-label slot="end" class="ion-text-right" color="warning">{{ item._id | unread | async}}</ion-label>
+          <ion-button (click)="openChat(item._id)" fill="clear" [disabled]="offline" class="bubble">
+            <ion-icon slot="icon-only" color="warning"  name="chatbubble"></ion-icon>
+          </ion-button>
+        </div>
       </ion-item>
     </ng-container>
-    <ng-template #single>
-      <ion-item detail="false">
-        <ion-label (click)="openServiceModal(items)">
-          <p class="date">{{ items.createdAt | amLocale:'es' | amTimeAgo  }}</p>
-          <p>{{ items.category.name | translate }}</p>
-          <h2>{{items._id.slice(0, 10)}}...</h2>
-          <p>{{ items.brand .name}} {{ items.model.name }}</p>
-          <h4>{{ items.description.slice(0, 50) }}...</h4>
-        </ion-label>
-        <ion-label class="ion-text-right" color="warning">{{ items.unread > 0 ? items.unread : '' }}</ion-label>
-        <ion-button slot="end" (click)="openChat(items._id)" fill="clear" [disabled]="offline">
-          <ion-icon slot="icon-only" name="chatbubbles" color="warning"></ion-icon>
-        </ion-button>
-      </ion-item>
-    </ng-template>
   </ng-container>
   <ng-template #notFound>
-    <ion-item lines="none" class="not-found" detail="false">
-      <ion-icon slot="start" name="sad-outline"></ion-icon>
-      <ion-label>{{ 'WIDGETS.NOT_FOUND' | translate }}</ion-label>
-    </ion-item>
+    <div class="container">
+      <ion-item lines="none" class="not-found" detail="false">
+        <ion-icon slot="start" name="list-circle" size="large"></ion-icon>
+        <ion-label>{{ 'WIDGETS.NOT_FOUND_ACCEPTED' | translate }}</ion-label>
+      </ion-item>
+    </div>
   </ng-template>
 </ion-list>

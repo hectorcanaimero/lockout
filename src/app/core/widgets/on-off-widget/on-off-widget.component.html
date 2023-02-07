@@ -1,12 +1,10 @@
-<ng-container *ngIf="(onLine$ | async) as status">
-  <div class="offline" *ngIf="!status">
-    <ion-card>
-      <ion-item lines="none">
-        <ion-label>
-          <h1><b>{{ 'YOU_ARE_OFFLINE' | translate }}</b></h1>
-          <h3 class="ion-text-wrap">{{ 'OFFLINE_MESSAGE' | translate }}</h3>
-        </ion-label>
-      </ion-item>
-    </ion-card>
+<ng-container *ngIf="!(item$ | async)">
+  <div class="container mt-3 mb-5">
+    <ion-item lines="none">
+      <ion-label>
+        <h1><strong>{{ 'YOU_ARE_OFFLINE' | translate }}</strong></h1>
+        <h3 class="ion-text-wrap">{{ 'OFFLINE_MESSAGE' | translate }}</h3>
+      </ion-label>
+    </ion-item>
   </div>
 </ng-container>

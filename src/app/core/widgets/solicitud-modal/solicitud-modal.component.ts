@@ -7,6 +7,7 @@ import { AppState } from '@store/app.state';
 import { MasterService } from '@core/services/master.service';
 import { SolicitudModel } from '@core/model/solicitud.interfaces';
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
+import { UtilsService } from '@core/services/utils.service';
 
 
 @Component({
@@ -17,59 +18,38 @@ import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.comp
 })
 export class SolicitudModalComponent implements OnInit {
 
-  opened$: Observable<any[]>;
-  accepted$: Observable<any[]>;
+  services$: Observable<any[]>;
   items: any = [];
 
   constructor(
-    private ms: MasterService,
     private store: Store<AppState>,
-    private modalCtrl: ModalController
+    private uService: UtilsService,
   ) { }
 
   ngOnInit(): void {
     this.getData();
   }
 
-  openService = async (res: any) => {
+  async openService(res: any): Promise<void> {
     this.onClose();
-    const modal = await this.modalCtrl.create({
+    await this.uService.modal({
+      mode: 'ios',
+      componentProps: { res },
+      initialBreakpoint: 1,
+      breakpoints: [0, .65, 1],
       component: WaitingComponent,
-      componentProps: { res }
     });
-    modal.present();
   };
 
 
   getData = () => {
-    this.opened$ = this.store.select('solicitud').pipe(
+    this.services$ = this.store.select('serviceActive').pipe(
       filter(row => !row.loading),
-      map((res: any) => res.solicitud),
-      switchMap((res) => this.constructData(res))
-    );
-    this.accepted$ = this.store.select('accepted').pipe(
-      filter(row => !row.loading),
-      map((res: any) => res.accepted),
-      switchMap((res) => this.constructData(res))
+      map((res: any) => res.items),
     );
   }
 
-  private constructData = (items: any) => {
-    const service: any = items;
-    return this.ms.getMaster('master/expert/').pipe(
-      map((res: any) => {
-        const data: any = [];
-        service.forEach((el: any) => {
-          const filter = res.filter((row: any) => row.name === el.type_expert)[0].picture.toString();
-          el.icon_expert = (filter);
-          data.push(el);
-        });
-        return data;
-      })
-    )
-  };
+  onClose = () => this.uService.modalDimiss();
 
-
-  onClose = () => this.modalCtrl.dismiss();
-
+  identify = (index: number, item: any) => item[index];
 }

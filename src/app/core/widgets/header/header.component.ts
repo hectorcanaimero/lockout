@@ -1,11 +1,11 @@
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
-import { NavController, ModalController } from '@ionic/angular';
 import { NotificationsComponent } from '@core/widgets/notifications/notifications.component';
 import { SolicitudModalComponent } from '@core/widgets/solicitud-modal/solicitud-modal.component';
 import { Observable } from 'rxjs';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
-import { map, filter, switchMap } from 'rxjs/operators';
+import { map, filter, switchMap, tap } from 'rxjs/operators';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-header',
@@ -20,12 +20,14 @@ export class HeaderComponent implements AfterViewInit {
   @Input() services = [];
   content = 0;
 
+  total = 0;
+  total$: Observable<any[]>;
+
   count: number = 0;
 
   constructor(
-    private nav: NavController,
     private store: Store<AppState>,
-    private modalCtrl: ModalController,
+    private uService: UtilsService,
   ) { }
 
   ngAfterViewInit(){
@@ -33,32 +35,22 @@ export class HeaderComponent implements AfterViewInit {
   }
 
   getData = (): void => {
-    const openedCount$ =  this.store.select('serviceInProcess').pipe(
-      filter(row => !row.loading ), map(({ items }: any) => items) );
-    const acceptedCount$ =  this.store.select('serviceAccepted').pipe(
-      filter(row => !row.loading ), map(({ items }: any) => items) );
-    openedCount$.subscribe(res => this.count = res ? res.length : 0);
-    acceptedCount$.subscribe(res => {
-      const a = res ? res.length : 0;
-      this.count = this.count + a;
-    });
-    console.log('COUNT ', this.count);
+    this.total$ = this.store.select('serviceActive')
+    .pipe(
+      filter(row => !row.loading),
+      map((res: any) => res.total)    
+    );
   };
 
 
-  onNotification = async () => {
-    const modal = await this.modalCtrl.create({ component: NotificationsComponent });
-    await modal.present();
-  };
-
-  onSolicitud = async () => {
-    const modal = await this.modalCtrl.create({
+  async onViewServicesActive(): Promise<void> {
+    await this.uService.modal({
       mode: 'ios',
-      initialBreakpoint: .85,
-      breakpoints: [0, .85, 1],
-      component: SolicitudModalComponent });
-    await modal.present();
+      initialBreakpoint: .95,
+      breakpoints: [0, .65, 1],
+      component: SolicitudModalComponent
+    });
   };
 
-  onMenu = (item: string) => this.nav.navigateRoot(item);
+  onMenu = (item: string) => this.uService.navigate(item);
 }

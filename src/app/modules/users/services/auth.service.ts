@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AlertController, NavController, LoadingController } from '@ionic/angular';
-import { take, map } from 'rxjs/operators';
-import { Observable, timer } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { NavController } from '@ionic/angular';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { ReducerManager } from '@ngrx/store';
 
 import { Login } from './interfaces';
-import { AppState } from '@store/app.state';
 import { MasterService } from '@core/services/master.service';
 import { StorageService } from 'src/app/core/services/storage.service';
-
-import * as actions from '@store/actions';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +15,9 @@ export class AuthService {
 
   constructor(
     private ms: MasterService,
-    private store: Store<AppState>,
     private navCtrl: NavController,
     private storage: StorageService,
-    private alertCtrl: AlertController,
-    private loadCtrl: LoadingController,
+    private reducers: ReducerManager,
   ) { }
 
   //TODO: Autoriza el accesso
@@ -44,6 +39,13 @@ export class AuthService {
   // TODO: Desloga la app
   async signOut(): Promise<boolean> {
     await this.storage.clearStorages();
+    this.reducers.removeReducers([
+      'user', 'closed', 'status',
+      'expert', 'stripe', 'company',
+      'history', 'customer', 'position',
+      'solicitud', 'serviceActive', 'serviceAccepted',
+      'serviceFinished', 'serviceInProcess', 'score',
+    ]);
     return this.navCtrl.navigateRoot('/user/signIn');
   };
 

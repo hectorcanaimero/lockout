@@ -27,7 +27,7 @@ export class HomePage implements OnInit, AfterViewInit {
   content = [
     { name: 'Perfil', url: '/user/profile' },
     { name: 'Compañia', url: '/pages/companies' },
-    { name: 'Mensajes', url: '/chat/soporte' }
+    { name: 'Chat Meka-asesor', url: '/chat/soporte' }
   ];
   subContent = [
     { name: 'Política de privacidad', modal: true },

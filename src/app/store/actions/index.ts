@@ -6,7 +6,7 @@ export * from './expert.actions';
 export * from './history.actions';
 export * from './company.actions';
 export * from './customer.actions';
-export * from './accepted.actions';
+export * from './service-active.actions';
 export * from './position.actions';
 export * from './in-process.actions';
 export * from './service-accepted.actions';

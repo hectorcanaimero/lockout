@@ -16,6 +16,8 @@ import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontaweso
 import ApiInterceptor from '@core/services/http.interceptor';
 import { NotificationsComponent } from '@core/widgets/notifications/notifications.component';
 import { SolicitudModalComponent } from '@core/widgets/solicitud-modal/solicitud-modal.component';
+import { SkeletonWidgetModule } from './widgets/skeleton/skeleton.module';
+import { CorePipeModule } from './pipe/pipe.module';
 
 @NgModule({
   exports: [NotificationsComponent, SolicitudModalComponent],
@@ -29,6 +31,8 @@ import { SolicitudModalComponent } from '@core/widgets/solicitud-modal/solicitud
     HttpClientModule,
     FontAwesomeModule,
     ReactiveFormsModule,
+    CorePipeModule,
+    SkeletonWidgetModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },

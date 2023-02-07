@@ -51,7 +51,6 @@ export class RoomChatPage implements OnInit {
 
   getMessage(uid: string) {
     this.messages$ = this.chatFireService.getMessages(uid);
-    this.messages$.subscribe(res => console.log(res));
     this.scrollToBottomLabel();
   }
 
@@ -86,13 +85,12 @@ export class RoomChatPage implements OnInit {
   }
 
   sendPush() {
+    console.log(this.service);
     const data = {
       token: this.service.user.push,
-      title: `Tienes un mensaje de ${this.service.user.name}`,
+      title: `Tienes un mensaje de ${this.service.company.name}`,
       body: `${this.message.slice(0, 50)}...`
     }
-    this.msService.postMaster('services/push/chat', data)
-      .subscribe((res) => console.log(res));
   }
 
   private async sendMessage(type_message: string, message: string) {
