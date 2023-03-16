@@ -6,9 +6,10 @@ import { UtilsService } from '@core/services/utils.service';
 import { LoadingController, NavController } from '@ionic/angular';
 import { AuthService } from '@modules/users/services/auth.service';
 import { Store } from '@ngrx/store';
-import { catchError, Observable, subscribeOn, timer } from 'rxjs';
+import { catchError, Observable, subscribeOn, tap, timer } from 'rxjs';
 import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-editar',
   templateUrl: './editar.component.html',
@@ -19,7 +20,9 @@ export class EditarComponent implements OnInit {
   registerForm: FormGroup;
   countries$: Observable<any[]>;
   idioma = [
-    { id: 1, name: 'Español (Latinoamerica)', iso: 'es' },
+    { name: 'Español', id: 'es' },
+    { name: 'Inglés', id: 'en' },
+    { name: 'Portugués', id: 'pt' },
   ];
 
   constructor(
@@ -28,6 +31,7 @@ export class EditarComponent implements OnInit {
     private store: Store<AppState>,
     private uService: UtilsService,
     private storage: StorageService,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit() {
@@ -45,10 +49,9 @@ export class EditarComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    if(this.registerForm.invalid) { return; }
+    if(this.registerForm.invalid) return;
     const data = this.registerForm.value;
-    await this.uService.load({message: 'Procesando...'});
-    await this.storage.setStorage('language', data.language);
+    await this.uService.load({message: this.translate.instant('PROCCESSING')});
     this.processingData(this.user._id, data);
   };
 
@@ -66,32 +69,39 @@ export class EditarComponent implements OnInit {
   loadData() {
     if (this.user) {
       const res = this.user;
-      this.registerForm.controls.first_name.setValue(res.first_name);
-      this.registerForm.controls.last_name.setValue(res.last_name);
-      this.registerForm.controls.email.setValue(res.email);
-      this.registerForm.controls.phone.setValue(res.phone);
-      this.registerForm.controls.country.setValue(res.country);
-      this.registerForm.controls.language.setValue(+res.language);
+      this.registerForm.patchValue({
+        first_name: res.first_name,
+        last_name: res.last_name,
+        email: res.email,
+        phone: res.phone,
+        country: res.country._id,
+        language: res.language
+      });
     }
   }
 
   private processingData(id: string, data: any) {
     this.ms.patchMaster(`users/${id}`, data)
     .pipe(
-      catchError(async (error: any) => {
-        this.uService.loadDimiss();
-        await this.uService.alert({
-          header: 'Error',
-          message: error.message,
-          buttons:['OK']
-        });
-      })
+      tap(() => this.uService.loadDimiss()),
+      catchError(async (error: any) => this.alertError(error))
     )
-    .subscribe(
-      (user: any) => {
-        this.uService.loadDimiss();
-        this.store.dispatch(actions.loadUser(user));
-      },
-    );
+    .subscribe(async (user: any) => this.setData(user))
+  }
+
+  private async setData(user) {
+    this.translate.use(user.language);
+    this.store.dispatch(actions.loadUser(user));
+    await this.storage.removeStorage('oUser');
+    await this.storage.setStorage('oUser', user);
+    this.uService.navigate('pages/home');
+  } 
+
+  private async alertError(error: any) {
+    return this.uService.alert({
+      header: this.translate.instant('ERROR'),
+      message: error.message,
+      buttons:['OK']
+    });
   }
 }

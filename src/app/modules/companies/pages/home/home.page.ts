@@ -21,19 +21,11 @@ export class HomePage implements AfterViewInit {
   load: boolean = true;
 
   constructor(
-    private db: DbCompaniesService,
-    private uService: UtilsService,
-    private storage: StorageService,
-    private modalCtrl: ModalController,
     private store: Store<AppState>,
     private navCtrl: NavController,
   ) {}
 
   ngAfterViewInit() {
-    // this.lists$ = this.store.select('company').pipe(
-    //   tap((res: any) => this.load = res.loading ),
-    //   map((res: any) => res.company),
-    // );
     this.company$ = this.store.select('company').pipe(
       filter(row => !row.loading),
       map((res: any) => res.company)
@@ -43,9 +35,5 @@ export class HomePage implements AfterViewInit {
 
   onEdit =  (item?: any) => {
     this.navCtrl.navigateRoot('/pages/companies/add');
-    //   component: RegisterPage,
-    //   componentProps: { modal: false, item: item ? item: null }
-    // });
-    // await modal.present();
   };
 }

@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MomentModule } from 'ngx-moment';
 import { RoomGatewayService } from './room.service';
 import { MessageWidgetModule } from './../../widget/message/message.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   { path: ':uid', component: RoomChatPage }
@@ -15,11 +16,12 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    MessageWidgetModule,
     IonicModule,
     FormsModule,
     CommonModule,
     MomentModule,
+    TranslateModule,
+    MessageWidgetModule,
     RouterModule.forChild(routes),
   ],
   exports: [RoomChatPage],

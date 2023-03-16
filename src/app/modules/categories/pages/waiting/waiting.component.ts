@@ -90,7 +90,6 @@ export class WaitingComponent implements OnInit {
   };
 
   async onFinishedService (item: any): Promise<void>{
-    console.log(item);
     await this.uService.alert({
       header: 'Info',
       message: this.translate.instant('MESSAGES.CLOSED_SERVICE'),
@@ -131,7 +130,7 @@ export class WaitingComponent implements OnInit {
   }
 
   private loadServiceInStore(id: string) {
-    timer(300).subscribe(() => {
+    timer(200).subscribe(() => {
       console.log(id);
       this.store.dispatch(actions.inProcessInit({ id }));
       this.store.dispatch(actions.acceptedInit({ id }));

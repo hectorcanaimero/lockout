@@ -43,6 +43,7 @@ export class AppComponent implements OnInit {
   initializeApp = () => {
     this.platform.ready().then(async () => {
       this.token.validate();
+      this.mobileService.lodApp();
       this.integrated.initState();
       this.socketService.getConnection();
       this.socketService.setJoinRoom();
@@ -61,6 +62,10 @@ export class AppComponent implements OnInit {
       }
     });
   };
+
+  getActive(ev: any) {
+    console.log(ev);
+  }
 
   offOn = async () => {
     const active = await this.storage.getStorage('status');

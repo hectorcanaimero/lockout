@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { ServicesListComponent } from './services-list.component';
 import { CorePipeModule } from '@core/pipe/pipe.module';
 import { SkeletonWidgetModule } from '@core/widgets/skeleton/skeleton.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -17,6 +18,7 @@ import { SkeletonWidgetModule } from '@core/widgets/skeleton/skeleton.module';
     CommonModule,
     LottieModule,
     CorePipeModule,
+    TranslateModule,
     SkeletonWidgetModule,
   ]
 })

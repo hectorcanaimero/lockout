@@ -1,46 +1,48 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Geolocation, Position } from '@capacitor/geolocation';
 import { Browser } from '@capacitor/browser';
-
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { UtilsService } from '@core/services/utils.service';
-import { MasterService } from '@core/services/master.service';
 import { ProfileComponent } from './profile/profile.component';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
 
 @Component({
   selector: 'app-widget-banner',
   templateUrl: './banners.component.html',
   styleUrls: ['./banners.component.scss'],
 })
-export class BannersWidgetComponent implements AfterViewInit {
+export class BannersWidgetComponent implements OnInit, AfterViewInit {
 
   options = {
     speed: 600,
-    autoplay: true,
     loop: true,
+    freeMode: true,
+    autoplay: true,
+    spaceBetween: 30,
   };
 
   banners$!: Observable<any>;
 
   constructor(
-    private ms: MasterService,
+    private store: Store<AppState>,
     private uService: UtilsService,
   ) { }
+
+    ngOnInit() {
+      this.getData();
+    }
 
   ngAfterViewInit() {
     this.getData();
   }
 
-  async getData(): Promise<void> {
-    const geo: Position = await Geolocation.getCurrentPosition();
-    if (geo) {
-      const { coords } = geo;
-      const data = {
-        latitude: coords.latitude,
-        longitude: coords.longitude
-      }
-      this.banners$ = this.ms.postMaster('banners/company', data);
-    }
+  getData(): void {
+    this.banners$ = this.store.select('banner')
+    .pipe(
+      filter(({ loading }) => !loading),
+      map(({ items }) => items)
+    );
   }
 
   async openProfile(uid: string): Promise<void> {
@@ -51,6 +53,10 @@ export class BannersWidgetComponent implements AfterViewInit {
       componentProps: { uid },
       component: ProfileComponent,
     });
+  }
+
+  isInternal(url: string) {
+    return url.includes('http') ? false : true;
   }
 
   async openUrl(url: string): Promise<void> {

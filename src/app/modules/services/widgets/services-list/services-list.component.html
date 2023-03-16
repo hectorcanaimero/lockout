@@ -39,6 +39,11 @@
     <app-widget-skeleton *ngFor="let item of [0, 1, 2, 3, 4]"></app-widget-skeleton>
   </ng-template>
   <ng-template #notShow>
-    <ng-lottie [options]="options" (animationCreated)="animationCreated($event)"></ng-lottie>
+    <ion-card>
+      <ion-card-content>
+        <h2 class="ion-text-center">{{ 'DATA_NOT_FOUND'| translate }}</h2>
+      </ion-card-content>
+    </ion-card>
+    <!-- <ng-lottie [options]="options" (animationCreated)="animationCreated($event)"></ng-lottie> -->
   </ng-template>
 </ion-list>

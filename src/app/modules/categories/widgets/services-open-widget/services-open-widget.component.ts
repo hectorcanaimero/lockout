@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
@@ -7,6 +7,7 @@ import { SocketService } from '@core/services/socket.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
+import { StorageService } from '@core/services/storage.service';
 
 @Component({
   selector: 'app-services-open-widget',
@@ -14,19 +15,25 @@ import { UtilsService } from '@core/services/utils.service';
   styleUrls: ['./services-open-widget.component.scss'],
 })
 
-export class ServicesOpenWidgetComponent implements AfterViewInit {
+export class ServicesOpenWidgetComponent implements OnInit, AfterViewInit {
 
-  service$: Observable<any>;
-  options = { freeMode: true, spaceBetween: 10, slidesPerView: 1.9,  };
-  items$: Observable<any>;
   loading = true;
   company: number;
-
+  language: string;
+  items$: Observable<any>;
+  service$: Observable<any>;
+  options = { freeMode: true, spaceBetween: 10, slidesPerView: 1.9,  };
   constructor(
     private store: Store<AppState>,
     private uService: UtilsService,
+    private storage: StorageService,
     private socketService: SocketService,
     ) { }
+  
+  async ngOnInit(): Promise<void> {
+    const { language } = await this.storage.getStorage('oUser');
+    this.language = language;
+  }
 
   ngAfterViewInit(): void {
     this.getServices();

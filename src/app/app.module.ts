@@ -24,7 +24,7 @@ import { LanguageModule } from '@core/language/language.module';
     LanguageModule,
     CoreConfigModule,
     StoreConfigModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({ hardwareBackButton: false }),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

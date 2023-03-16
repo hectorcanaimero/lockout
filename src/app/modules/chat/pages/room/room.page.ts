@@ -85,12 +85,13 @@ export class RoomChatPage implements OnInit {
   }
 
   sendPush() {
-    console.log(this.service);
     const data = {
       token: this.service.user.push,
       title: `Tienes un mensaje de ${this.service.company.name}`,
       body: `${this.message.slice(0, 50)}...`
     }
+    this.msService.postMaster('notification/send', data)
+    .subscribe(res => null);
   }
 
   private async sendMessage(type_message: string, message: string) {

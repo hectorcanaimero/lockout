@@ -8,6 +8,7 @@ import { PaidPage } from './paid.page';
 
 import { HeaderModule } from '@core/widgets/header/header.module';
 import { RouterModule, Routes } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   { path: '', component: PaidPage }
@@ -21,6 +22,7 @@ const routes: Routes = [
     HeaderModule,
     MomentModule,
     NgxStripeModule,
+    TranslateModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
   ],

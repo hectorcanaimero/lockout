@@ -1,7 +1,7 @@
 <app-header [title]="'TABS.HISTORY' | translate"></app-header>
 <ion-content>
-  <ng-container *ngIf="(items$ | async) as items; else notFound">
-    <ion-list lines="none">
+  <ng-container *ngIf="(items$ | async) as items">
+    <ion-list lines="none" *ngIf="items.length > 0; else notFound">
       <ion-item-sliding *ngFor="let item of items">
         <ion-item button (click)="openService(item)" [detail]="false">
           <ion-label>
@@ -21,7 +21,11 @@
     </ion-list>
   </ng-container>
   <ng-template #notFound>
-    <app-widget-skeleton *ngFor="let item of [0, 1, 2]"></app-widget-skeleton>
+    <ion-card>
+      <ion-card-content>
+        {{ 'DATA_NOT_FOUND' | translate }}
+      </ion-card-content>
+    </ion-card>
   </ng-template>
 
 </ion-content>

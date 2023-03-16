@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertOptions } from '@ionic/angular';
-import { Geolocation, Position } from '@capacitor/geolocation';
 import { Observable, timer } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState } from '@store/app.state';
+import { TranslateService } from '@ngx-translate/core';
+import { Geolocation, Position } from '@capacitor/geolocation';
+
 import { UtilsService } from '@core/services/utils.service';
 import { DbCompaniesService } from '@modules/companies/services/db-companies.service';
 
-// declare const google: any;
 
 @Component({
   selector: 'app-user-maps-widget',
@@ -24,9 +22,9 @@ export class MapsWidgetComponent implements  OnInit {
   position$: Observable<Position>;
 
   constructor(
-    private store: Store<AppState>,
     private db: DbCompaniesService,
     private uService: UtilsService,
+    private translate: TranslateService,
   ) {
   }
   async ngOnInit(): Promise<void> {
@@ -62,10 +60,20 @@ export class MapsWidgetComponent implements  OnInit {
           this.address = results[0].formatted_address;
         }
         else {
-          await this.uService.alert(this.onSetError('No se encontro ningun resultado.'))
+          await this.uService.alert({ 
+            mode: 'ios', 
+            header: 'Error', 
+            buttons: ['OK'],
+            message: this.translate.instant('DATA_NOT_FOUND'), 
+          })
         }
       } else {
-        await this.uService.alert(this.onSetError('Geocode fallo ' + status))
+        await this.uService.alert({ 
+          mode: 'ios', 
+          header: 'Error', 
+          buttons: ['OK'], 
+          message: this.translate.instant('GEOCODE_FAIL'), 
+        })
       }
     });
   };
@@ -74,11 +82,6 @@ export class MapsWidgetComponent implements  OnInit {
     this.db.setAddress$({lat: this.lat, lng: this.lng, address: this.address});
     await this.uService.load({ message: 'Salvando información de ubicación', duration: 1500 });
     timer(1700).subscribe(() => this.uService.navigate('register-company'));
-  }
-
-  private onSetError(message) {
-    const alert: AlertOptions = { header: 'Error', mode: 'ios', message, buttons: ['OK'] };
-    return alert;
   }
 }
 

@@ -9,11 +9,10 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-list lines="none">
+  <ion-list>
     <ng-container *ngIf="(services$ | async) as items; else notFound">
       <ng-container *ngFor="let item of items; trackBy:identify">
-        <ion-item button (click)="openService(item)" [detail]="false" 
-          [color]="item.status === 'accepted' ? '' : 'medium'">
+        <ion-item button (click)="openService(item)" [detail]="false">
           <ion-label>
             <p style="font-size: .7rem;">{{ item.createdAt | date: 'dd MMM, HH:mm' }}</p>
             <h2 style="font-weight: 600;">{{ item.status | translate }}</h2>
@@ -25,7 +24,7 @@
             <h4></h4>
           </ion-label>
           <ion-avatar slot="end" class="expert">
-            <img [src]="item.category.picture" [alt]="item.category.name" />
+            <img [src]="item.category.picture" [alt]="item.category.name | translate" />
           </ion-avatar>
         </ion-item>
       </ng-container>

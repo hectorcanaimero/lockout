@@ -42,9 +42,8 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
     this.getServices(changes.type.currentValue);
   }
 
-  animationCreated(animationItem: AnimationItem): void {
-    console.log(animationItem);
-  }
+  animationCreated(animationItem: AnimationItem): void { }
+
   getServices = (type: any) => {
     this.store.select('company')
     .pipe(
@@ -58,7 +57,6 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
         this.items$ = this.ms.getMaster(`services/${res._id}/status/accepted`);
       }
     })
-    this.items$.subscribe(res => console.log(res));
   }
 
   async openService (res: any): Promise<void> {

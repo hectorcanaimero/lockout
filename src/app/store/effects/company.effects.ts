@@ -11,21 +11,11 @@ export class CompanyEffects {
   company$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.loadCompany),
-      mergeMap((action) => this.db.getCompany(action.user)
+      mergeMap(({ user }) => this.db.getCompany(user)
         .pipe(
-          tap((res) => {
-            if (res) {
-              this.uService.navigate('pages/home');
-            } else {
-              this.uService.navigate('register-company');
-            }
-          }),
-          map((company: any) => {
-            return actions.loadedCompany({ company })
-          }),
-          catchError(async ({ error }: any) => {
-            return actions.loadedCompanyError({ error });
-          })
+          tap((res) => this.getRoutes(res)),
+          map((company: any) => actions.loadedCompany({ company })),
+          catchError(async ({ error }: any) => actions.loadedCompanyError({ error }))
         )
       )
     )
@@ -34,14 +24,10 @@ export class CompanyEffects {
   update$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.updateCompany),
-      mergeMap((action) =>
-        this.db.updateCompany(action.user, {status: action.data})
+      mergeMap(({ data, user }) =>this.db.updateCompany(user, {status: data})
         .pipe(
           map((company: any) => actions.loadedCompany({ company })),
-          catchError(async ({ error }) => {
-            console.log(error);
-            return actions.loadedCompanyError({ error });
-          })
+          catchError(async ({ error }) => actions.loadedCompanyError({ error }))
         )
       )
     )
@@ -52,4 +38,12 @@ export class CompanyEffects {
     private uService: UtilsService,
     private db: DbCompaniesService,
   ) {}
+
+  private getRoutes(res: any) {
+    if (res) {
+      this.uService.navigate('pages/home');
+    } else {
+      this.uService.navigate('register-company');
+    }
+  }
 }

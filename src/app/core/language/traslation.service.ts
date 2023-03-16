@@ -1,17 +1,25 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { StorageService } from '@core/services/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TraslationService {
 
-  constructor( private translate: TranslateService ) {
+  constructor(
+    private storage: StorageService,
+    private translate: TranslateService,
+  ) {
     translate.addLangs(['en', 'es', 'pt']);
-    translate.setDefaultLang('es');
+    this.definedLang();
+  }
 
-    const browserLang = translate.getBrowserLang();
-    translate.use(browserLang.match(/en|es/) ? browserLang : 'es');
+  async definedLang() {
+    const user = await this.storage.getStorage('oUser');
+    if (user) {
+      this.translate.use(user.language);
+    }
   }
 
   use = (lang: string) => this.translate.use(lang);

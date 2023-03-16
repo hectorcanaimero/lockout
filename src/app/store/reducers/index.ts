@@ -13,3 +13,4 @@ export * from './service-finished.reducer';
 export * from './service-accepted.reducer';
 export * from './service-in-process.reducer';
 export * from './score.reducer';
+export * from './banners.reducer';

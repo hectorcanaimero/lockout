@@ -1,18 +1,17 @@
 import { Component, OnInit, EventEmitter, Output, Input, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AlertController, LoadingController, ModalController, NavController, ToastController } from '@ionic/angular';
-import { Geolocation, Position } from '@capacitor/geolocation';
+
 import { Store } from '@ngrx/store';
 import { Observable, timer } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { AppState } from '@store/app.state';
-import * as actions from '@store/actions';
+import { Geolocation } from '@capacitor/geolocation';
+import { TranslateService } from '@ngx-translate/core';
 
-import { MapsWidgetComponent } from './../../widgets/maps/maps.component';
-import { DbCompaniesService } from './../../services/db-companies.service';
+import * as actions from '@store/actions';
+import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
-import { runInThisContext } from 'vm';
 import { StorageService } from '@core/services/storage.service';
+import { DbCompaniesService } from './../../services/db-companies.service';
 
 
 @Component({
@@ -45,7 +44,8 @@ export class RegisterPage implements OnInit, AfterViewInit {
     private db: DbCompaniesService,
     private store: Store<AppState>,
     private uService: UtilsService,
-    private storage: StorageService
+    private storage: StorageService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -97,8 +97,9 @@ export class RegisterPage implements OnInit, AfterViewInit {
     const user: any = await this.storage.getStorage('oUser');
     const value = this.factoryForm.value;
     value.user = user._id;
-    await this.uService.load({ message: 'Procesando...' })
-    timer(2000).subscribe(() => this.uService.loadDimiss());
+    console.log(value);
+    await this.uService.load({ message: this.translate.instant('PROCCESSING') })
+    timer(500).subscribe(() => this.uService.loadDimiss());
     this.create(value);
   };
 
@@ -116,7 +117,7 @@ export class RegisterPage implements OnInit, AfterViewInit {
   };
 
   goToMap = async (): Promise<void> => {
-    await this.uService.load({message: 'Cargando tu ubicación en el mapa...'});
+    await this.uService.load({message: this.translate.instant('LOAD_MAP')});
     this.db.setData$(this.factoryForm.value);
     this.uService.loadDimiss();
     this.uService.navigate('register-mapa');
@@ -142,18 +143,18 @@ export class RegisterPage implements OnInit, AfterViewInit {
   }
   private create = (item: any) => {
     this.db.registerCompany(item).subscribe(
-      async (res: any) => {
+      async () => {
         this.store.dispatch(actions.loadCompany({ user: item.user }));
         this.uService.loadDimiss();
         await this.uService.alert({
-          header: 'Info', message: 'Compañia creada con éxito!',
+          header: 'Info', message: this.translate.instant('COMPANY_SUCCESS'),
           mode: 'ios', buttons: ['OK']
         });
         this.uService.navigate('/pages/home');
       },
       async(error) => {
         await this.uService.alert({
-          header: 'Error', message: error.message,
+          header: 'Error', message: error.message,  
           mode: 'ios', buttons: ['OK']
         });
       }
@@ -166,8 +167,8 @@ export class RegisterPage implements OnInit, AfterViewInit {
       this.db.setPosition$(position);
     } else {
       await this.uService.alert({
-        header: 'Aviso',
-        message: 'Es necesario que su Localizacion este activa',
+        header: 'Info',
+        message: this.translate.instant('LOCATION_ACTIVE'),
         mode: 'ios',
         buttons: ['OK']
       });

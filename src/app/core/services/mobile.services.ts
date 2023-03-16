@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-
-import { App, AppInfo } from '@capacitor/app';
-import { Device, DeviceInfo } from '@capacitor/device';
+import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
+import { StatusBar, Style } from '@capacitor/status-bar';
 import { PushService } from '@core/services/push.service';
 import { Globalization } from '@ionic-native/globalization/ngx';
 import { TraslationService } from '@core/language/traslation.service';
-import { Browser } from '@capacitor/browser';
-import { PluginListenerHandle } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root'
@@ -19,26 +17,29 @@ export class MobileService{
     public traslate: TraslationService,
   ) {}
 
-  async getPush() {
-    const info: DeviceInfo = await Device.getInfo();
-    if (info.platform !== 'web') {
-      this.pushService.initPush();
-    } else {
-      console.log('Aqui es web');
+  async lodApp() {
+    if (Capacitor.isNativePlatform()) {
+      await StatusBar.setBackgroundColor({ color: '#000000' });
+      await StatusBar.setStyle({ style: Style.Dark })
     }
   }
 
-  async getAppInfo(): Promise<AppInfo | boolean> {
-    const info: DeviceInfo = await Device.getInfo();
-    if (info.platform !== 'web') {
+
+  getPush() {
+    if (Capacitor.isNativePlatform()) {
+      this.pushService.initPush();
+    }
+  }
+
+  getAppInfo(): any {
+    if (Capacitor.isNativePlatform()) {
       return App.getInfo();
     }
     return false;
   }
 
   async getGlobalization() {
-    const info: DeviceInfo = await Device.getInfo();
-    if (info.platform !== 'web') {
+    if (Capacitor.isNativePlatform()) {
       const { value } = await this.global.getPreferredLanguage();
       if (value) {
         this.traslate.use(value.split('-')[0]);

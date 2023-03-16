@@ -27,7 +27,7 @@
             <ion-text color="danger">*</ion-text>
           </ion-label>
           <ion-select [placeholder]="'GLOBAL.SELECT' | translate" interface="action-sheet" formControlName="country">
-            <ion-select-option *ngFor="let item of countries$ | async" [value]="item.id">
+            <ion-select-option *ngFor="let item of countries$ | async" [value]="item._id">
               (+{{ item.phone_code }}) {{ item.name  }}</ion-select-option>
           </ion-select>
         </ion-item>
@@ -36,15 +36,14 @@
             <ion-text color="danger">*</ion-text>
           </ion-label>
           <ion-select placeholder="Idioma" interface="action-sheet" formControlName="language">
-            <ion-select-option *ngFor="let item of idioma">{{ item.name  }}</ion-select-option>
+            <ion-select-option  *ngFor="let item of idioma" [value]="item.id">{{ item.name  }}</ion-select-option>
           </ion-select>
         </ion-item>
       </div>
       <div class="col-8 mt-3">
-        <ion-button (click)="onSubmit()" expand="block" color="warning"
-        shape="round" mode="ios">
-        {{ 'BUTTON.UPDATE'| translate }}
-      </ion-button>
+        <ion-button (click)="onSubmit()" expand="block" color="warning" shape="round" mode="ios">
+          {{ 'BUTTON.UPDATE'| translate }}
+        </ion-button>
       </div>
     </div>
   </form>

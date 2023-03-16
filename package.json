@@ -14,7 +14,9 @@
     "sync:open": "npx cap sync android && npx cap open android",
     "res": "cordova-res ios && cordova-res android && node scripts/resources.js",
     "res:md": "cordova-res android && node scripts/resources.js",
-    "res:ios": "cordova-res ios && node scripts/resources.js"
+    "res:ios": "cordova-res ios && node scripts/resources.js",
+    "deploy:ios": "npm run build && npx cap sync ios && npx cap open ios",
+    "deploy:md": "npm run build && npx cap sync android && npx cap open android"
   },
   "private": true,
   "dependencies": {
@@ -51,6 +53,8 @@
     "@capacitor/push-notifications": "^4.0.1",
     "@capacitor/splash-screen": "^4.0.0",
     "@capacitor/status-bar": "^4.0.0",
+    "@datadog/browser-logs": "^4.34.3",
+    "@datadog/browser-rum": "^4.34.3",
     "@fortawesome/angular-fontawesome": "^0.10.2",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",

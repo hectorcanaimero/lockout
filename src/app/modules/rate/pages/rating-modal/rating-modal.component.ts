@@ -52,7 +52,6 @@ export class RatingModalComponent implements OnInit {
       score_customer: this.score ? this.score : 1,
     };
     this.ms.postMaster('comments', data).subscribe((res: any) => {
-      console.log(res);
       this.changeStatusService(res._id);
       this.loadServiceInStore(this.item.company._id);
       this.uService.modalDimiss();
@@ -72,6 +71,7 @@ export class RatingModalComponent implements OnInit {
   
   private loadServiceInStore(id: string) {
     timer(300).subscribe(() => {
+      this.store.dispatch(actions.load({ company: id }))
       this.store.dispatch(actions.inProcessInit({ id }));
       this.store.dispatch(actions.acceptedInit({ id }));
     });

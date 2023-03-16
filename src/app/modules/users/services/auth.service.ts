@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ReducerManager } from '@ngrx/store';
 
 import { Login } from './interfaces';
 import { MasterService } from '@core/services/master.service';
 import { StorageService } from 'src/app/core/services/storage.service';
+import { StripeService } from '@core/services/stripe.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class AuthService {
     private navCtrl: NavController,
     private storage: StorageService,
     private reducers: ReducerManager,
+    private stripeServie: StripeService
   ) { }
 
   //TODO: Autoriza el accesso
@@ -29,7 +31,6 @@ export class AuthService {
   signUp(data: any): Observable<Promise<boolean>> {
     return this.ms.postMaster( 'users', data).pipe(
       map(async (res: any): Promise<boolean> => {
-        console.log(res);
         await this.storage.setStorage('oProfile', res);
         return this.navCtrl.navigateRoot('/user/signIn');
       })

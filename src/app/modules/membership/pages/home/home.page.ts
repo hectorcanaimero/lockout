@@ -1,17 +1,14 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { LoadingController, AlertController, ModalController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { filter, map, take, tap, switchMap } from 'rxjs/operators';
-import { StripeCardComponent, StripeCardNumberComponent, StripeService } from "ngx-stripe";
+import { switchMap } from 'rxjs/operators';
+import { StripeCardComponent, StripeService } from "ngx-stripe";
 import {
   StripeElements,
   StripeElementsOptions,
-  StripeCardNumberElementOptions,
   StripeCardNumberElement,
   StripeCardCvcElement,
   StripeCardExpiryElement,
-  StripeCardExpiryElementOptions,
-  StripeCardCvcElementOptions,
   StripeCardElementOptions
 } from '@stripe/stripe-js';
 
@@ -21,7 +18,6 @@ import { StorageService } from '@core/services/storage.service';
 import { MemberService } from '../../services/membership.service';
 import { DatePipe } from '@angular/common';
 import { from, Observable } from 'rxjs';
-import { ConnectService } from '@modules/chat/services/connect.service';
 import { Router } from '@angular/router';
 import { MasterService } from '@core/services/master.service';
 
@@ -33,8 +29,6 @@ import { MasterService } from '@core/services/master.service';
   providers: [DatePipe]
 })
 export class HomePage implements OnInit {
-
-  // @ViewChild(StripeCardNumberComponent) card: StripeCardNumberComponent;
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
   entry$: Observable<any>;
   item: any = [];
@@ -43,17 +37,6 @@ export class HomePage implements OnInit {
   cvcCard: StripeCardCvcElement;
   numberCard: StripeCardNumberElement;
   expiryCard: StripeCardExpiryElement;
-
-  // cardOptions: StripeCardElementOptions = {
-  //   iconStyle: 'solid',
-  //   style: {
-  //     base: {
-  //       color: '#303030', fontWeight: '400', fontFamily: 'Roboto, sans-serif',
-  //       fontSize: '18px', '::placeholder': { color: '#303030' },
-  //     }
-  //   }
-  // }
-  // elementsOptions: StripeElementsOptions = { locale: 'es' };
 
   cardOptions: StripeCardElementOptions = {
     style: {

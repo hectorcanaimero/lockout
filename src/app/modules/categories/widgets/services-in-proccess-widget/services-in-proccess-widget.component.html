@@ -1,14 +1,14 @@
 <ion-list lines="none" class="mb-5">
   <ion-list-header class="mb-2">
     <ion-label>
-      <h2>{{ 'WIDGETS.ACCEPTED' | translate }}</h2>
+      <h2>{{ 'SA.TITLE' | translate }}</h2>
     </ion-label>
   </ion-list-header>
   <ng-container *ngIf="(services$ | async ) as items; else notFound">
     <ng-container *ngIf="items.length > 0; else notFound">
       <ion-item detail="false" button *ngFor="let item of items">
         <ion-label (click)="openServiceModal(item)">
-          <p class="date">{{ item.createdAt | amLocale:'es' | amTimeAgo  }}</p>
+          <p class="date">{{ item.createdAt | amLocale: language | amTimeAgo  }}</p>
           <h3>{{item._id | slice:0:7 }}...</h3>
           <p>{{ item.category.name | translate }}</p>
           <p>{{ item.brand .name}} {{ item.model.name }}</p>
@@ -26,7 +26,7 @@
     <div class="container">
       <ion-item lines="none" class="not-found" detail="false">
         <ion-icon slot="start" name="list-circle" size="large"></ion-icon>
-        <ion-label>{{ 'WIDGETS.NOT_FOUND_ACCEPTED' | translate }}</ion-label>
+        <ion-label>{{ 'SA.NOT_FOUND' | translate }}</ion-label>
       </ion-item>
     </div>
   </ng-template>

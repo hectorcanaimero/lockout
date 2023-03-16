@@ -10,6 +10,7 @@ import { AppState } from '@store/app.state';
 import { AuthService } from '@modules/users/services/auth.service';
 import { UtilsService } from '@core/services/utils.service';
 import { StorageService } from '@core/services/storage.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sign-in',
@@ -29,6 +30,7 @@ export class SignInPage implements OnInit, AfterViewInit {
     private store: Store<AppState>,
     private uService: UtilsService,
     private storage: StorageService,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit() {
@@ -41,14 +43,14 @@ export class SignInPage implements OnInit, AfterViewInit {
 
   async onSubmit(): Promise<void> {
     if (this.loginForm.invalid) { return; }
-    await this.uService.load({message: 'Loading...'});
+    await this.uService.load({message: this.translate.instant('PROCCESSING')});
     this.login(this.loginForm.value);
   };
 
   onSubmitForgotPassword = async () => {
     const form = this.forgotPasswordForm;
     if (form.invalid) { return; }
-    await this.uService.load({message: 'Loading...'});
+    await this.uService.load({message: this.translate.instant('PROCCESSING')});
     this.db.forgotSenha(form.value).subscribe(
       async (res) => {
         this.uService.loadDimiss();
@@ -65,8 +67,8 @@ export class SignInPage implements OnInit, AfterViewInit {
 
   loadForm = () => {
     this.loginForm = this.fb.group({
-      username: ['aplicativo@condor.com.br', [Validators.required, Validators.email]],
-      password: ['admin', [Validators.required, Validators.minLength(4)]],
+      username: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(4)]],
     });
     this.forgotPasswordForm = this.fb.group({
       username: ['', [Validators.required, Validators.email]],
@@ -86,17 +88,21 @@ export class SignInPage implements OnInit, AfterViewInit {
     .pipe(catchError(async (error: any) => {
       this.uService.loadDimiss();
       await this.uService.alert({
-        mode:'ios', header: 'Error', buttons: ['OK'],
-        message: error.error_description || error.message,
+        mode:'ios', 
+        header: this.translate.instant('ERROR'), 
+        buttons: ['OK'],
+        message: this.translate.instant(error.error.error_description),
       });
     }))
     .subscribe(async (res: any) => {
+      const user = res.user._id;
+      console.log(user);
       this.uService.loadDimiss();
-      console.log(res.user._id);
+      this.translate.use(res.user.language);
       await this.storage.setStorage('oUser', res.user);
       await this.storage.setStorage('oAccess', res.access);
       this.store.dispatch(actions.loadUser({ user: res.user }));
-      this.store.dispatch(actions.loadCompany({ user: res.user._id }));
+      // this.store.dispatch(actions.loadCompany({ user }));
       this.uService.navigate('/pages/home');
     });
   }

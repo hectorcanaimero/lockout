@@ -26,37 +26,36 @@ export class PagesPage implements AfterViewInit {
   company: number;
   user: any;
   constructor(
-    private stripeService: StripeService,
     private store: Store<AppState>,
     private storage: StorageService,
     private modalCtrl: ModalController,
     private iService: IntegratedService,
     private memberService: MemberService,
+    private stripeService: StripeService,
     private validateService: ValidationTokenService,
   ) { }
 
   async ngOnInit(): Promise<void> {
     this.appActive();
     await this.getLoadAppMobile();
-    this.iService.getCompany();
+    this.iService.getUser();
     await this.iService.setTokenPushOnUser();
   }
 
   ngAfterViewInit() {
-    this.iService.page2State().subscribe(res =>
-        this.iService.processing(res))
+    this.iService.page2State().subscribe(res => 
+      res ? this.iService.processing(res) : null)
     this.stripeCustomer();
     this.getConfigStripe();
     this.validateService.validateMember();
-    timer(10*1000).subscribe(() => {
-      this.stripeService.validatePeriodtest();
-    })
+    this.setDataValidateStripe(3);
     // this.loadServices();
   }
 
   appActive (): void {
     App.addListener('appStateChange', ({ isActive }) => {
       if (isActive) {
+        this.setDataValidateStripe(2);
         this.iService.page2State().subscribe(res =>
           this.iService.processing(res))
       }
@@ -65,13 +64,23 @@ export class PagesPage implements AfterViewInit {
 
 
   loadServices = () => {
-    const company$: Observable<unknown> = this.store.select('company')
+    this.store.select('company')
     .pipe(filter((row: any) => !row.loading), map((res: any) => res.company))
-    company$.subscribe((res: any) => {
-      if(!res) { this.goToCompany(); }
+    .subscribe((res: any) => {
+      if(res) { 
+        this.stripeService.checkRecord(res.user);
+      } else {
+        this.goToCompany(); 
+      }
     });
   };
 
+  private setDataValidateStripe(second: number) {
+    timer(second * 1000).subscribe(() => {
+      this.stripeService.validatePeriodtest();
+    })
+  }
+  
   private stripeCustomer = async () => {
     const user = await this.storage.getStorage('userCompany');
     if (user) {

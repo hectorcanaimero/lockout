@@ -5,6 +5,8 @@ ion-content, ion-footer, ion-toolbar {
 
 ion-content {
   form {
+    --color: #fff;
+    color: #fff;
     width: 100%;
     .avatar {
       margin-top: 20px;
@@ -19,4 +21,8 @@ ion-content {
       }
     }
   }
+}
+
+ion-textarea {
+  --color: #fafafa;
 }

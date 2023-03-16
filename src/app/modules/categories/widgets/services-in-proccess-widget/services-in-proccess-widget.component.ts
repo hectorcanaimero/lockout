@@ -6,8 +6,8 @@ import { map, filter } from 'rxjs/operators';
 import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
 import { SocketService } from '@core/services/socket.service';
-import { ChatFireService } from '@core/services/chat-fire.service';
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
+import { StorageService } from '@core/services/storage.service';
 
 @Component({
   selector: 'app-services-in-proccess-widget',
@@ -17,28 +17,32 @@ import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.comp
 
 export class ServicesInProccessWidgetComponent implements OnInit, AfterViewInit {
   unread: any;
+  companyId = 0;
+  ids: any = [];
   company: string;
   offline: boolean;
-  companyId = 0;
-  items$: Observable<[] | any>;
+  language: string;
   services$: Observable<any>;
   total$: Observable<number>;
-  ids: any = [];
+  items$: Observable<[] | any>;
 
 
   constructor(
     private store: Store<AppState>,
     private uService: UtilsService,
-    private chatFire: ChatFireService,
+    private storage: StorageService,
     private socketService: SocketService,
   ) { }
 
-  ngOnInit(): void {
-    this.getServices();
+  async ngOnInit(): Promise<void> {
+    const { language } = await this.storage.getStorage('oUser');
+    console.log(language);
+    this.language = language;
   }
-
+  
   ngAfterViewInit(): void {
     this.getData();
+    this.getServices();
   }
 
   getServices() {

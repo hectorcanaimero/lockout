@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
-    <ion-title>Registro de Empresa</ion-title>
+    <ion-title></ion-title>
     <ion-buttons slot="end" *ngIf="modal">
       <!-- <ion-button (click)="onClose()" *ngIf="(count$ | async)" color="light">
         <ion-icon slot="icon-only" name="close" ></ion-icon>
@@ -16,25 +16,25 @@
           <div>
             <form [formGroup]="factoryForm" class="meka-form">
               <ion-item>
-                <ion-label mode="ios" position="floating">Nombre Compañia<ion-text color="danger">*</ion-text></ion-label>
+                <ion-label mode="ios" position="stacked">{{ 'NOME_COMPANY' | translate }}<ion-text color="danger">*</ion-text></ion-label>
                 <ion-input type="text" formControlName="name"></ion-input>
               </ion-item>
               <ion-item>
-                <ion-label mode="ios"position="floating">Tipo Compañia <ion-text color="danger">*</ion-text></ion-label>
-                <ion-select formControlName="typeCompany" placeholder="Seleccione..." interface="action-sheet" (ionChange)="onTypeCompany($event)">
+                <ion-label mode="ios"position="floating">{{ 'TYPE_COMPANY' | translate }} <ion-text color="danger">*</ion-text></ion-label>
+                <ion-select formControlName="typeCompany" [placeholder]="'SELECT' | translate" interface="action-sheet" (ionChange)="onTypeCompany($event)">
                   <ion-select-option *ngFor="let item of types$ | async"
                     [value]="item">{{ item.name | translate | titlecase }}</ion-select-option>
                 </ion-select>
               </ion-item>
               <ion-item>
-                <ion-label mode="ios"position="floating">Categorias <ion-text color="danger">*</ion-text></ion-label>
-                <ion-select placeholder="Seleccione..." interface="action-sheet" formControlName="categories" multiple="true">
+                <ion-label mode="ios"position="floating">{{ 'CATEGORIES' | translate }} <ion-text color="danger">*</ion-text></ion-label>
+                <ion-select [placeholder]="'SELECT' | translate"  interface="action-sheet" formControlName="categories" multiple="true">
                   <ion-select-option *ngFor="let item of experts$ | async" [value]="item._id">{{ item.name | translate }}</ion-select-option>
                 </ion-select>
               </ion-item>
               <ion-item>
                 <ion-label mode="ios"position="floating">{{ 'PAYMENT' | translate }}<ion-text color="danger">*</ion-text></ion-label>
-                <ion-select placeholder="Seleccione..." interface="action-sheet" formControlName="payment" multiple="true">
+                <ion-select [placeholder]="'SELECT' | translate"  interface="action-sheet" formControlName="payment" multiple="true">
                   <ion-select-option *ngFor="let item of payment" [value]="item">{{ item | translate }}</ion-select-option>
                 </ion-select>
               </ion-item>
@@ -42,17 +42,17 @@
                 <br />
                 <ion-button (click)="goToMap()" expand="block" color="warning">
                   <ion-icon slot="start" name="location"></ion-icon>
-                  Mi Ubicación
+                  {{ 'MY_LOCATION' | translate }}
                 </ion-button>
-                <ion-item *ngIf="address">
+                <!-- <ion-item *ngIf="address">
                   <ion-label>
                     <p class="ion-text-center">[{{ address.lat | number }}, {{ address.lng | number }}]</p>
                     <p class="ion-text-wrap ion-text-center b">{{ address.address }}</p>
                   </ion-label>
-                </ion-item>
+                </ion-item> -->
                 <ion-item>
-                  <ion-label mode="ios"position="floating">Dirección <ion-text color="danger"></ion-text></ion-label>
-                  <ion-textarea formControlName="address"></ion-textarea>
+                  <ion-label mode="ios" position="stacked">{{ 'ADDRESS' | translate }} <ion-text color="danger"></ion-text></ion-label>
+                  <ion-textarea formControlName="address" rows="4"></ion-textarea>
                 </ion-item>
               </ng-container>
               <div class="my-4">

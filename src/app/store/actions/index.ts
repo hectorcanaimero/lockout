@@ -13,3 +13,4 @@ export * from './service-accepted.actions';
 export * from './service-finished.actions';
 export * from './service-in-process.actions';
 export * from './score.actions';
+export * from './banners.actions';

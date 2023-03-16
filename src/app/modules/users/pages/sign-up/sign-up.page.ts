@@ -1,14 +1,14 @@
-import { catchError } from 'rxjs/operators';
+import { StripeService } from '@core/services/stripe.service';
+import { catchError, switchMap } from 'rxjs/operators';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Observable } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils.service';
 import { MasterService } from '@core/services/master.service';
-import { StorageService } from '@core/services/storage.service';
 import { AuthService } from '@modules/users/services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sign-up',
@@ -21,9 +21,9 @@ export class SignUpPage implements OnInit, AfterViewInit {
   avatar: any;
   countries$: Observable<any[]>;
   idioma = [
-    { name: 'Español (Latinoamerica)', id: 1 },
-    { name: 'Ingles (USA)', id: 2 },
-    { name: 'Portugues (Brasil)', id: 3 }
+    { name: 'Español', id: 'es' },
+    { name: 'Ingles', id: 'en' },
+    { name: 'Portugues', id: 'pt' }
   ];
 
   constructor(
@@ -31,7 +31,8 @@ export class SignUpPage implements OnInit, AfterViewInit {
     private auth: AuthService,
     private ms: MasterService,
     private uService: UtilsService,
-    private storage: StorageService,
+    private translate: TranslateService,
+    private stripeService: StripeService,
   ) { }
 
   ngOnInit() {
@@ -49,32 +50,27 @@ export class SignUpPage implements OnInit, AfterViewInit {
     if(this.registerForm.invalid) { return; }
     const data = this.registerForm.value;
     await this.getDataForm(data);
-    await this.uService.load({ message: 'Procesando...' });
+    await this.uService.load({ message: this.translate.instant('PROCCESSING')});
     this.auth.signUp(this.registerForm.value)
     .pipe(
       catchError(async (error) => {
         this.uService.loadDimiss();
-        await this.uService.alert(
-          {
-            mode: 'ios',
-            header: 'Error',
-            message: error.response.errorMessage,
-            buttons: ['OK']
-          }
-        );
+        this.setAlert(error);
       })
     )
-    .subscribe(
-      async () => {
-        this.uService.loadDimiss();
-        await this.setToast();
-      });
+    .subscribe(async () => {
+      this.translate.use(data.language);
+      await this.setToast();
+      this.uService.loadDimiss();
+    });
   };
 
   loadForm = () => {
     this.registerForm = this.fb.group({
       picture: [''],
       type_user: [1],
+      lgpd: ['', Validators.required],
+      term: ['', Validators.required],
       language: ['', Validators.required],
       password: ['', Validators.required],
       phone: ['', Validators.required],
@@ -95,7 +91,6 @@ export class SignUpPage implements OnInit, AfterViewInit {
 
   private async getDataForm(data: any): Promise<void> {
     this.constructImage();
-    await this.storage.setStorage('language', data.language);
   };
 
   onBack (): Promise<boolean> {
@@ -112,9 +107,20 @@ export class SignUpPage implements OnInit, AfterViewInit {
 
   private setToast = async (): Promise<void> => {
     await this.uService.toast({
-      message: 'Cuenta creada, ahora accede con tu usuario y contraseña',
+      message: this.translate.instant('SIGN.ACCOUNT_CREATED'),
       position: 'top', duration: 1000
     });
     this.uService.navigate('/user/signIn');
   };
+
+  private async setAlert(error: any) {
+    return this.uService.alert(
+      {
+        mode: 'ios',
+        header: this.translate.instant('ERROR'),
+        message: error.response.errorMessage,
+        buttons: ['OK']
+      }
+    );
+  }
 }

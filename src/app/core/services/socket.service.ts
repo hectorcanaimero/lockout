@@ -27,8 +27,10 @@ export class SocketService {
       map((res: any) => res.company)
     )
     .subscribe((company: any) => {
-      this.socket.emit('joinCompany', company._id);
-      this.socket.emit('serviceCompany', company._id);
+      if (company) {
+        this.socket.emit('joinCompany', company._id);
+        this.socket.emit('serviceCompany', company._id);
+      }
     });
   }
 

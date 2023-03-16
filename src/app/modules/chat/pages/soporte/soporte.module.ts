@@ -7,6 +7,7 @@ import { SoporteChatPage } from './soporte.page';
 import { HeaderModule } from '@core/widgets/header/header.module';
 import { Routes, RouterModule } from '@angular/router';
 import { MessageWidgetModule } from './../../widget/message/message.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   { path: '',  component: SoporteChatPage, }
@@ -18,6 +19,7 @@ const routes: Routes = [
     IonicModule,
     CommonModule,
     HeaderModule,
+    TranslateModule,
     MessageWidgetModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes)

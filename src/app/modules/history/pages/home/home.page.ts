@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 
 import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
@@ -14,7 +14,7 @@ import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.comp
   styleUrls: ['home.page.scss'],
 })
 
-export class HomePage implements OnInit {
+export class HomePage implements AfterViewInit {
   expert: any = [];
   items$: Observable<any[]>;
   loading = false;
@@ -24,16 +24,16 @@ export class HomePage implements OnInit {
     private store: Store<AppState>,
     private uService: UtilsService,
   ) {}
-  ngOnInit(): void {
+
+  ngAfterViewInit(): void {
     this.getData();
   }
 
   getData() {
-    this.items$ = this.store.select('company')
+    this.items$ = this.store.select('history')
     .pipe(
       filter(row => !row.loading),
-      switchMap(({ company }: any) =>
-        this.ms.getMaster(`services/company/history/${company._id}`))
+      map((res: any) => res.history)
     );
     this.items$.subscribe(res => console.log(res));
   }

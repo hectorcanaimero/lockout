@@ -6,10 +6,14 @@ import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { HomePage } from './home.page';
-import { HomePageRoutingModule } from './home-routing.module';
 import { HeaderModule } from '@core/widgets/header/header.module';
 import { CorePipeModule } from '@core/pipe/pipe.module';
 import { SkeletonWidgetModule } from '@core/widgets/skeleton/skeleton.module';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  { path: '', component: HomePage }
+];
 
 @NgModule({
   imports: [
@@ -20,7 +24,7 @@ import { SkeletonWidgetModule } from '@core/widgets/skeleton/skeleton.module';
     CorePipeModule,
     TranslateModule,
     SkeletonWidgetModule,
-    HomePageRoutingModule,
+    RouterModule.forChild(routes),
   ],
   declarations: [HomePage]
 })

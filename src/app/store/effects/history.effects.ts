@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MasterService } from '@core/services/master.service';
-import { HistoryService } from '@modules/history/services/history.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';

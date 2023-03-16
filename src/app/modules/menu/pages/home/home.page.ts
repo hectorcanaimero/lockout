@@ -3,15 +3,17 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
+import { Browser } from'@capacitor/browser';
 import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
 import { MobileService } from '@core/services/mobile.services';
-import { StorageService } from '@core/services/storage.service';
 import { AuthService } from '@modules/users/services/auth.service';
 import * as MemberPage from '@modules/membership/pages/paid/paid.page';
 import { PostContentsWidgetComponent } from '@modules/contents/widget/post/post.component';
+import { StorageService } from '@core/services/storage.service';
+import { MasterService } from '@core/services/master.service';
 
 
 
@@ -25,14 +27,12 @@ export class HomePage implements OnInit, AfterViewInit {
   position: number;
   appInfo: any;
   content = [
-    { name: 'Perfil', url: '/user/profile' },
-    { name: 'Compañia', url: '/pages/companies' },
-    { name: 'Chat Meka-asesor', url: '/chat/soporte' }
+    { name: 'MENU.PROFILE', url: '/user/profile' },
+    { name: 'MENU.COMPANY', url: '/pages/companies' },
+    { name: 'MENU.CHAT', url: '/chat/soporte' }
   ];
   subContent = [
-    { name: 'Política de privacidad', modal: true },
-    { name: 'Términos de uso', modal: true },
-    { name: 'Acerca de Meka', modal: true }
+    { name: 'MENU.ABOUT', url: 'https://meka.do', modal: false }
   ];
   user$: Observable<any>;
   count$: Observable<number>;
@@ -42,13 +42,16 @@ export class HomePage implements OnInit, AfterViewInit {
 
   company$: Observable<any>;
   ts: string = '';
+  session: any;
 
   constructor(
+    private ms: MasterService,
     private auth: AuthService,
     private store: Store<AppState>,
     private uService: UtilsService,
+    private storage: StorageService,
     private mService: MobileService,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -58,6 +61,15 @@ export class HomePage implements OnInit, AfterViewInit {
 
   async ngAfterViewInit(): Promise<void> {
     await this.getAppInfo();
+    await this.sessionStripe();
+  }
+
+  async sessionStripe() {
+    const oPayment = await this.storage.getStorage('oPayment');
+    this.ms.getMaster('payments/checkout-session/' + oPayment.session)
+    .subscribe((res) => {
+      this.session = res;
+    })
   }
 
   async getAppInfo(): Promise<void> {
@@ -67,9 +79,9 @@ export class HomePage implements OnInit, AfterViewInit {
   getCompany = () => {
     this.company$ = this.store.select('company')
     .pipe(
-      filter(row => !row.loading),
+      filter(({ loading }: any) => !loading),
       map(({ company }: any) => {
-        this.active = company.status;
+        this.active = company?.status;
         return company;
       })
     );
@@ -82,11 +94,16 @@ export class HomePage implements OnInit, AfterViewInit {
   async goToMembresia (): Promise<void> {
     await this.uService.modal({
       mode: 'ios',
-      initialBreakpoint: 1,
-      breakpoints: [0, .5, .85, 1],
+      initialBreakpoint: .7,
+      breakpoints: [0, .7],
       component: MemberPage.PaidPage,
+      componentProps: { res: this.session }
     });
   };
+
+  async onAboutMeka() {
+    await Browser.open({ url: 'https://meka.do' });
+  }
 
   countClosedJobs = () => {
     this.count$ = this.store.select('closed')
@@ -116,6 +133,8 @@ export class HomePage implements OnInit, AfterViewInit {
       message: this.translate.instant('PROCCESSING'),
       duration: 1000
     });
+    await this.mService.getGlobalization(); 
+    await this.storage.clearStorages();
     await this.auth.signOut();
   }
 }

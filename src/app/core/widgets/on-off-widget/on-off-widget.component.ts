@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/app.state';
-import { filter, map, Observable, subscribeOn } from 'rxjs';
+import { filter, map, Observable, of, subscribeOn } from 'rxjs';
 
 @Component({
   selector: 'app-on-off-widget',
@@ -21,8 +21,9 @@ export class OnOffWidgetComponent implements OnInit {
   ngOnInit(): void {
     this.item$ = this.store.select('company')
     .pipe(
-      filter(row => !row.loading),
-      map((res: any) => res.company.status)
+      filter(({ loading }) => !loading),
+      map(({ company }: any) => 
+        company ? company.status : of(false))
     );
   }
 

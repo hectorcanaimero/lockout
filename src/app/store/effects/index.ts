@@ -1,3 +1,4 @@
+import { BannersEffects } from './banners.effects';
 import { ScoreEffects } from './score.effects';
 import { ExpertEffects } from './expert.effects';
 import { CustomerEffects } from './customer.effects';
@@ -23,6 +24,7 @@ export const EffectsArray: any[] = [
   ExpertEffects,
   CompanyEffects,
   HistoryEffects,
+  BannersEffects,
   PositionEffects,
   CustomerEffects,
   InProcessEffects,

@@ -1,6 +1,6 @@
 <div class="container widget-slides">
   <ion-label>
-    <h2 class="mb-3 white-text">{{'WIDGETS.IN_PROCESS' | translate }}</h2>
+    <h2 class="mb-3 white-text">{{'SO.TITLE' | translate }}</h2>
   </ion-label>
   <ng-container *ngIf="(service$ | async) as service; else notFound">
     <ng-container *ngIf="service.length > 0; else notFound">
@@ -9,11 +9,11 @@
           <ion-slide (click)="openModal(item, company)">
             <div class="service">
               <ion-label>
-                <p class="date">{{ item.createdAt | amLocale:'es' | amTimeAgo  }}</p>
+                <p class="date">{{ item.createdAt | amLocale: language | amTimeAgo  }}</p>
                 <p>{{ item.category.name | translate }}</p>
                 <h2>{{item._id | slice:0:7 }}...</h2>
                 <p>{{ item.brand.name}} {{ item.model.name }}</p>
-                <h4>Distancia: {{ item.distance | unitConverted }}</h4>
+                <h4>{{ 'SO.DISTANCE' | translate }} {{ item.distance | unitConverted }}</h4>
               </ion-label>
             </div>
           </ion-slide>
@@ -26,7 +26,7 @@
       <ion-slide>
         <div class="service">
           <ion-label>
-            <h4 class="text-center">{{ 'WIDGETS.NOT_FOUND' | translate }}</h4>
+            <h4 class="text-center">{{ 'SO.NOT_FOUND' | translate }}</h4>
           </ion-label>
         </div>
       </ion-slide>

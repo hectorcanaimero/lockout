@@ -20,6 +20,7 @@ export interface AppState {
   serviceFinished: reducers.ServiceFinishedState;
   serviceInProcess: reducers.ServiceInProcessState;
   score: reducers.ScoreState;
+  banner: reducers.BannerState;
 }
 
 export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
@@ -38,4 +39,5 @@ export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
   serviceFinished: reducers.serviceFinishedReducer,
   serviceInProcess: reducers.serviceInProcessReducer,
   score: reducers.scoreReducer,
+  banner: reducers.bannerReducer,
 };

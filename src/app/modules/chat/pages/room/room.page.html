@@ -5,14 +5,16 @@
         <ion-icon slot="icon-only" color="primary"  name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Chat Servicio</ion-title>
+    <ion-title>
+      {{ 'CHAT.TITLE_SERVICE' | translate }}
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content [scrollEvents]="true">
   <div class="mt-4 px-4">
     <ion-text color="medium">
       <p class="text-center" style="font-size: .8rem">
-        No intercambie informacion personal, su seguridad es lo mas importante....
+        {{ 'CHAT.MESSAGE' | translate }}
         <span style="display: block; font-weight: 700;">{{ uid }}</span>
       </p>
     </ion-text>
@@ -30,7 +32,7 @@
       rows="1"
       class="chat-input"
       [(ngModel)]="message"
-      placeholder="escribe aqui..."
+      [placeholder]="'CHAT.PLACEHOLDER' | translate"
       (keyup.enter)="onSubmit()"
       (ngModelChange)="onEventInput($event)"
     >

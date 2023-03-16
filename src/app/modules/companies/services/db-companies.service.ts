@@ -54,10 +54,9 @@ export class DbCompaniesService implements OnDestroy{
     this.unsubscribe$.complete();
   }
 
-
-
-  getCompany = (user: string) =>
-    this.ms.getMaster(`companies/user/${user}`);
+  getCompany(user: string) {
+    return this.ms.getMaster(`companies/user/${user}`);
+  }
 
   getCompanies = () => this.ms.getMaster('user/company/');
 

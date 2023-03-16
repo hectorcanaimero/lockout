@@ -70,6 +70,14 @@
             <ion-select placeholder="Idioma" interface="action-sheet" formControlName="language">
               <ion-select-option *ngFor="let item of idioma" [value]="item.id"> {{ item.name  }}</ion-select-option> </ion-select>
           </ion-item>
+          <ion-item lines="none" class="checkbox">
+            <ion-checkbox color="warning" mode="ios" slot="start" formControlName="lgpd"></ion-checkbox>
+            <ion-label class="ion-text-wrap">{{ 'LGPD' | translate }}</ion-label>
+          </ion-item>
+          <ion-item lines="none" class="checkbox">
+            <ion-checkbox color="warning" mode="ios" slot="start" formControlName="term"></ion-checkbox>
+            <ion-label class="ion-text-wrap">{{ 'TERM' | translate }}</ion-label>
+          </ion-item>
         </div>
       </div>
     </form>
