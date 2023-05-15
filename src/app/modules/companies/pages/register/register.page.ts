@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input, AfterViewInit } from '@
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Store } from '@ngrx/store';
-import { Observable, timer } from 'rxjs';
+import { BehaviorSubject, Observable, timer } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { Geolocation } from '@capacitor/geolocation';
 import { TranslateService } from '@ngx-translate/core';
@@ -12,6 +12,7 @@ import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
 import { StorageService } from '@core/services/storage.service';
 import { DbCompaniesService } from './../../services/db-companies.service';
+import { MapsWidgetComponent } from '@modules/companies/widgets/maps/maps.component';
 
 
 @Component({
@@ -23,6 +24,8 @@ import { DbCompaniesService } from './../../services/db-companies.service';
 export class RegisterPage implements OnInit, AfterViewInit {
   @Input() item: any;
   @Input() modal = false;
+  toggle: boolean = false;
+  data$: BehaviorSubject<object> =  new BehaviorSubject<object>({});
   @Output() output: EventEmitter<boolean> = new EventEmitter();
   company$: Observable<any[]>;
   companyExist: boolean;
@@ -30,7 +33,6 @@ export class RegisterPage implements OnInit, AfterViewInit {
   yenny: any;
   payment = ['Cash', 'Credit Card', 'Transfer Bank', 'Crypto', 'Paypal'];
   typeCompany: number;
-
   address: any;
   factoryForm: FormGroup;
   types$: Observable<any[]>;
@@ -59,7 +61,7 @@ export class RegisterPage implements OnInit, AfterViewInit {
     this.getAddress();
   }
 
-  getData = () => {
+  getData () {
     this.types$ = this.db.getType();
     this.experts$ = this.db.getCategories();
     this.countries$ = this.db.getCountries();
@@ -69,7 +71,7 @@ export class RegisterPage implements OnInit, AfterViewInit {
     );
   };
 
-  getAddress = () => {
+  getAddress () {
     this.db.getAddress$().subscribe(
       (res: any) => {
         if (res) {
@@ -83,7 +85,7 @@ export class RegisterPage implements OnInit, AfterViewInit {
     )
   };
 
-  getDataForm = () => {
+  getDataForm () {
     this.db.getData$().subscribe(
       (res: any) => {
         if (res) {
@@ -93,11 +95,10 @@ export class RegisterPage implements OnInit, AfterViewInit {
     )
   };
 
-  onSubmit = async () => {
+  async onSubmit() {
     const user: any = await this.storage.getStorage('oUser');
     const value = this.factoryForm.value;
     value.user = user._id;
-    console.log(value);
     await this.uService.load({ message: this.translate.instant('PROCCESSING') })
     timer(500).subscribe(() => this.uService.loadDimiss());
     this.create(value);
@@ -116,11 +117,15 @@ export class RegisterPage implements OnInit, AfterViewInit {
     });
   };
 
-  goToMap = async (): Promise<void> => {
+  async goToMap(): Promise<void> {
     await this.uService.load({message: this.translate.instant('LOAD_MAP')});
+    this.data$.next(this.factoryForm.value);
     this.db.setData$(this.factoryForm.value);
     this.uService.loadDimiss();
-    this.uService.navigate('register-mapa');
+    this.uService.modal({
+      component: MapsWidgetComponent,
+      mode: 'ios',
+    })
   }
 
   onSelectCompany(ev: any) {

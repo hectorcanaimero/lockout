@@ -1,14 +1,14 @@
-import { StripeService } from '@core/services/stripe.service';
-import { catchError, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Camera, CameraResultType } from '@capacitor/camera';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Camera, CameraResultType } from '@capacitor/camera';
-import { Observable } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 import { UtilsService } from '@core/services/utils.service';
 import { MasterService } from '@core/services/master.service';
+import { StorageService } from '@core/services/storage.service';
 import { AuthService } from '@modules/users/services/auth.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sign-up',
@@ -31,27 +31,38 @@ export class SignUpPage implements OnInit, AfterViewInit {
     private auth: AuthService,
     private ms: MasterService,
     private uService: UtilsService,
+    private storage: StorageService,
     private translate: TranslateService,
-    private stripeService: StripeService,
   ) { }
 
   ngOnInit() {
     this.getData();
   }
 
-  ngAfterViewInit() { }
+  ngAfterViewInit() {
+    console.log(this.registerForm);
+  }
 
   getData() {
     this.loadForm();
     this.countries$ = this.ms.getMaster('tables/countries');
   }
 
-  onSubmit = async () => {
-    if(this.registerForm.invalid) { return; }
-    const data = this.registerForm.value;
-    await this.getDataForm(data);
+  async onSubmit (): Promise<any> {
+    const data: any = this.registerForm.value;
+    const push: string = await this.storage.getStorage('oPush');
+    data.push = push ? push : null;
+    if(!data.term || !data.lgpd) {
+      await this.uService.alert({
+        mode: 'ios',
+        message: this.translate.instant('SIGN.ERROR_TERM_LGPD'),
+        buttons: ['OK']
+      })
+      return;
+    }
+    await this.getDataForm();
     await this.uService.load({ message: this.translate.instant('PROCCESSING')});
-    this.auth.signUp(this.registerForm.value)
+    this.auth.signUp(data)
     .pipe(
       catchError(async (error) => {
         this.uService.loadDimiss();
@@ -69,8 +80,8 @@ export class SignUpPage implements OnInit, AfterViewInit {
     this.registerForm = this.fb.group({
       picture: [''],
       type_user: [1],
-      lgpd: ['', Validators.required],
-      term: ['', Validators.required],
+      lgpd: [, Validators.required],
+      term: [, Validators.required],
       language: ['', Validators.required],
       password: ['', Validators.required],
       phone: ['', Validators.required],
@@ -89,7 +100,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
     this.avatar =  image.dataUrl;
   };
 
-  private async getDataForm(data: any): Promise<void> {
+  private getDataForm(): void {
     this.constructImage();
   };
 

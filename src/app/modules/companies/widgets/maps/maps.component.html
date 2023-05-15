@@ -1,14 +1,13 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
-    <ion-title></ion-title>
+    <ion-item>
+      <ion-icon slot="start" color="primary" name="location"></ion-icon>
+      <ion-label>
+        <h4 class="ion-text-wrap">{{ address }}</h4>
+        <p> [{{ lat | number }}, {{ lng | number }}]</p>
+      </ion-label>
+    </ion-item>
   </ion-toolbar>
-  <ion-item>
-    <ion-icon slot="start" color="primary" name="location"></ion-icon>
-    <ion-label>
-      <h4 class="ion-text-wrap">{{ address }}</h4>
-      <p> [{{ lat | number }}, {{ lng | number }}]</p>
-    </ion-label>
-  </ion-item>
 </ion-header>
 <ion-content>
   <agm-map

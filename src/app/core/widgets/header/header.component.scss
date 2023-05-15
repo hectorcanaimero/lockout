@@ -34,3 +34,17 @@ ion-button {
     margin-right: .25rem;
   }
 }
+
+.notConecction {
+  ion-toolbar {
+    ion-item {
+      --background: none;
+      ion-label {
+        p {
+          color: #fafafa;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}

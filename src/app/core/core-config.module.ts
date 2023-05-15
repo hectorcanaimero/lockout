@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { Globalization } from '@ionic-native/globalization/ngx';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
-  declarations: [],
-  imports: [
+  imports:[
     CommonModule,
-
   ],
   providers: [
     Globalization,

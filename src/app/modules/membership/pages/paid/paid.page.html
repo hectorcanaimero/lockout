@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
-    <ion-title></ion-title>
+    <ion-title>{{ 'PAID.TITLE' | translate }}</ion-title>
     <ng-container *ngIf="close">
       <ion-buttons slot="end">
         <ion-button (click)="onClose()">
@@ -11,18 +11,16 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ng-container *ngIf="(company$ | async) as company">
-    <ion-card class="mt-1" >
+  <ng-container>
+    <ion-card class="mt-4">
       <ion-card-content>
-        <div class="row g-1 ">
-          <div class="col-7 align-self-center">
+        <div class="row g-1 justify-content-center">
+          <div class="col-10">
+            <ion-label class="plan ion-text-center">
+              <h1>{{ payment?.config.price | currency }}</h1>
+            </ion-label>
             <ion-label class="plan ion-text-center">
               <h2 class="py-3">{{ 'PAID.VALUE' | translate }}</h2>
-            </ion-label>
-          </div>
-          <div class="col-5 align-self-center">
-            <ion-label class="plan ion-text-center">
-              <h1>{{ company.typeCompany.price | currency }}</h1>
             </ion-label>
           </div>
         </div>
@@ -34,15 +32,22 @@
       <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
       <ion-label>
         <p>{{ 'PAID.ACCOUNT_CREATED' | translate }}</p>
-        <h2>{{ user?.createdAt | amLocale: user.language | amDateFormat: 'DD MMMM YYYY' }}</h2>
+        <h2>{{ (payment.data.trial_start | amFromUnix) | amLocale: user.language | amDateFormat: 'DD MMMM YYYY' }}</h2>
       </ion-label>
     </ion-item>
-    <ion-item *ngIf="res && res.payment_status === 'unpaid'">
+    <ion-item>
+      <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
+      <ion-label>
+        <p>{{ 'PAID.ACCOUNT_END' | translate }}</p>
+        <h2>{{ (payment.data.trial_end | amFromUnix) | amLocale: user.language | amDateFormat: 'DD MMMM YYYY' }}</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="payment">
       <ion-icon slot="start" name="key-outline"></ion-icon>
       <ion-label>
         <h1 class="dia_prueba ion-text-wrap">
-          <ng-container *ngIf="total >= 0; else validate">
-            {{ total }} {{ 'PAID.FREE_TRIAL_DAYS' | translate }}
+          <ng-container *ngIf="!payment.data.cancel_at_period_end; else validate">
+            {{ diff }} {{ 'PAID.FREE_TRIAL_DAYS' | translate }}
           </ng-container>
           <ng-template #validate>
             {{ 'PAID.FREE_TRIAL' | translate }}
@@ -52,15 +57,14 @@
     </ion-item>
   </ion-list>
   <div class="container mt-4">
-    <ng-container *ngIf="res && res.payment_status === 'unpaid'">
-      <ion-button (click)="onPay(res.url)" expand="block" color="primary">
-        {{ 'PAID.SUBSCRIBER' | translate }}
-      </ion-button>
-    </ng-container>
-    <ng-container *ngIf="url">
-      <ion-button (click)="onPay(url)" expand="block" color="tertiary">
-        {{ 'PAID.SUBSCRIPTION' | translate }}
-      </ion-button>
-    </ng-container>
+    <div class="row g-1 justify-content-center">
+      <ng-container *ngIf="url">
+        <div class="col-11">
+          <ion-button (click)="onPay(url)" expand="block" color="tertiary">
+            {{ 'PAID.SUBSCRIPTION' | translate }}
+          </ion-button>
+        </div>
+      </ng-container>
+    </div>
   </div>
 </ion-content>

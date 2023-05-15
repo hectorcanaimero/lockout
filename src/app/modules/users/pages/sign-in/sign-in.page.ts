@@ -11,6 +11,7 @@ import { AuthService } from '@modules/users/services/auth.service';
 import { UtilsService } from '@core/services/utils.service';
 import { StorageService } from '@core/services/storage.service';
 import { TranslateService } from '@ngx-translate/core';
+import { duration } from 'moment';
 
 @Component({
   selector: 'app-sign-in',
@@ -23,7 +24,7 @@ export class SignInPage implements OnInit, AfterViewInit {
   options = { initialSlide: 0, };
   loginForm: FormGroup;
   forgotPasswordForm: FormGroup;
-
+  active = true;
   constructor(
     private fb: FormBuilder,
     private db: AuthService,
@@ -37,9 +38,7 @@ export class SignInPage implements OnInit, AfterViewInit {
     this.loadForm();
   }
 
-  ngAfterViewInit() {
-    this.slides.lockSwipes(true);
-  };
+  ngAfterViewInit() { };
 
   async onSubmit(): Promise<void> {
     if (this.loginForm.invalid) { return; }
@@ -50,19 +49,22 @@ export class SignInPage implements OnInit, AfterViewInit {
   onSubmitForgotPassword = async () => {
     const form = this.forgotPasswordForm;
     if (form.invalid) { return; }
-    await this.uService.load({message: this.translate.instant('PROCCESSING')});
+    await this.uService.load({message: this.translate.instant('PROCCESSING'), duration: 700});
     this.db.forgotSenha(form.value).subscribe(
       async (res) => {
-        this.uService.loadDimiss();
         await this.storage.setStorage('oChange', res);
         const opts: AlertOptions = {
-          header: 'INFO', buttons: ['Ok'],
-          message: 'A code was sent to your email',
+          header: 'INFO', buttons: [
+            {
+              text: 'OK',
+              handler: () => this.active = true,
+            },
+          ],
+          message: this.translate.instant('SIGN.MESSAGE_FORGOT'),
         };
         await this.uService.alert(opts);
       }
     );
-    this.goToSlides(0);
   };
 
   loadForm = () => {
@@ -87,11 +89,12 @@ export class SignInPage implements OnInit, AfterViewInit {
     this.db.signIn(data)
     .pipe(catchError(async (error: any) => {
       this.uService.loadDimiss();
+      console.log(error);
       await this.uService.alert({
         mode:'ios', 
         header: this.translate.instant('ERROR'), 
         buttons: ['OK'],
-        message: this.translate.instant(error.error.error_description),
+        message: this.translate.instant(error.error.error_description || error.error.message),
       });
     }))
     .subscribe(async (res: any) => {

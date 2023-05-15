@@ -1,18 +1,31 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar mode="ios">
-    <ion-title> {{ title }} </ion-title>
-    <ion-buttons slot="start" *ngIf="link">
-      <ion-button (click)="onMenu(link)">
-        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button class="me-1" (click)="onViewServicesActive()">
-        <ion-badge id="notifications-badge" color="danger"> {{ total$ | async }} </ion-badge>
-        <ion-icon slot="icon-only" src="./assets/images/mechanics.svg">
-        </ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ng-container *ngIf="statusNetwork; else networkOk">
+  <ion-header class="ion-no-border">
+    <ion-toolbar mode="ios">
+      <ion-title> {{ title }} </ion-title>
+      <ion-buttons slot="start" *ngIf="link">
+        <ion-button (click)="onMenu(link)">
+          <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button class="me-1" (click)="onViewServicesActive()">
+          <ion-badge id="notifications-badge" color="danger"> {{ total$ | async }} </ion-badge>
+          <ion-icon slot="icon-only" src="./assets/images/mechanics.svg">
+          </ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+</ng-container>
+<ng-template #networkOk>
+  <ion-header color="danger" class="ion-no-border notConecction">
+    <ion-toolbar color="danger" mode="ios">
+      <ion-item>
+        <ion-label class="ion-text-wrap">
+          <p [innerHTML]="'NETWORK' | translate"></p>
+        </ion-label>
+      </ion-item>
+    </ion-toolbar>
+  </ion-header>
+</ng-template>
 

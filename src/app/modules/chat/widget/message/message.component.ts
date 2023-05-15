@@ -1,18 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ChatFireService } from '@core/services/chat-fire.service';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-chat-msg',
   templateUrl: 'message.component.html',
   styleUrls: ['message.component.scss'],
 })
-export class MessageChatComponent implements OnInit {
+export class MessageChatComponent {
   @Input() item: any;
-
-  constructor(private chatFireService: ChatFireService) {}
-
-  ngOnInit(): void {
-    console.log('Method not implemented.');
-  }
-
 }

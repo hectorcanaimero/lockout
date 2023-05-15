@@ -1,18 +1,15 @@
 import { Injectable } from "@angular/core";
-
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap, take } from 'rxjs/operators';
 
 import { AppState } from '@store/app.state';
 import { UtilsService } from './utils.service';
 import { MasterService } from './master.service';
 import { StorageService } from './storage.service';
 import { PaidPage } from '@modules/membership/pages/paid/paid.page';
-import { Platform } from "@ionic/angular";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +18,6 @@ export class StripeService {
   private company: any;
   constructor(
     private ms: MasterService,
-    private platform: Platform,
     private uService: UtilsService,
     private store: Store<AppState>,
     private storageService: StorageService,
@@ -36,14 +32,18 @@ export class StripeService {
   }
 
   async validatePeriodtest() {
-    const { createdAt } = await this.storageService.getStorage('oUser');
-    const payment = await this.storageService.getStorage('oPayment');
-    if (payment && payment.config) {
-      const conf: any = payment.config;
-      const diff = this.diffData(createdAt);
-      if (diff >= conf.free) this.checkoutSession(payment);
-      this.lockBackButton();
-    }
+    const { _id } = await this.storageService.getStorage('oUser');
+    this.ms.getMaster(`payments/user/${_id}`)
+    .pipe(take(1))
+    .subscribe((payment: any) => {
+      if (payment) {
+        if (payment.data.cancel_at_period_end) {
+          this.checkoutSession(payment);
+        } else {
+          this.lockBackButton();
+        }
+      }
+    })
   }
 
   async checkoutSession(payment: any) {
@@ -52,8 +52,7 @@ export class StripeService {
   }
 
   setPaymentSession(payment: any): void {
-    const data = { customer: payment.customer, price: payment.config.price };
-    console.log(data);
+    const data = { customer: payment.customer, price: payment.config.priceId };
     this.ms.postMaster('payments/create-checkout-session', data)
     .subscribe(async (res: any) => {
       this.uService.modal({
@@ -61,7 +60,7 @@ export class StripeService {
         component: PaidPage,
         componentProps: { res, close: false  }
       })
-    }); 
+    });
     this.setPaymentStorage(payment.user);
   }
 
@@ -78,9 +77,9 @@ export class StripeService {
     });
   }
 
-
   diffData(createdAt: any) {
     const a = moment(createdAt).format();
+    console.log('A', a);
     return moment().diff(a, 'days');
   }
 
@@ -101,8 +100,7 @@ export class StripeService {
     .subscribe((arg: any) => this.createCustomer());
   }
 
-
-  async createCustomer() {
+  createCustomer() {
     if(this.company) {
       this.ms.postMaster('payments/create-customer', this.company)
       .subscribe(async (paid: any) => {
@@ -111,32 +109,26 @@ export class StripeService {
     }
   }
 
-  setPaymentConfig(): void { }
+  setPaymentConfig(): void {}
 
-  private setPaymentStorage(user) {
-    this.ms.getMaster(`payments/user/${user}`)
+  private setPaymentStorage(user) { 
+    this.ms.getMaster(`payments/user/${user._id}`)
     .subscribe(async (paid) => {
       await this.storageService.setStorage('oPayment', paid);
     });
   }
 
-  createCheckoutSession(session: string) {
-
-  }
+  createCheckoutSession(session: string) {}
 
   createCustomerAndSubscription(user: any) {
     this.ms.postMaster('payments/create-customer', user)
     .pipe(
       switchMap((item: any) => {
-        console.log(item);
         const data = { customer: item.id };
         return this.ms.postMaster('payments/create-subscription', data);
       })
     )
-    .subscribe(async(res: any) => {
-      console.log(res);
-      Browser.open({ url: res.url });
-    });
+    .subscribe(async(res: any) => Browser.open({ url: res.url }));
   }
 
 

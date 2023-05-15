@@ -8,6 +8,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { SocketService } from '@core/services/socket.service';
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 import { StorageService } from '@core/services/storage.service';
+import { ChatFireService } from '@core/services/chat-fire.service';
 
 @Component({
   selector: 'app-services-in-proccess-widget',
@@ -32,11 +33,11 @@ export class ServicesInProccessWidgetComponent implements OnInit, AfterViewInit 
     private uService: UtilsService,
     private storage: StorageService,
     private socketService: SocketService,
+    private chatService: ChatFireService,
   ) { }
 
   async ngOnInit(): Promise<void> {
     const { language } = await this.storage.getStorage('oUser');
-    console.log(language);
     this.language = language;
   }
   
@@ -79,4 +80,11 @@ export class ServicesInProccessWidgetComponent implements OnInit, AfterViewInit 
   openChat(code: any): void {
     this.uService.navigate(`/chat/service/${code}`);
   };
+
+  unreadChat(id: string) {
+    console.log(id);
+  }
+
+  serviceById(index, item) {
+  }
 }

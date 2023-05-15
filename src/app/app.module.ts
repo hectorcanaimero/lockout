@@ -11,6 +11,8 @@ import { MekaSdkModule } from '@core/meka-sdk.module';
 import { StoreConfigModule } from '@store/store.module';
 import { CoreConfigModule } from '@core/core-config.module';
 import { LanguageModule } from '@core/language/language.module';
+import { CommonModule } from '@angular/common';
+import { NetworkWidgetModule } from '@core/widgets/network/network.module';
 
 
 @NgModule({
@@ -19,11 +21,13 @@ import { LanguageModule } from '@core/language/language.module';
   imports: [
     appRoute,
     CoreModule,
+    CommonModule,
     BrowserModule,
     MekaSdkModule,
     LanguageModule,
     CoreConfigModule,
     StoreConfigModule,
+    NetworkWidgetModule,
     IonicModule.forRoot({ hardwareBackButton: false }),
   ],
   providers: [

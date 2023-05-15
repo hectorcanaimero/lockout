@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Browser } from '@capacitor/browser';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { delay, filter, map, tap } from 'rxjs/operators';
 import { UtilsService } from '@core/services/utils.service';
 import { ProfileComponent } from './profile/profile.component';
 import { Store } from '@ngrx/store';
@@ -13,10 +13,9 @@ import { AppState } from '@store/app.state';
   styleUrls: ['./banners.component.scss'],
 })
 export class BannersWidgetComponent implements OnInit, AfterViewInit {
-
+  loading: boolean = true;
   options = {
     speed: 600,
-    loop: true,
     freeMode: true,
     autoplay: true,
     spaceBetween: 30,
@@ -40,7 +39,9 @@ export class BannersWidgetComponent implements OnInit, AfterViewInit {
   getData(): void {
     this.banners$ = this.store.select('banner')
     .pipe(
+      delay(500),
       filter(({ loading }) => !loading),
+      tap(({ loading }) => this.loading = loading),
       map(({ items }) => items)
     );
   }

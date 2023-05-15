@@ -35,7 +35,6 @@ export class HomePage implements AfterViewInit {
       filter(row => !row.loading),
       map((res: any) => res.history)
     );
-    this.items$.subscribe(res => console.log(res));
   }
 
   async openService (res: any): Promise<void> {

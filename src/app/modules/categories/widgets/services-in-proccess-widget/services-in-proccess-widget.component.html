@@ -6,7 +6,7 @@
   </ion-list-header>
   <ng-container *ngIf="(services$ | async ) as items; else notFound">
     <ng-container *ngIf="items.length > 0; else notFound">
-      <ion-item detail="false" button *ngFor="let item of items">
+      <ion-item detail="false" button *ngFor="let item of items; trackBy:serviceById">
         <ion-label (click)="openServiceModal(item)">
           <p class="date">{{ item.createdAt | amLocale: language | amTimeAgo  }}</p>
           <h3>{{item._id | slice:0:7 }}...</h3>
@@ -16,6 +16,8 @@
         <div class="bubble" slot="end">
           <ion-label slot="end" class="ion-text-right" color="warning">{{ item._id | unread | async}}</ion-label>
           <ion-button (click)="openChat(item._id)" fill="clear" [disabled]="offline" class="bubble">
+            <ng-container *ngIf="(total$ | async) as total">
+            </ng-container>
             <ion-icon slot="icon-only" color="warning"  name="chatbubble"></ion-icon>
           </ion-button>
         </div>

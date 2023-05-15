@@ -5,7 +5,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { IntroWidgetComponent } from './intro.component';
 
-
 @NgModule({
   declarations: [IntroWidgetComponent],
   exports: [IntroWidgetComponent],

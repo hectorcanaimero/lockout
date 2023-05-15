@@ -49,7 +49,6 @@ export class AppComponent implements OnInit {
       this.socketService.setJoinRoom();
       await this.mobileService.getPush();
       await this.mobileService.getGlobalization();
-      setTimeout(()=>{ SplashScreen.hide({ fadeOutDuration: 1000 }); }, 2000)
     });
   };
 
@@ -64,7 +63,7 @@ export class AppComponent implements OnInit {
   };
 
   getActive(ev: any) {
-    console.log(ev);
+    // console.log(ev);
   }
 
   offOn = async () => {

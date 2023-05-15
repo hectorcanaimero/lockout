@@ -4,7 +4,7 @@ const config: CapacitorConfig = {
   appId: 'com.mekadevelopments.lt',
   appName: 'Meka LT',
   webDir: 'www',
-  bundledWebRuntime: false,
+  bundledWebRuntime: true,
   plugins: {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
@@ -13,7 +13,7 @@ const config: CapacitorConfig = {
       launchAutoHide: true,
       splashImmersive: false,
       splashFullScreen: false,
-      launchShowDuration: 1000,
+      launchShowDuration: 3000,
       backgroundColor: '#222428',
       spinnerColor: "#E7B63A",
       androidScaleType: 'CENTER_CROP',
@@ -28,10 +28,10 @@ const config: CapacitorConfig = {
   android: {
     allowMixedContent: true
   },
-  // server: {
-  //   cleartext: true,
-  //   url: 'http://192.168.0.226:8103',
-  // },
+  server: {
+    // cleartext: true,
+    // url: 'http://192.168.1.8:8103',
+  },
 };
 
 export default config;

@@ -78,10 +78,10 @@ export class MapsWidgetComponent implements  OnInit {
     });
   };
 
-  onClose = async (): Promise<void> => {
+  async onClose(): Promise<void> {
     this.db.setAddress$({lat: this.lat, lng: this.lng, address: this.address});
-    await this.uService.load({ message: 'Salvando información de ubicación', duration: 1500 });
-    timer(1700).subscribe(() => this.uService.navigate('register-company'));
+    await this.uService.load({ message: this.translate.instant('SAVE_LOCATION'), duration: 700 });
+    this.uService.modalDimiss();
   }
 }
 

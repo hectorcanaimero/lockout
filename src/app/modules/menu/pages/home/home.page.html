@@ -1,11 +1,12 @@
 <app-header [title]="'MENU.TITLE' | translate"></app-header>
 <ion-content>
+  <app-on-off-widget></app-on-off-widget>
   <div id="menu">
     <app-profile></app-profile>
     <ion-list class="link">
       <ion-item class="onOff mt-3 mb-4" lines="none">
         <ion-label>
-          <p class="mb-0">{{ active ? 'On-line' : 'Off-line' }}</p>
+          <p class="mb-0">{{ status | translate }}</p>
         </ion-label>
         <ng-container *ngIf="(company$ | async) as company">
           <ion-toggle mode="ios" color="success" [(ngModel)]="active"

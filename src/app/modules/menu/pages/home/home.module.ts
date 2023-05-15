@@ -8,6 +8,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomePage } from './home.page';
 import { HeaderModule } from '@core/widgets/header/header.module';
 import { ProfileComponent } from '@modules/menu/widgets/profile/profile.component';
+import { OnOffWidgetModule } from '@core/widgets/on-off-widget/on-off-widget.module';
+import { PostModule } from '@modules/contents/widget/post/post.module';
 
 const routes: Routes = [
   {
@@ -18,11 +20,13 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    PostModule,
     FormsModule,
     IonicModule,
     HeaderModule,
     CommonModule,
     TranslateModule,
+    OnOffWidgetModule,
     RouterModule.forChild(routes),
   ],
   declarations: [HomePage, ProfileComponent]

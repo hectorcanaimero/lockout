@@ -23,7 +23,7 @@ import { MasterService } from '@core/services/master.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, AfterViewInit {
-
+  status!: string;
   position: number;
   appInfo: any;
   content = [
@@ -61,15 +61,6 @@ export class HomePage implements OnInit, AfterViewInit {
 
   async ngAfterViewInit(): Promise<void> {
     await this.getAppInfo();
-    await this.sessionStripe();
-  }
-
-  async sessionStripe() {
-    const oPayment = await this.storage.getStorage('oPayment');
-    this.ms.getMaster('payments/checkout-session/' + oPayment.session)
-    .subscribe((res) => {
-      this.session = res;
-    })
   }
 
   async getAppInfo(): Promise<void> {
@@ -82,6 +73,7 @@ export class HomePage implements OnInit, AfterViewInit {
       filter(({ loading }: any) => !loading),
       map(({ company }: any) => {
         this.active = company?.status;
+        this.status = this.active ? 'ONOFF.ON' :'ONOFF.OFF';
         return company;
       })
     );
@@ -94,10 +86,9 @@ export class HomePage implements OnInit, AfterViewInit {
   async goToMembresia (): Promise<void> {
     await this.uService.modal({
       mode: 'ios',
-      initialBreakpoint: .7,
-      breakpoints: [0, .7],
+      initialBreakpoint: .8,
+      breakpoints: [0, .8],
       component: MemberPage.PaidPage,
-      componentProps: { res: this.session }
     });
   };
 

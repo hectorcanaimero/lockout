@@ -51,10 +51,12 @@ export class IntegratedService {
   }
 
   processing(data: any) {
-    const accepted: any = data.filter((row: any) => row.status === 'accepted');
-    this.store.dispatch(actions.acceptedLoaded( { items: accepted }));
-    const inProcess = data.filter((row: any) => row.status === 'in_process');
-    this.store.dispatch(actions.inProcessLoaded( { items: inProcess }));
+    if (data.length > 0) {
+      const accepted: any = data.filter((row: any) => row.status === 'accepted');
+      this.store.dispatch(actions.acceptedLoaded( { items: accepted }));
+      const inProcess = data.filter((row: any) => row.status === 'in_process');
+      this.store.dispatch(actions.inProcessLoaded( { items: inProcess }));
+    }
   }
 
   onSync = () => {};
@@ -115,7 +117,7 @@ export class IntegratedService {
     const { coords } = await Geolocation.getCurrentPosition();
     if (coords) {
       const data = { latitude: coords.latitude, longitude: coords.longitude };
-      this.store.dispatch(actions.bannerLoad({ data }));    
+      this.store.dispatch(actions.bannerLoad({ data }));
     }
   }
 }

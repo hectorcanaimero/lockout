@@ -1,34 +1,43 @@
-import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
-import { NotificationsComponent } from '@core/widgets/notifications/notifications.component';
+import { Component, Input, AfterViewInit, AfterContentInit } from '@angular/core';
 import { SolicitudModalComponent } from '@core/widgets/solicitud-modal/solicitud-modal.component';
 import { Observable } from 'rxjs';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
-import { map, filter, switchMap, tap } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { UtilsService } from '@core/services/utils.service';
+import { ConnectionStatus, Network } from '@capacitor/network';
+import { StatusBar, Style } from '@capacitor/status-bar';
+
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements AfterViewInit {
-
+export class HeaderComponent implements AfterViewInit, AfterContentInit {
   @Input() title: any;
   @Input() link: string;
   @Input() position = 'end';
   @Input() services = [];
-  content = 0;
 
-  total = 0;
-  total$: Observable<any[]>;
-
+  total: number = 0;
   count: number = 0;
+  content: number = 0;
+  total$: Observable<any[]>;
+  statusNetwork: boolean = true;
 
   constructor(
     private store: Store<AppState>,
     private uService: UtilsService,
-  ) { }
+  ) {}
+
+  async ngAfterContentInit(): Promise<any> {
+    const status: ConnectionStatus  = await Network.getStatus();
+    if (!status.connected) {
+      this.statusNetwork = false;
+      await StatusBar.setBackgroundColor({ color: '#eb445a' });
+    }
+  }
 
   ngAfterViewInit(){
     this.getData();
@@ -38,7 +47,7 @@ export class HeaderComponent implements AfterViewInit {
     this.total$ = this.store.select('serviceActive')
     .pipe(
       filter(row => !row.loading),
-      map((res: any) => res.total)    
+      map((res: any) => res.total)
     );
   };
 

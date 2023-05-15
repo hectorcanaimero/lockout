@@ -11,6 +11,7 @@ import { RatingModalComponent } from '@modules/rate/pages/rating-modal/rating-mo
 import { UtilsService } from '@core/services/utils.service';
 import { ChatFireService } from '@core/services/chat-fire.service';
 import { SocketService } from '@core/services/socket.service';
+import { MasterService } from '@core/services/master.service';
 
 @Component({
   selector: 'app-waiting',
@@ -35,16 +36,18 @@ export class WaitingComponent implements OnInit {
   constructor(
     private uService: UtilsService,
     private store: Store<AppState>,
+    private msService: MasterService,
     private translate: TranslateService,
     private socketService: SocketService,
     private chatFireService: ChatFireService,
     ) { }
   ngOnInit(): void {
-    // timer(500).subscribe(() => this.unreadMessage(this.res._id));
+    timer(500).subscribe(() => this.unreadMessage(this.res._id));
   }
 
   unreadMessage(service: string) {
     this.total$ = this.chatFireService.unReadMessages(0, service);
+    this.total$.subscribe(res => console.log(res));
   }
 
 
@@ -71,20 +74,19 @@ export class WaitingComponent implements OnInit {
 
   async onCancelService (item: any): Promise<void>{
     item.status = 'open';
-    delete item.company;
     await this.uService.alert({
       header: 'Info', message: this.translate.instant('MESSAGES.CANCEL_SERVICE'),
       buttons: [
         { text: this.translate.instant('ALERT.CANCEL'), role: 'cancel', handler: () => {} },
         {
-          text: 'OK', handler: async() => {
-            await this.uService.load({ message: 'Processing...', duration: 750, });
+          text: 'OK', role: 'confirm', handler: () => {
             this.socketService.changeStatus(item);
             this.loadServiceInStore(item.company._id);
           }
         }
       ],
     });
+    this.sendPush(item);
     this.uService.modalDimiss();
     this.uService.navigate('/pages/home');
   };
@@ -98,7 +100,7 @@ export class WaitingComponent implements OnInit {
         {
           text: 'OK',
           handler: async() => {
-            await this.uService.load({ message: this.translate.instant('PROCCESSING'), duration: 1500,  });
+            await this.uService.load({ message: this.translate.instant('PROCCESSING'), duration: 750,  });
             timer(500).subscribe(async () => {
               await this.uService.modal({
                 mode: 'ios',
@@ -137,4 +139,15 @@ export class WaitingComponent implements OnInit {
       this.store.dispatch(actions.load({ company: id }));
     });
   }
+
+  private sendPush(item: any) {
+    const data = {
+      token: item.user.push,
+      title: `El proveedor ${item.company.name} no acepto tu solicitud de servicio!`, //TODO: change translate
+      body: `Tu solicitud regreso con el status de abierta, a la espera que seleccione otro proveedor`
+    }
+    this.msService.postMaster('notification/send', data)
+    .subscribe(() => null);
+  }
+
 }

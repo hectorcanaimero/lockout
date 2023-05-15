@@ -10,6 +10,7 @@ import { HeaderModule } from '@core/widgets/header/header.module';
 import { CorePipeModule } from '@core/pipe/pipe.module';
 import { SkeletonWidgetModule } from '@core/widgets/skeleton/skeleton.module';
 import { RouterModule, Routes } from '@angular/router';
+import { OnOffWidgetModule } from '@core/widgets/on-off-widget/on-off-widget.module';
 
 const routes: Routes = [
   { path: '', component: HomePage }
@@ -23,6 +24,7 @@ const routes: Routes = [
     HeaderModule,
     CorePipeModule,
     TranslateModule,
+    OnOffWidgetModule,
     SkeletonWidgetModule,
     RouterModule.forChild(routes),
   ],

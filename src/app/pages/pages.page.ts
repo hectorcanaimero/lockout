@@ -1,3 +1,4 @@
+import { SplashScreen } from '@capacitor/splash-screen';
 import { ModalController } from '@ionic/angular';
 import { Component, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { App } from '@capacitor/app';
@@ -10,7 +11,7 @@ import { StorageService } from '@core/services/storage.service';
 import { MemberService } from '@modules/membership/services/membership.service';
 import { ValidationTokenService } from '@core/services/validation-token.service';
 import { RegisterPage } from '@modules/companies/pages/register/register.page';
-import { Observable, timer } from 'rxjs';
+import { timer } from 'rxjs';
 import { IntegratedService } from '@core/services/integrated.service';
 import { StripeService } from '@core/services/stripe.service';
 
@@ -34,6 +35,10 @@ export class PagesPage implements AfterViewInit {
     private stripeService: StripeService,
     private validateService: ValidationTokenService,
   ) { }
+
+    ionViewDidEnter() {
+      SplashScreen.hide();
+    }
 
   async ngOnInit(): Promise<void> {
     this.appActive();
@@ -62,7 +67,6 @@ export class PagesPage implements AfterViewInit {
     });
   };
 
-
   loadServices = () => {
     this.store.select('company')
     .pipe(filter((row: any) => !row.loading), map((res: any) => res.company))
@@ -76,11 +80,11 @@ export class PagesPage implements AfterViewInit {
   };
 
   private setDataValidateStripe(second: number) {
-    timer(second * 1000).subscribe(() => {
+    timer(second * 700).subscribe(() => {
       this.stripeService.validatePeriodtest();
     })
   }
-  
+
   private stripeCustomer = async () => {
     const user = await this.storage.getStorage('userCompany');
     if (user) {
@@ -104,15 +108,15 @@ export class PagesPage implements AfterViewInit {
 
   }
 
-  private createSubscription = (price: string) => {
-    this.store.select('customer').pipe(filter((row: any) => row.item?.status), map((res: any) => res.item?.item))
-    .subscribe((res: any) => {
-      if (res) {
-        const data: any = { customer: res.id, price };
-        this.dispatchSubscription(res, data);
-      }
-    });
-  }
+  // private createSubscription = (price: string) => {
+  //   this.store.select('customer').pipe(filter((row: any) => row.item?.status), map((res: any) => res.item?.item))
+  //   .subscribe((res: any) => {
+  //     if (res) {
+  //       const data: any = { customer: res.id, price };
+  //       this.dispatchSubscription(res, data);
+  //     }
+  //   });
+  // }
 
   private dispatchSubscription = (res: any, data: any) => {
     if(res?.subscription) {
@@ -128,7 +132,7 @@ export class PagesPage implements AfterViewInit {
     this.memberService.getConfig().pipe(take(1)).subscribe(
       (res: any) => {
         data = res;
-        this.createSubscription(res.mechanics);
+        // this.createSubscription(res.mechanics);
         this.storage.setStorage('oConfig', res).then(() => {});
       });
   }

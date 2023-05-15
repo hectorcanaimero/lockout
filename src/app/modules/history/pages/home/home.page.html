@@ -1,12 +1,13 @@
 <app-header [title]="'TABS.HISTORY' | translate"></app-header>
 <ion-content>
+  <app-on-off-widget></app-on-off-widget>
   <ng-container *ngIf="(items$ | async) as items">
     <ion-list lines="none" *ngIf="items.length > 0; else notFound">
       <ion-item-sliding *ngFor="let item of items">
         <ion-item button (click)="openService(item)" [detail]="false">
           <ion-label>
             <p>{{ item.status | translate }}</p>
-            <h2>{{ item._id }}</h2>
+            <h2>{{ item._id | slice:0:7 }}...</h2>
             <p>
               {{ item.brand.name }} {{ item.model.name }}
             </p>

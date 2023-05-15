@@ -35,7 +35,6 @@ export class PushService {
 
   addListeners = () => {
     PushNotifications.addListener('registration', async (token: any) => {
-      console.log('TOKEN ', token.value);
       await this.storage.setStorage('oPush', token.value);
       await this.updateToken(token);
     });
@@ -45,7 +44,7 @@ export class PushService {
     PushNotifications.addListener('pushNotificationReceived',
     async (notification: PushNotificationSchema): Promise<void> => {
       console.log('Push notification received: ', notification);
-      await this.setLocalNotification(notification);
+      // await this.setLocalNotification(notification);
       if (!notification.data.type) {
         await this.savePushStorage(notification);
       }
@@ -62,8 +61,8 @@ export class PushService {
 
   updateToken = async (token: any)=>{
     const push = await this.storage.getStorage('push');
-    if(push !== token) {
-      this.ms.changeToken(token.value).subscribe((res) => {});
+    if(token && push !== token) {
+      this.ms.changeToken(token.value).subscribe(() => null);
     }
   }
   private async savePushStorage(item) {

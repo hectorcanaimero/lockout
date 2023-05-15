@@ -2,10 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
 import * as actions from '@store/actions';
+import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@core/services/utils.service';
 import { MasterService } from '@core/services/master.service';
 import { SocketService } from '@core/services/socket.service';
-import { filter, map, timer } from 'rxjs';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-rating-modal',
@@ -16,8 +17,8 @@ export class RatingModalComponent implements OnInit {
 
   @Input() item: any;
   num: number;
-  data: any = [];
   score: number;
+  data: any = [];
   comment: string = '';
 
   constructor(
@@ -25,6 +26,7 @@ export class RatingModalComponent implements OnInit {
     private store: Store<AppState>,
     private uService: UtilsService,
     private socketService: SocketService,
+    private translate: TranslateService,
   ) { }
   ngOnInit(): void { }
 
@@ -34,7 +36,7 @@ export class RatingModalComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     await this.uService.load({
-      message: 'Tu clasificación es importante para nosotros!',
+      message: this.translate.instant('RATE'),
       duration: 2000
     });
     this.createComment();
@@ -62,9 +64,9 @@ export class RatingModalComponent implements OnInit {
     this.item.status = 'finished';
     this.item.comment = commentId;
     this.socketService.changeStatus(this.item);
-    this.store.dispatch(actions.historyInit({ id: this.item._id }));
-    this.store.dispatch(actions.acceptedInit({ id: this.item._id }));
-    this.store.dispatch(actions.inProcessInit({ id: this.item._id }));
+    this.store.dispatch(actions.historyInit({ id: this.item.company._id }));
+    this.store.dispatch(actions.acceptedInit({ id: this.item.company._id }));
+    this.store.dispatch(actions.inProcessInit({ id: this.item.company._id }));
   }
 
   onClose = (): Promise<boolean> => this.uService.modalDimiss();

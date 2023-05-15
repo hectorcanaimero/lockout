@@ -1,7 +1,31 @@
 #banner {
   padding: 1rem;
+  min-height: 219px;
 }
 
 .border-radius {
   border-radius: 15px;
+}
+
+.center {
+  height: 218px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fafafa;
+  border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+}
+
+ion-card {
+  height: 200px;
+  border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
 }

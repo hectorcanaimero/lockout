@@ -17,12 +17,12 @@ const config: SocketIoConfig = { url: environment.api.url, options: {} };
 
 @NgModule({
   imports:[
-    SocketIoModule.forRoot(config),
     provideStorage(() => getStorage()),
     provideFirestore(() => getFirestore()),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    SocketIoModule.forRoot(config),
     LottieModule.forRoot({ player: playerFactory }),
     NgxStripeModule.forRoot(environment.apiKeyStripe),
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
     AgmCoreModule.forRoot({ apiKey: environment.maps, libraries: ['places'] }),
   ]
 })

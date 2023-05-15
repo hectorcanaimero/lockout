@@ -17,13 +17,15 @@ import { MasterService } from '@core/services/master.service';
   providers: [DatePipe]
 })
 export class PaidPage implements OnInit {
-  @Input() res: any;
   @Input() close = true;
-  user: any;
-  payment: any;
-  url: string;
-  total = 0;
   company$!: Observable<any>;
+  diff: number;
+  total = 0;
+  url: string;
+  user: any;
+  res!: any;
+  payment: any;
+  checkout: any;
   constructor(
     private ms: MasterService,
     private store: Store<AppState>,
@@ -34,7 +36,6 @@ export class PaidPage implements OnInit {
   async ngOnInit(): Promise<void> {
     this.getCompany();
     await this.getData();
-    timer(300).subscribe(() => console.log(this.res));
   }
 
   async onPay(url) {
@@ -47,9 +48,10 @@ export class PaidPage implements OnInit {
     this.uService.modalDimiss();
   }
 
-  diffData(createdAt: any) {
-    const a = moment(createdAt).format();
-    return moment().diff(a, 'days');
+  diffData(start: number, end: number) {
+    const a = moment.unix(start);
+    const b = moment.unix(end);
+    return b.diff(a, 'days');
   }
 
   getCompany() {
@@ -62,13 +64,27 @@ export class PaidPage implements OnInit {
 
   private async getData() {
     this.user = await this.storage.getStorage('oUser');
+    this.getInfo(this.user._id);
     this.payment = await this.storage.getStorage('oPayment');
-    const diff = this.diffData(this.user.createdAt);
-    this.total = this.payment.config.free - diff;
-    console.log(this.total);
-    this.ms.postMaster('payments/billing-portal', { user: this.payment.user._id })
-    .subscribe((res: any) =>{
-      this.url = res.url;
-    });
+    this.diff = this.diffData(this.payment.data.trial_start, this.payment.data.trial_end);
+    this.ms.postMaster('payments/billing-portal2', { customer: this.payment.customer })
+    .subscribe((res: any) =>this.url = res.url);
+  }
+
+  private getInfo(id: string) {
+    this.ms.getMaster(`payments/user/${id}`)
+    .subscribe((res) => {
+      this.createCheckoutSession(res.data);
+      this.payment = res;
+    })
+  }
+
+  private createCheckoutSession(data: any) {
+    const body = {
+      price: data.plan.id,
+      customer: data.customer
+    };
+    this.ms.postMaster('payments/create-checkout-session', body)
+    .subscribe((session: any) => this.checkout = session.url);
   }
 }

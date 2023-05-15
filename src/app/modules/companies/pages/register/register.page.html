@@ -26,41 +26,36 @@
                     [value]="item">{{ item.name | translate | titlecase }}</ion-select-option>
                 </ion-select>
               </ion-item>
-              <ion-item>
-                <ion-label mode="ios"position="floating">{{ 'CATEGORIES' | translate }} <ion-text color="danger">*</ion-text></ion-label>
-                <ion-select [placeholder]="'SELECT' | translate"  interface="action-sheet" formControlName="categories" multiple="true">
-                  <ion-select-option *ngFor="let item of experts$ | async" [value]="item._id">{{ item.name | translate }}</ion-select-option>
-                </ion-select>
-              </ion-item>
-              <ion-item>
-                <ion-label mode="ios"position="floating">{{ 'PAYMENT' | translate }}<ion-text color="danger">*</ion-text></ion-label>
-                <ion-select [placeholder]="'SELECT' | translate"  interface="action-sheet" formControlName="payment" multiple="true">
-                  <ion-select-option *ngFor="let item of payment" [value]="item">{{ item | translate }}</ion-select-option>
-                </ion-select>
-              </ion-item>
+              <ng-container>
+                <ion-item>
+                  <ion-label mode="ios"position="floating">{{ 'CATEGORIES' | translate }} <ion-text color="danger">*</ion-text></ion-label>
+                  <ion-select [placeholder]="'SELECT' | translate"  interface="action-sheet" formControlName="categories" multiple="true">
+                    <ion-select-option *ngFor="let item of experts$ | async" [value]="item._id">{{ item.name | translate }}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label mode="ios"position="floating">{{ 'PAYMENT' | translate }}<ion-text color="danger">*</ion-text></ion-label>
+                  <ion-select mode="ios" [placeholder]="'SELECT' | translate"  interface="action-sheet" formControlName="payment" multiple="true">
+                    <ion-select-option *ngFor="let item of payment" [value]="item">{{ item | translate }}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ng-container>
               <ng-container *ngIf="typeCompany !== 1">
-                <br />
-                <ion-button (click)="goToMap()" expand="block" color="warning">
+                <ion-button (click)="goToMap()" expand="block" color="warning" class="mt-4">
                   <ion-icon slot="start" name="location"></ion-icon>
                   {{ 'MY_LOCATION' | translate }}
                 </ion-button>
-                <!-- <ion-item *ngIf="address">
+                <ion-item *ngIf="address">
                   <ion-label>
                     <p class="ion-text-center">[{{ address.lat | number }}, {{ address.lng | number }}]</p>
                     <p class="ion-text-wrap ion-text-center b">{{ address.address }}</p>
                   </ion-label>
-                </ion-item> -->
-                <ion-item>
+                </ion-item>
+                <!-- <ion-item>
                   <ion-label mode="ios" position="stacked">{{ 'ADDRESS' | translate }} <ion-text color="danger"></ion-text></ion-label>
                   <ion-textarea formControlName="address" rows="4"></ion-textarea>
-                </ion-item>
+                </ion-item> -->
               </ng-container>
-              <div class="my-4">
-                <ion-button expand="block" (click)="onSubmit()" color="warning" [disabled]="factoryForm.invalid">
-                  <ion-icon slot="start" name="checkmark-circle"></ion-icon>
-                  {{ 'COMPANY.CREATE' | translate }}
-                </ion-button>
-              </div>
             </form>
           </div>
         </div>
@@ -68,3 +63,11 @@
     </div>
   </div>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block" (click)="onSubmit()" color="warning" [disabled]="factoryForm.invalid">
+      <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+      {{ 'COMPANY.CREATE' | translate }}
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

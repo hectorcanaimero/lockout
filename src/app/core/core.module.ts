@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
-import { MomentModule } from 'ngx-moment';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -20,18 +19,26 @@ import { SkeletonWidgetModule } from './widgets/skeleton/skeleton.module';
 import { CorePipeModule } from './pipe/pipe.module';
 
 @NgModule({
-  exports: [NotificationsComponent, SolicitudModalComponent],
-  declarations: [NotificationsComponent, SolicitudModalComponent],
-  entryComponents: [NotificationsComponent, SolicitudModalComponent],
+  exports: [
+    NotificationsComponent,
+    SolicitudModalComponent
+  ],
+  declarations: [
+    NotificationsComponent,
+    SolicitudModalComponent
+  ],
+  entryComponents: [
+    NotificationsComponent,
+    SolicitudModalComponent
+  ],
   imports: [
     IonicModule,
     CommonModule,
-    MomentModule,
+    CorePipeModule,
     TranslateModule,
     HttpClientModule,
     FontAwesomeModule,
     ReactiveFormsModule,
-    CorePipeModule,
     SkeletonWidgetModule,
   ],
   providers: [

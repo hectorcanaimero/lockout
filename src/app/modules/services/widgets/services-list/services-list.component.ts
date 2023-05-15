@@ -2,6 +2,7 @@ import { Component, Input, AfterViewInit, OnChanges, SimpleChanges } from '@angu
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 
 import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
@@ -31,6 +32,7 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
     private ms: MasterService,
     private store: Store<AppState>,
     private uService: UtilsService,
+    private translate: TranslateService
   ) { }
 
   ngAfterViewInit() {
@@ -68,14 +70,13 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
 
   async cancelService (item: any): Promise<void> {
     await this.uService.alert({
-      header: 'Info',
-      message: 'Do you want to cancel the service?',
+      header: 'Info', message: this.translate.instant('MESSAGES.CANCEL_SERVICE'),
       mode: 'ios',
       buttons: [
-        { text: 'Cancel', role: 'cancel', cssClass: 'secondary' },
+        { text: this.translate.instant('ALERT.CANCEL'), role: 'cancel', handler: () => {} },
         {
           text: 'OK', handler: async() => {
-            await this.uService.load({message: 'Procesando...', duration: 1000});
+            await this.uService.load({message: this.translate.instant('PROCCESSING'), duration: 1000});
             this.ms.patchMaster(`services/company/${item._id}`, { status: 'cancelled' })
             .subscribe((res: any) => {
               this.store.dispatch(actions.acceptedInit({ id: item._id }));
@@ -92,11 +93,11 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
     await this.uService.alert({
       mode: 'ios',
       header: 'Info',
-      message: 'Do you finish to the service?',
+      message: this.translate.instant('MESSAGES.CLOSED_SERVICE'),
       buttons: [
-        { text: 'Cancel', role: 'cancel', cssClass: 'secondary' },
-        { text: 'Finish', handler: async() => {
-          await this.uService.load({message: 'Procesando...', duration: 1000});
+        { text: this.translate.instant('ALERT.CANCEL'), role: 'cancel' },
+        { text: 'OK', handler: async() => {
+          await this.uService.load({message: this.translate.instant('PROCCESSING'), duration: 1000});
           this.ms.patchMaster(`services/company/${item._id}`, { status: 'finished' })
           .subscribe((res: any) => {
             this.store.dispatch(actions.acceptedInit({ id: item._id }));
@@ -109,7 +110,7 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
   };
 
   async acceptedService (item: any): Promise<void> {
-    await this.uService.load({message: 'Procesando...', duration: 1500});
+    await this.uService.load({message: this.translate.instant('PROCCESSING'), duration: 1500});
     this.ms.patchMaster(`services/company/${item._id}`, { status: 'accepted' })
     .subscribe((res: any) => {
       console.log(res);
@@ -130,8 +131,6 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
   getStatusOffOnLine() {
     this.store.select('company')
     .pipe(filter(row => !row.loading), map((res: any) => res.company))
-    .subscribe((res: any) => {
-      this.offline = res.status;
-    });
+    .subscribe((res: any) => this.offline = res.status);
   }
 }

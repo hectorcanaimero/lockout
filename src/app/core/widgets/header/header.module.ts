@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { HeaderComponent } from './header.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -11,6 +12,7 @@ import { HeaderComponent } from './header.component';
   imports: [
     IonicModule,
     CommonModule,
+    TranslateModule,
   ]
 })
 export class HeaderModule { }

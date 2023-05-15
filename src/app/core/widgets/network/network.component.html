@@ -1,0 +1,18 @@
+<ion-modal [isOpen]="networkStatus && !networkStatus.connected">
+  <ng-template>
+    <ion-content [fullscreen]="true" class="ion-padding">
+      <div class="container" id="page">
+        <div class="image">
+          <img src="./assets/images/wifi.png" alt="icon wifi">
+        </div>
+        <div class="text">
+          <ion-label>
+            <h2>{{ language.title }}</h2>
+            <p>{{ language.text1 }}</p>
+            <p>{{ language.text2 }}</p>
+          </ion-label>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

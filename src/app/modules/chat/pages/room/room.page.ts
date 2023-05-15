@@ -1,22 +1,21 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { IonContent } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils.service';
+import { MasterService } from '@core/services/master.service';
 import { StorageService } from '@core/services/storage.service';
 import { ChatFireService } from '@core/services/chat-fire.service';
 import { FireStorageService } from '@modules/chat/services/fire-storage.service';
-import { SocketService } from '@core/services/socket.service';
-import { MasterService } from '@core/services/master.service';
 
 @Component({
   selector: 'app-room-hat',
   templateUrl: 'room.page.html',
   styleUrls: ['room.page.scss'],
 })
-export class RoomChatPage implements OnInit {
+export class RoomChatPage implements OnInit, AfterViewInit {
   @ViewChild(IonContent, { static: false }) content: IonContent;
   uid: string;
   activeMessage = false;
@@ -24,13 +23,13 @@ export class RoomChatPage implements OnInit {
   public message = '';
   public messages: string[] = [];
   public messages$: Observable<any[]>;
+  total: number;
   service: any;
 
   constructor(
     private uService: UtilsService,
     private storage: StorageService,
     private msService: MasterService,
-    private socketService: SocketService,
     private activatedRoute: ActivatedRoute,
     private chatFireService: ChatFireService,
     private storageService: FireStorageService,
@@ -41,23 +40,32 @@ export class RoomChatPage implements OnInit {
     .subscribe(({uid}) => this.getData(uid));
   }
 
+  ngAfterViewInit(): void {
+    this.scrollToBottomLabel();
+  }
+
   async onSubmit(): Promise<void> {
     if(this.message) {
       await this.sendMessage('MSG', this.message);
       this.sendPush();
       this.message = '';
+      this.total = this.total + 100;
+      this.content.scrollToPoint(0, this.total, 0);
+
     }
   }
 
   getMessage(uid: string) {
     this.messages$ = this.chatFireService.getMessages(uid);
-    this.scrollToBottomLabel();
   }
 
   scrollToBottomLabel() {
-    const id = document.getElementById('id-0');
-    // console.log(id);
-    // this.content.scrollToPoint(0,id.offsetTop-60,700);
+    this.messages$.pipe(take(1)).subscribe((res) => {
+      if (res) {
+        this.total = (res.length * 140);
+        this.content.scrollToPoint(0, this.total, 0);
+      }
+    })
   }
 
   async setCamera() {
@@ -87,7 +95,7 @@ export class RoomChatPage implements OnInit {
   sendPush() {
     const data = {
       token: this.service.user.push,
-      title: `Tienes un mensaje de ${this.service.company.name}`,
+      title: `Tienes un mensaje de ${this.service.company.name}`, //TODO: change translate
       body: `${this.message.slice(0, 50)}...`
     }
     this.msService.postMaster('notification/send', data)
@@ -104,8 +112,9 @@ export class RoomChatPage implements OnInit {
   }
 
   private getData(uid: string) {
-    this.uid = uid;
     this.getMessage(uid);
+    this.uid = uid;this.scrollToBottomLabel();
+
     this.chatFireService.readMessages(uid)
       .subscribe(() => null);
     this.msService.getMaster(`services/${uid}`)

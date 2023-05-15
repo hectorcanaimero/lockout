@@ -40,13 +40,13 @@ export class AuthService {
   // TODO: Desloga la app
   async signOut(): Promise<boolean> {
     await this.storage.clearStorages();
-    this.reducers.removeReducers([
-      'user', 'closed', 'status',
-      'expert', 'stripe', 'company',
-      'history', 'customer', 'position',
-      'solicitud', 'serviceActive', 'serviceAccepted',
-      'serviceFinished', 'serviceInProcess', 'score',
-    ]);
+    // this.reducers.removeReducers([
+    //   'user', 'closed', 'status',
+    //   'expert', 'stripe', 'company',
+    //   'history', 'customer', 'position',
+    //   'solicitud', 'serviceActive', 'serviceAccepted',
+    //   'serviceFinished', 'serviceInProcess', 'score',
+    // ]);
     return this.navCtrl.navigateRoot('/user/signIn');
   };
 
