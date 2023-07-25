@@ -14,8 +14,6 @@ export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, prefix, '');
 }
 
-
-
 @NgModule({
   declarations: [],
   imports: [

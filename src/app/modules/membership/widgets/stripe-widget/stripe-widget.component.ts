@@ -1,10 +1,8 @@
 import { ToastController } from '@ionic/angular';
 import { MemberService } from './../../services/membership.service';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { environment } from 'src/environments/environment';
-import { Stripe } from '@capacitor-community/stripe';
 
 @Component({
   selector: 'app-stripe-widget',
@@ -18,8 +16,6 @@ export class StripeWidgetComponent {
   cardExp: any;
   cardNumber: any;
   orderData!: any;
-  private elementStripe!: any;
-  private readonly STRIPE!: any; //TODO: window.Stripe
 
   constructor(
     private fb: FormBuilder,

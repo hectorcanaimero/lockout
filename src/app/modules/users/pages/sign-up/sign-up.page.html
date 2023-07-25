@@ -54,17 +54,21 @@
               <small>{{ "SIGN.ERROR.PASSWORD" | translate }}</small>
             </ion-text>
           </ion-item>
-          <ion-item lines="none">
-            <ion-label position="stacked">{{ "SIGN.COUNTRY" | translate }} <ion-text color="danger">*</ion-text></ion-label>
-            <ion-select placeholder="Country" interface="action-sheet" formControlName="country">
-              <ion-select-option *ngFor="let item of countries$ | async" [value]="item._id">
-                (+{{ item.phone_code }}) {{ item.name  }}</ion-select-option>
-            </ion-select>
-          </ion-item>
-          <ion-item lines="none">
+          <ng-container *ngIf="(setting$ | async) as setting">
+            <ion-item lines="none" *ngIf="setting.country">
+              <ion-label position="stacked">{{ "SIGN.COUNTRY" | translate }} <ion-text color="danger">*</ion-text></ion-label>
+              <ion-select placeholder="Country" interface="action-sheet" formControlName="country">
+                <ion-select-option *ngFor="let item of countries$ | async" [value]="item._id">
+                  (+{{ item.phone_code }}) {{ item.name  }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ng-container>
+          <ng-container *ngIf="(setting$ | async) as setting">
+          <ion-item lines="none" *ngIf="setting.phone">
             <ion-label position="stacked">{{ "SIGN.PHONE" | translate }} <ion-text color="danger">*</ion-text></ion-label>
             <ion-input required formControlName="phone" type="phone" inputmode="numeric" placeholder="0000-0000"></ion-input>
           </ion-item>
+          ></ng-container>
           <ion-item lines="none">
             <ion-label position="stacked">{{ "SIGN.LANGUAGE" | translate }} <ion-text color="danger">*</ion-text></ion-label>
             <ion-select placeholder="Idioma" interface="action-sheet" formControlName="language">

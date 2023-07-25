@@ -2,6 +2,29 @@ ion-content, ion-footer, ion-toolbar {
   --background: var(--ion-meka-primary);
   --color: #fff;
 }
+ion-slides {
+  ion-slide {
+    height: 100vh;
+    width: 100vw;
+    flex-direction: column;
+    justify-content: flex-end;
+    div {
+      width: 100%;
+      height: 90vh;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+    }
+  }
+}
+
+.icon-one {
+  margin-bottom: 15px;
+  font-size: 6rem;
+  font-weight: 900;
+  color: var(--ion-color-warning);
+}
 
 ion-content {
   form {

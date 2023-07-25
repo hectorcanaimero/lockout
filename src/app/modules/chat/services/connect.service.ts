@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Firestore, addDoc, collection, doc, docData, setDoc,
-  orderBy, query, collectionData, where, updateDoc, Timestamp, QuerySnapshot, getDocs } from '@angular/fire/firestore';
-import { from, Observable, of } from 'rxjs';
-import { tap, filter, map, take, switchMap, mergeMap } from 'rxjs/operators';
+  orderBy, query, collectionData, where, updateDoc, Timestamp } from '@angular/fire/firestore';
+import { Observable, of } from 'rxjs';
+import { tap, filter, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
-import { RouterLinkWithHref } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'

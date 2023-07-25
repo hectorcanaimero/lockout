@@ -1,7 +1,17 @@
 {
+  "Motorcycles": "Motocicletas",
+  "Town truck": "Grua",
+  "Boats": "Barcos",
+  "Motorcycle": "Motocicleta",
+  "Truck": "Camiones",
+  "Heavy Machine": "Maquinaria pesada",
+  "ONOFF": {
+    "YOU_ARE_OFFLINE": "Fuera de linea.",
+    "OFFLINE_MESSAGE": "No podrá aceptar ningún servicio"
+  },
   "DATA_NOT_FOUND": "Sin registro",
   "GEOCODE_FAIL": "Geocode fallo",
-  "SELECT": "Seleccione...", 
+  "SELECT": "Seleccione...",
   "NOME_COMPANY": "Nombre de la Compañia",
   "ADDRESS": "Dirección",
   "MY_LOCATION": "Mi Ubicación",
@@ -39,7 +49,6 @@
   "Oil Change": "Cambio de Aceite",
   "Tires": "Neumáticos",
   "General Mechanics": "Mecanica General",
-  "Town truck": "Grua",
   "Maintenance": "Mantenimiento",
   "Electrical Breakdown": "Problema Eléctrico",
   "Suspension": "Suspension",
@@ -69,11 +78,7 @@
     "TITLE": "Servicios Aceptados",
     "NOT_FOUND": "Sin Servicios"
   },
-  "ONOFF": {
-    "YOU_ARE_OFFLINE": "Fuera de linea.",
-    "OFFLINE_MESSAGE": "No podrá aceptar ningún servicio"
-  },
-  "WA" : {
+  "WA": {
     "LOCATION": "UBICACIÓN",
     "INFORMATION": "INFORMACIÓN",
     "DISTANCE": "Distancia:",
@@ -85,6 +90,8 @@
     }
   },
   "PAID": {
+    "TITLE": "Membresia",
+    "ACCOUNT_END": "Tu cuenta expira",
     "VALUE": "Valor mensual",
     "ACCOUNT_CREATED": "Tu cuenta fue creada",
     "FREE_TRIAL": "Se acabo tu periodo de prueba",
@@ -154,6 +161,7 @@
     "CREATE": "Crear Compañia"
   },
   "SIGN": {
+    "ERROR_TERM_LGPD": "Debe aceptar los Términos y Condiciones",
     "NEW_PWD": "Nueva contraseña",
     "REPEAT_PWD": "Repetir contraseña",
     "EMAIL": "Correo electrónico",
@@ -187,7 +195,9 @@
       "HI": "Hola",
       "NEED_SOME_HELP_TODAY": "En que te puedo ayudar?"
     },
-    "LAST_REPAIRED": { "TITLE": "Last Repaired"}
+    "LAST_REPAIRED": {
+      "TITLE": "Last Repaired"
+    }
   },
   "USER": {
     "SHOW_MESSAGE": "Su contraseña fue cambiada con éxito!",

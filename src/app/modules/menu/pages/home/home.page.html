@@ -16,6 +16,9 @@
       <ion-item button *ngFor="let item of content" (click)="goToPage(item.url)" routerLinkActive="router-link-active" >
         <ion-label>{{ item.name | translate }}</ion-label>
       </ion-item>
+      <ion-item button (click)="onRemove()">
+        <ion-label>{{ 'MENU.EXCLUDE_MY_ACCOUNT_DATA' | translate }}</ion-label>
+      </ion-item>
       <ion-item button (click)="goToMembresia()">
         <ion-label>{{ 'MENU.MEMBER' | translate }}</ion-label>
       </ion-item>

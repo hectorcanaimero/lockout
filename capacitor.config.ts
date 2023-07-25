@@ -24,13 +24,20 @@ const config: CapacitorConfig = {
       iconColor: "#488AFF",
       sound: "beep.wav",
     },
+    CapacitorCookies: {
+      enabled: true,
+    },
+    Badge: {
+      persist: true,
+      autoClear: true
+    },
   },
   android: {
     allowMixedContent: true
   },
   server: {
-    // cleartext: true,
-    // url: 'http://192.168.1.8:8103',
+    cleartext: true,
+    url: 'http://192.168.0.227:8103',
   },
 };
 

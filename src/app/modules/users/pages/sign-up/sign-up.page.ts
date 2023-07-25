@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { docData, doc, Firestore } from '@angular/fire/firestore';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -16,7 +17,7 @@ import { AuthService } from '@modules/users/services/auth.service';
   styleUrls: ['./sign-up.page.scss'],
 })
 export class SignUpPage implements OnInit, AfterViewInit {
-
+  setting$: Observable<any>;
   registerForm: FormGroup;
   avatar: any;
   countries$: Observable<any[]>;
@@ -27,6 +28,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
   ];
 
   constructor(
+    private fs: Firestore,
     private fb: FormBuilder,
     private auth: AuthService,
     private ms: MasterService,
@@ -40,7 +42,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    console.log(this.registerForm);
+    this.setting$ = docData(doc(this.fs, `setting/meka-lt`), { idField: 'id' });
   }
 
   getData() {

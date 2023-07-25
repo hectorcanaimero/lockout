@@ -3,13 +3,13 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MasterService } from '@core/services/master.service';
 import { StorageService } from '@core/services/storage.service';
 import { UtilsService } from '@core/services/utils.service';
-import { LoadingController, NavController } from '@ionic/angular';
-import { AuthService } from '@modules/users/services/auth.service';
 import { Store } from '@ngrx/store';
-import { catchError, Observable, subscribeOn, tap, timer } from 'rxjs';
+import { catchError, Observable, tap, timer } from 'rxjs';
 import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
 import { TranslateService } from '@ngx-translate/core';
+import { Firestore, doc, docData } from '@angular/fire/firestore';
+
 @Component({
   selector: 'app-editar',
   templateUrl: './editar.component.html',
@@ -17,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class EditarComponent implements OnInit {
   @Input() user: any;
+  setting$: Observable<any>;
   registerForm: FormGroup;
   countries$: Observable<any[]>;
   idioma = [
@@ -26,6 +27,7 @@ export class EditarComponent implements OnInit {
   ];
 
   constructor(
+    private fs: Firestore,
     private fb: FormBuilder,
     private ms: MasterService,
     private store: Store<AppState>,
@@ -36,16 +38,13 @@ export class EditarComponent implements OnInit {
 
   ngOnInit() {
     this.getData();
-    timer(500).subscribe(() => {
-      console.log(this.user);
-      this.loadData();
-    });
+    timer(500).subscribe(() => this.loadData());
   }
-  
+
   getData() {
     this.loadForm();
+    this.setting$ = docData(doc(this.fs, `setting/meka-lt`), { idField: 'id' });
     this.countries$ = this.ms.getMaster('tables/countries');
-
   }
 
   async onSubmit(): Promise<void> {

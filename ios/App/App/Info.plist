@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>Meka LT</string>
+  <string>Meka LT</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,6 +22,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSRemindersUsageDescription</key>
+  <string>This app requires reminders access to function properly.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -45,5 +47,32 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.getcapacitor.capacitor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>capacitor</string>
+			</array>
+		</dict>
+	</array>
+	<key>NSUserTrackingUsageDescription</key>
+  <string>Your data will be used to deliver personalized ads to you.</string>
+  <key>NSCameraUsageDescription</key>
+	<string>The camera will be used to capture images: as your avatar, in the delivery of the service, where you must specify the problem of your vehicle.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Images will be added to the App</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>The images can be stored on the mobile phone, to facilitate the sending of the service detail, in addition that you can use it later to track the service</string>
+  <key>LSSupportsOpeningDocumentsInPlace</key>
+  <string>Supports opening documents in place</string>
+  <key>NSLocationAlwaysUsageDescription</key>
+  <string>The location will always be used in the application, in order to give you the best experience in the App. It is the only way to find your service provider in real time</string>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>The location when the App is in use, will be used to give the location of the service</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>The microphone permission is needed to to receive voice commands.</string>
 </dict>
 </plist>

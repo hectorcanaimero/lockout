@@ -16,13 +16,13 @@
           </ion-label>
           <ion-input required formControlName="email" type="email"></ion-input>
         </ion-item>
-        <ion-item class="phone">
+        <ion-item class="phone" *ngIf="(setting$ | async)?.phone">
           <ion-label position="stacked">{{ "SIGN.PHONE" | translate }}
             <ion-text color="danger">*</ion-text>
           </ion-label>
           <ion-input required formControlName="phone" type="phone" inputmode="numeric" placeholder="0000-0000"></ion-input>
         </ion-item>
-        <ion-item class="country">
+        <ion-item class="country" *ngIf="(setting$ | async)?.country">
           <ion-label position="stacked">{{ 'SIGN.COUNTRY' | translate }}
             <ion-text color="danger">*</ion-text>
           </ion-label>

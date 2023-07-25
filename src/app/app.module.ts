@@ -13,6 +13,7 @@ import { CoreConfigModule } from '@core/core-config.module';
 import { LanguageModule } from '@core/language/language.module';
 import { CommonModule } from '@angular/common';
 import { NetworkWidgetModule } from '@core/widgets/network/network.module';
+import { AppService } from './app.service';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { NetworkWidgetModule } from '@core/widgets/network/network.module';
     IonicModule.forRoot({ hardwareBackButton: false }),
   ],
   providers: [
+    AppService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

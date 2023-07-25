@@ -45,16 +45,18 @@ export class MobileService{
     return false;
   }
 
-  async getGlobalization() {
-    if (Capacitor.isNativePlatform()) {
-      const { value } = await this.global.getPreferredLanguage();
-      if (value) {
-        this.traslate.use(value.split('-')[0]);
-      } else {
-        this.traslate.use('en');
-      }
-    } else {
-      this.traslate.use('en');
-    }
+  getGlobalization() {
+    this.traslate.use('en');
+    // if (Capacitor.isNativePlatform()) {
+    //   const { value } = await this.global.getPreferredLanguage();
+    //   console.log(value);
+    //   if (value) {
+    //     this.traslate.use(value.split('-')[0]);
+    //   } else {
+    //     this.traslate.use('en');
+    //   }
+    // } else {
+    //   this.traslate.use('en');
+    // }
   }
 }

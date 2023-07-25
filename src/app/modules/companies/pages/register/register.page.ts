@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Store } from '@ngrx/store';
@@ -13,6 +13,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { StorageService } from '@core/services/storage.service';
 import { DbCompaniesService } from './../../services/db-companies.service';
 import { MapsWidgetComponent } from '@modules/companies/widgets/maps/maps.component';
+import { IonSlides } from '@ionic/angular';
 
 
 @Component({
@@ -22,6 +23,7 @@ import { MapsWidgetComponent } from '@modules/companies/widgets/maps/maps.compon
 })
 
 export class RegisterPage implements OnInit, AfterViewInit {
+  @ViewChild('swiper') slides: IonSlides;
   @Input() item: any;
   @Input() modal = false;
   toggle: boolean = false;
@@ -41,6 +43,11 @@ export class RegisterPage implements OnInit, AfterViewInit {
   countries$: Observable<any[]>;
   isMechanics = false;
 
+  options = {
+    speed: 600,
+    spaceBetween: 30,
+  };
+
   constructor(
     private fb: FormBuilder,
     private db: DbCompaniesService,
@@ -59,8 +66,14 @@ export class RegisterPage implements OnInit, AfterViewInit {
     this.setPosition();
     this.getDataForm();
     this.getAddress();
+    this.slides.lockSwipes(true);
   }
 
+  slideNext() {
+    this.slides.lockSwipes(false);
+    this.slides.slideNext();
+    this.slides.lockSwipes(true);
+  }
   getData () {
     this.types$ = this.db.getType();
     this.experts$ = this.db.getCategories();

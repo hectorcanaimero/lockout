@@ -1,73 +1,78 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar mode="ios">
-    <ion-title></ion-title>
-    <ion-buttons slot="end" *ngIf="modal">
-      <!-- <ion-button (click)="onClose()" *ngIf="(count$ | async)" color="light">
-        <ion-icon slot="icon-only" name="close" ></ion-icon>
-      </ion-button> -->
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-<ion-content>
-  <div id="content">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-11 col-md-7">
-          <div>
-            <form [formGroup]="factoryForm" class="meka-form">
-              <ion-item>
-                <ion-label mode="ios" position="stacked">{{ 'NOME_COMPANY' | translate }}<ion-text color="danger">*</ion-text></ion-label>
-                <ion-input type="text" formControlName="name"></ion-input>
-              </ion-item>
-              <ion-item>
-                <ion-label mode="ios"position="floating">{{ 'TYPE_COMPANY' | translate }} <ion-text color="danger">*</ion-text></ion-label>
-                <ion-select formControlName="typeCompany" [placeholder]="'SELECT' | translate" interface="action-sheet" (ionChange)="onTypeCompany($event)">
-                  <ion-select-option *ngFor="let item of types$ | async"
-                    [value]="item">{{ item.name | translate | titlecase }}</ion-select-option>
-                </ion-select>
-              </ion-item>
-              <ng-container>
+<ion-content [fullscreen]="true">
+  <ion-slides mode="ios" #swiper>
+    <ion-slide>
+      <div class="container">
+        <ion-icon class="icon-one" name="business"></ion-icon>
+        <ion-text>
+          <h3 class="mb-4">{{ 'COMPANY.TITLE' | translate }}</h3>
+          <p>{{ 'COMPANY.TEXT' | translate }}</p>
+        </ion-text>
+      </div>
+      <ion-footer class="ion-no-border">
+        <ion-toolbar>
+          <ion-button expand="block" color="warning" (click)="slideNext()">
+            <ion-icon slot="end" name="chevron-forward"></ion-icon>
+            {{ 'COMPANY.NEXT' | translate }}
+          </ion-button>
+        </ion-toolbar>
+      </ion-footer> 
+    </ion-slide>
+    <ion-slide>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-11 col-md-7">
+            <div>
+              <form [formGroup]="factoryForm" class="meka-form">
                 <ion-item>
-                  <ion-label mode="ios"position="floating">{{ 'CATEGORIES' | translate }} <ion-text color="danger">*</ion-text></ion-label>
-                  <ion-select [placeholder]="'SELECT' | translate"  interface="action-sheet" formControlName="categories" multiple="true">
-                    <ion-select-option *ngFor="let item of experts$ | async" [value]="item._id">{{ item.name | translate }}</ion-select-option>
-                  </ion-select>
+                  <ion-label mode="ios" position="stacked">{{ 'NOME_COMPANY' | translate }}<ion-text color="danger">*</ion-text></ion-label>
+                  <ion-input type="text" formControlName="name"></ion-input>
                 </ion-item>
                 <ion-item>
-                  <ion-label mode="ios"position="floating">{{ 'PAYMENT' | translate }}<ion-text color="danger">*</ion-text></ion-label>
-                  <ion-select mode="ios" [placeholder]="'SELECT' | translate"  interface="action-sheet" formControlName="payment" multiple="true">
-                    <ion-select-option *ngFor="let item of payment" [value]="item">{{ item | translate }}</ion-select-option>
+                  <ion-label mode="ios"position="floating">{{ 'TYPE_COMPANY' | translate }} <ion-text color="danger">*</ion-text></ion-label>
+                  <ion-select formControlName="typeCompany" [placeholder]="'SELECT' | translate" interface="action-sheet" (ionChange)="onTypeCompany($event)">
+                    <ion-select-option *ngFor="let item of types$ | async"
+                      [value]="item">{{ item.name | translate | titlecase }}</ion-select-option>
                   </ion-select>
                 </ion-item>
-              </ng-container>
-              <ng-container *ngIf="typeCompany !== 1">
-                <ion-button (click)="goToMap()" expand="block" color="warning" class="mt-4">
-                  <ion-icon slot="start" name="location"></ion-icon>
-                  {{ 'MY_LOCATION' | translate }}
-                </ion-button>
-                <ion-item *ngIf="address">
-                  <ion-label>
-                    <p class="ion-text-center">[{{ address.lat | number }}, {{ address.lng | number }}]</p>
-                    <p class="ion-text-wrap ion-text-center b">{{ address.address }}</p>
-                  </ion-label>
-                </ion-item>
-                <!-- <ion-item>
-                  <ion-label mode="ios" position="stacked">{{ 'ADDRESS' | translate }} <ion-text color="danger"></ion-text></ion-label>
-                  <ion-textarea formControlName="address" rows="4"></ion-textarea>
-                </ion-item> -->
-              </ng-container>
-            </form>
+                <ng-container>
+                  <ion-item>
+                    <ion-label mode="ios"position="floating">{{ 'CATEGORIES' | translate }} <ion-text color="danger">*</ion-text></ion-label>
+                    <ion-select [placeholder]="'SELECT' | translate"  interface="action-sheet" formControlName="categories" multiple="true">
+                      <ion-select-option *ngFor="let item of experts$ | async" [value]="item._id">{{ item.name | translate }}</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label mode="ios"position="floating">{{ 'PAYMENT' | translate }}<ion-text color="danger">*</ion-text></ion-label>
+                    <ion-select mode="ios" [placeholder]="'SELECT' | translate"  interface="action-sheet" formControlName="payment" multiple="true">
+                      <ion-select-option *ngFor="let item of payment" [value]="item">{{ item | translate }}</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ng-container>
+                <ng-container *ngIf="typeCompany !== 1">
+                  <ion-button (click)="goToMap()" expand="block" color="warning" class="mt-4">
+                    <ion-icon slot="start" name="location"></ion-icon>
+                    {{ 'MY_LOCATION' | translate }}
+                  </ion-button>
+                  <ion-item *ngIf="address">
+                    <ion-label>
+                      <p class="ion-text-center" style="color: #fafafa">[{{ address.lat | number }}, {{ address.lng | number }}]</p>
+                      <p class="ion-text-wrap ion-text-center b" style="color: #fafafa">{{ address.address }}</p>
+                    </ion-label>
+                  </ion-item>
+                </ng-container>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button expand="block" (click)="onSubmit()" color="warning" [disabled]="factoryForm.invalid">
+            <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+            {{ 'COMPANY.CREATE' | translate }}
+          </ion-button>
+        </ion-toolbar>
+      </ion-footer> 
+    </ion-slide>
+  </ion-slides>
 </ion-content>
-<ion-footer>
-  <ion-toolbar>
-    <ion-button expand="block" (click)="onSubmit()" color="warning" [disabled]="factoryForm.invalid">
-      <ion-icon slot="start" name="checkmark-circle"></ion-icon>
-      {{ 'COMPANY.CREATE' | translate }}
-    </ion-button>
-  </ion-toolbar>
-</ion-footer>

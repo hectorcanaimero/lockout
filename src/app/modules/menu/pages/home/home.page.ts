@@ -32,7 +32,7 @@ export class HomePage implements OnInit, AfterViewInit {
     { name: 'MENU.CHAT', url: '/chat/soporte' }
   ];
   subContent = [
-    { name: 'MENU.ABOUT', url: 'https://meka.do', modal: false }
+    { name: 'MENU.ABOUT', url: 'https://www.meka.do', modal: false }
   ];
   user$: Observable<any>;
   count$: Observable<number>;
@@ -73,7 +73,9 @@ export class HomePage implements OnInit, AfterViewInit {
       filter(({ loading }: any) => !loading),
       map(({ company }: any) => {
         this.active = company?.status;
-        this.status = this.active ? 'ONOFF.ON' :'ONOFF.OFF';
+        this.status = this.active ? 
+          this.translate.instant('ONOFF.ON') : 
+          this.translate.instant('ONOFF.OFF');
         return company;
       })
     );
@@ -93,7 +95,7 @@ export class HomePage implements OnInit, AfterViewInit {
   };
 
   async onAboutMeka() {
-    await Browser.open({ url: 'https://meka.do' });
+    await Browser.open({ url: 'https://www.meka.do' });
   }
 
   countClosedJobs = () => {
@@ -127,5 +129,26 @@ export class HomePage implements OnInit, AfterViewInit {
     await this.mService.getGlobalization(); 
     await this.storage.clearStorages();
     await this.auth.signOut();
+  }
+
+  async onRemove() {
+    const { _id } = await this.storage.getStorage('oUser');
+    if (_id) {
+      await this.uService.alert({
+        header: 'Info',
+        message: this.translate.instant('MENU.REMOVE_USER'),
+        mode: 'ios',
+        buttons: [
+          { text: 'Cancel', role: 'cancel' },
+          {
+            text: 'OK', role: 'confirm',
+            handler: () => {
+              this.ms.patchMaster(`users/${_id}`, { status: false })
+              .subscribe(async () => await this.logout());
+            },
+          },
+        ]
+      });
+    }
   }
 }

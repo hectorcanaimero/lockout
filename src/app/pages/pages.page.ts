@@ -14,6 +14,7 @@ import { RegisterPage } from '@modules/companies/pages/register/register.page';
 import { timer } from 'rxjs';
 import { IntegratedService } from '@core/services/integrated.service';
 import { StripeService } from '@core/services/stripe.service';
+import { MobileService } from '@core/services/mobile.services';
 
 
 @Component({
@@ -27,11 +28,11 @@ export class PagesPage implements AfterViewInit {
   company: number;
   user: any;
   constructor(
+    private mobile: MobileService,
     private store: Store<AppState>,
     private storage: StorageService,
     private modalCtrl: ModalController,
     private iService: IntegratedService,
-    private memberService: MemberService,
     private stripeService: StripeService,
     private validateService: ValidationTokenService,
   ) { }
@@ -45,11 +46,12 @@ export class PagesPage implements AfterViewInit {
     await this.getLoadAppMobile();
     this.iService.getUser();
     await this.iService.setTokenPushOnUser();
+    await this.mobile.getPush();
+    await this.mobile.getGlobalization();
   }
 
   ngAfterViewInit() {
-    this.iService.page2State().subscribe(res => 
-      res ? this.iService.processing(res) : null)
+    this.iService.page2State().subscribe(res => res ? this.iService.processing(res) : null)
     this.stripeCustomer();
     this.getConfigStripe();
     this.validateService.validateMember();
@@ -129,12 +131,12 @@ export class PagesPage implements AfterViewInit {
 
   private getConfigStripe = () => {
     let data: any;
-    this.memberService.getConfig().pipe(take(1)).subscribe(
-      (res: any) => {
-        data = res;
-        // this.createSubscription(res.mechanics);
-        this.storage.setStorage('oConfig', res).then(() => {});
-      });
+    // this.memberService.getConfig().pipe(take(1)).subscribe(
+    //   (res: any) => {
+    //     data = res;
+    //     // this.createSubscription(res.mechanics);
+    //     this.storage.setStorage('oConfig', res).then(() => {});
+    //   });
   }
 
   private goToCompany = async () => {
